@@ -1,0 +1,17 @@
+markdown:         rdiscount
+pygments:         true
+paginate:         6
+
+title:            PIZn's Blog theme
+url:              http://dianacody.github.io
+feed:             /blog/atom.xml
+author:
+    name:         DianaCody
+    email:        dianacodyleaf@gmail.com
+    twitter:      twitter.com/
+description:      "DianaCody's blog theme -- violet 1.0 "
+
+copyright:
+    - Design by <a href="http://dianacody.github.io" rel="friend" title="pizn" target="_blank">DianaCody</a>
+    - "&copy; Copyright 2011, DianaCody. All Rights Reserved."
+
