@@ -1,13 +1,12 @@
-###主题介绍
+###DianaCody's Blog
 
 * version :  1.0
 * name    :  Black Cube Theme
 * color   :  black
-* create  :  2012-04-25
-* author  :  PIZn
+* create  :  2014-04-25
+* author  :  DianaCody
 * support :  index, archives, contact
 
-###Other
+####More
 
-这是一款黑色主题，目前支持 3 个页面，分别是 index.html, archives.html,
-contact.html。
+This is DianaCody's Blog。
