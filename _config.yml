@@ -37,45 +37,42 @@ permalink:     date
 paginate_path: /page:num
 timezone:      null
 
-# Site Config
+#站点基础配置
 title: iLotus
-description: A Jekyll theme designed by DianaCody
+subTitle: Just another Jekyll blog.
+description: 这是 PIZn 的又一个博客，它是基于 Jekyll 搭建起来的。在这里，不仅仅是用来快速记录工作，学习，生活的一点一滴的地方，更�?PIZn �?Jekyll 的学习和使用的一次有意义的实践�?
 url: http://dianacody.github.io
 feed: /atom.xml
 
-# Menu Config
+#菜单配置
 nav:
-  - text: ��ҳ
+  - text: 首页
     url: /index.html
     icon: icon-home
     class: home
-  - text: ���¹鵵
+  - text: 文章归档
     url: /archives.html
     icon: icon-reorder
     class: none
-  - text: ������
-    url: /contact.html
+  - text: 关于�?    url: /contact.html
     icon: icon-envelope-alt
     class: none
-  - text: ��ϵ��
-    url: http://blog.csdn.net/dianacody
+  - text: 联系�?    url: http://dianacody.github.io/contact.html
     icon: icon-heart
     class: none
-  - text: ����Դ����
-    url: https://github.com/dianacody/dianacody.github.io
+  - text: 博客源代�?    url: https://github.com/dianacdy/dianacody.github.io
     icon: icon-github
     class: none
 
 page:
-  - text: ���·���
+  - text: 文章分类
     url: /archives.html
     last: true
-  - text: ��������
+  - text: 友情链接
     url: /links.html
     last: true
-  - text: ������
-    url: /contact.html
-    last: true
+  - text: 关于�?    url: /contact.html
+    last: false
 
 author:
   name: DianaCody
