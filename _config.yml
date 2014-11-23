@@ -26,20 +26,26 @@ highlighter:  pygments
 lsi:          false
 excerpt_separator: "\n\n"
 
+# Serving
+detach:       false
+port:         4000
+host:         127.0.0.1
+baseurl:      "" # does not include hostname
+
 # Outputting
 permalink:     date
 paginate_path: /page:num
 timezone:      null
 
-#Site config
+#Site Config
 title: iLotus
-description: A Jekyll theme design by DianaCody
+description: A Jekyll theme designed by DianaCody
 url: http://dianacody.github.io
 feed: /atom.xml
 
-#Menu config
+#Menu Config
 nav:
-  - text: 首页〉
+  - text: 首页
     url: /index.html
     icon: icon-home
     class: home
@@ -56,7 +62,7 @@ nav:
     icon: icon-heart
     class: none
   - text: 博客源代码
-    url: https://github.com/pizn/iLotus
+    url: https://github.com/dianacody/dianacody.github.io
     icon: icon-github
     class: none
 
