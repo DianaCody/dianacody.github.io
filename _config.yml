@@ -37,13 +37,13 @@ permalink:     date
 paginate_path: /page:num
 timezone:      null
 
-#Site Config
+# Site Config
 title: iLotus
 description: A Jekyll theme designed by DianaCody
 url: http://dianacody.github.io
 feed: /atom.xml
 
-#Menu Config
+# Menu Config
 nav:
   - text: Ê×Ò³
     url: /index.html
