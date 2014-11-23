@@ -1,7 +1,7 @@
 @charset "utf-8";
 /*************************
 Theme Name:         iLotus
-Author:             展新(pizner@gmail.com)
+Author:             DianaCody(dianacodyleaf@gmail.com)
 *************************/
 /*************************
  * style font
@@ -405,7 +405,7 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
 
 .lotus blockquote p { margin-bottom: 0.4em; }
 .lotus blockquote p:before {
-    content: "“";
+    content: "�?;
     font-size: 38px;
     line-height: 18px;
     position: relative;
@@ -415,7 +415,7 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
 }
 
 .lotus blockquote p:after {
-    content: "”";
+    content: "�?;
     font-size: 38px;
     line-height: 18px;
     position: relative;
