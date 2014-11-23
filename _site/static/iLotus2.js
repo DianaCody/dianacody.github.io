@@ -1,17 +1,17 @@
 /**
- * author: PIZn
+ * author: DianaCody
  * version: 1.0
- * site: http://www.pizn.net
+ * site: http://dianacody.github.io
  */
 $(document).ready(function() {
-    //涓轰粈涔堟垜浼氬啓杩欎釜鍛紵
+    //为什么我会写这个呢？
     var iLotus = {
         Version: "1.0",
-        Author: "PIZn",
+        Author: "DianaCody",
         Site: "http://www.pizn.net"
     }
     /**
-     * checkServer for PIZn
+     * checkServer for DianaCody
      */
     iLotus.checkServer = {
         checked: function() {
