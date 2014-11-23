@@ -1,0 +1,71 @@
+# Where things are
+source:       .
+destination:  ./_site
+plugins:      ./_plugins
+layouts:      ./_layouts
+paginate:     8
+
+# Handling Reading
+safe:         false
+include:      [".htaccess"]
+exclude:      []
+keep_files:   [".git", ".svn"]
+encoding:     "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+textile_ext:  "textile"
+
+# Filtering Content
+show_drafts:  null
+limit_posts:  0
+future:       true
+unpublished:  false
+
+# Conversion
+markdown:     kramdown
+highlighter:  pygments
+lsi:          false
+excerpt_separator: "\n\n"
+
+# Outputting
+permalink:     date
+paginate_path: /page:num
+timezone:      null
+
+#Site config
+title: iLotus
+description: A Jekyll theme design by DianaCody
+url: http://dianacody.github.io
+feed: /atom.xml
+
+#Menu config
+nav:
+  - text: 首页
+    url: /index.html
+    icon: icon-home
+    class: home
+  - text: 文章归档
+    url: /archives.html
+    icon: icon-reorder
+    class: none
+  - text: 关于�?    url: /contact.html
+    icon: icon-envelope-alt
+    class: none
+  - text: 联系�?    url: http://blog.csdn.net/dianacody
+    icon: icon-heart
+    class: none
+  - text: 博客源代�?    url: https://github.com/pizn/iLotus
+    icon: icon-github
+    class: none
+
+page:
+  - text: 文章分类
+    url: /archives.html
+    last: true
+  - text: 友情链接
+    url: /links.html
+    last: true
+  - text: 关于�?    url: /contact.html
+    last: false
+
+author:
+  name: DianaCody
