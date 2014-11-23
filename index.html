@@ -1,7 +1,7 @@
 ---
 layout: default
 title:
-description: 这是 PIZn 的又一个博客，它是基于 Jekyll 搭建起来的。在这里，不仅仅是用来快速记录工作，学习，生活的一点一滴的地方，更是 PIZn 对 Jekyll 的学习和使用的一次有意义的实践。
+description: Just a blog for DianaCody
 keywords: PIZn, GitHub, Jekyll, Plugins, Works, Archives, Quotes, Violet, css, html, javascript, wordpress, logo, design, geek
 ---
 <section class="lotus-logo fn-clear">
@@ -18,7 +18,7 @@ keywords: PIZn, GitHub, Jekyll, Plugins, Works, Archives, Quotes, Violet, css, h
 </article>
 <section class="lotus-double fn-clear">
     <article class="article article-first">
-    <h3>最新文章</h3>
+    <h3>��������</h3>
         <ul>
             {% for npost in site.posts limit:3 offset:2   %}
             <li><a href="{{ npost.url }}" pubdate="{{ npost.date | date_to_utc | date: '%Y-%m-%d' }}" title="{{ npost.title }}" rel="bookmark">{{ npost.title }}</a></li>
@@ -26,7 +26,7 @@ keywords: PIZn, GitHub, Jekyll, Plugins, Works, Archives, Quotes, Violet, css, h
         </ul>
     </article>
     <article class="article article-last">
-    <h3>相关页面</h3>
+    <h3>���ҳ��</h3>
     <ul>
         <li>
             {% for page in site.page %}
