@@ -1,0 +1,98 @@
+# Where things are
+source:       .
+destination:  ./_site
+plugins:      ./_plugins
+layouts:      ./_layouts
+paginate:     8
+
+# Handling Reading
+safe:         false
+include:      [".htaccess"]
+exclude:      []
+keep_files:   [".git", ".svn"]
+encoding:     "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+textile_ext:  "textile"
+
+# Filtering Content
+show_drafts:  null
+limit_posts:  0
+future:       true
+unpublished:  false
+
+# Conversion
+markdown:     kramdown
+highlighter:  pygments
+lsi:          false
+excerpt_separator: "\n\n"
+
+# Serving
+detach:       false
+port:         4000
+host:         127.0.0.1
+baseurl:      "" # does not include hostname
+
+# Outputting
+permalink:     date
+paginate_path: /page:num
+timezone:      null
+
+
+#站点基础配置
+title: DianaCody
+subTitle: Thinking of code...
+description: DianaCody's blog
+url: http://dianacody.github.io
+feed: /atom.xml
+
+#菜单配置
+nav:
+  - text: 首页
+    url: /index.html
+  - text: 文章归档
+    url: /archives.html
+  - text: 作品
+    url: /works.html
+  - text: 联系�?    url: http://dianacody.github.io/contact.html
+  - text: 博客源代�?    url: https://github.com/dianacody/dianacody.github.com
+
+#theme config
+themes: /themes/violet
+
+#配置你喜欢的顶部背景图片
+headimg:
+  - item: /themes/violet/images/hdbg01.jpg
+  - item: /themes/violet/images/hdbg02.jpg
+  - item: /themes/violet/images/hdbg03.jpg
+  - item: /themes/violet/images/hdbg04.jpg
+
+#关注�?follow:
+  - class: fa-google-plus
+    url: http://dianacody.github.io
+  - class: fa-facebook
+    url: http://dianacody.github.io
+  - class: fa-github
+    url: http://github.com/dianacody
+  - class: fa-weibo
+    url: http://weibo.com/
+  - class: fa-renren
+    url: http://dianacody.github.io
+  - class: fa-pinterest
+    url: http://dianacody.github.io
+  - class: fa-twitter
+    url: http://dianacody.github.io
+  - class: fa-rss
+    url: http://dianacody.github.io
+
+#作者信�?author:
+  link: http://dianacody.github.io/contact.html
+  img: http://tp2.sinaimg.cn/1832671293/180/40020872447/1
+
+#评论信息
+disqus:
+  config: true
+  id: dianacodyblog
+
+duoshuo:
+  config: false
+  id: dianacody
