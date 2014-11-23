@@ -42,7 +42,7 @@ timezone:      null
 title: Jekyll Theme
 description: Just another Jekyll theme design and code by zhanxin.info.
 keywords: Jekyll Theme
-url: http://pizn.github.io/kunka
+url: http://dianacody.github.io
 feed: /atom.xml
 favicon: http://jekyllrb.com/favicon.png
 
@@ -54,7 +54,7 @@ nav:
     url: /categories.html
   - text: 文章归档
     url: /archives.html
-  - text: 联系我
+  - text: 联系�?
     url: /contact.html
   - text: 友情链接
     url: /links.html
@@ -62,12 +62,12 @@ nav:
 #Author config
 author:
     name: 掌心
-    email: zhanxin.info@gmail.com
+    email: dianacodyleaf@gmail.com
     imageLink: http://tp2.sinaimg.cn/1832671293/180/40020872447/1
-    simpleIntro: 我是「展新展新」，一个矛盾体的化身，在你的掌心里。
+    simpleIntro: 我是「展新展新」，一个矛盾体的化身，在你的掌心里�?
     detailIntro:
-      <p>Jekyll 是一个简洁的、特别针对博客平台的 静态网站 生成器。它使用一个模板目录作为网站布局的基础框架，并在其上运行 Textile 、 Markdown 或 Liquid 标记语言的转换器，最终生成一个完整的静态Web站点，可以被放置在Apache或者你喜欢的其他任何Web服务器上。它同时也是 GitHub Pages 、一个由 GitHub 提供的用于托管项目主页或博客的服务，在后台所运行的引擎。</p>
-      <p>很早之前，使用过 wordpress 来写博客。但是还要处理很多的底层问题。而使用 Jekyll 来写博客，可以很简单，写 Markdown 就好。然而，Jekyll 还很年轻，没有很多主题的支持。这里的主题，就是为 Jekyll 而写的。希望你能喜欢。</p>
+      <p>Jekyll 是一个简洁的、特别针对博客平台的 静态网�?生成器。它使用一个模板目录作为网站布局的基础框架，并在其上运�?Textile �?Markdown �?Liquid 标记语言的转换器，最终生成一个完整的静态Web站点，可以被放置在Apache或者你喜欢的其他任何Web服务器上。它同时也是 GitHub Pages 、一个由 GitHub 提供的用于托管项目主页或博客的服务，在后台所运行的引擎�?/p>
+      <p>很早之前，使用过 wordpress 来写博客。但是还要处理很多的底层问题。而使�?Jekyll 来写博客，可以很简单，�?Markdown 就好。然而，Jekyll 还很年轻，没有很多主题的支持。这里的主题，就是为 Jekyll 而写的。希望你能喜欢�?/p>
 
 #Follow me, you can choose your icon by http://fortawesome.github.io/Font-Awesome/icons/#brand
 follow:
@@ -78,9 +78,9 @@ follow:
   - class: icon-renren
     url: http://renren.com
   - class: icon-github-alt
-    url: http://github.com/pizn
+    url: http://github.com/dianacody
   - class: icon-twitter
-    url: http://twitter.com/piznlin
+    url: http://twitter.com/
   - class: icon-google-plus
     url: http://google.com
 
@@ -88,11 +88,11 @@ follow:
 customLinks:
   - item:
     - text: 掌心
-      url: http://www.zhanxin.info
+      url: http://dianacody.github.io
     - text: Jekyll
       url: http://jekyllrb.com
     - text: Jekyll Theme
-      url: http://www.zhanxin.info/themes.html
+      url: http://dianacody.github.io/themes.html
     message: Friends
   - item:
     - text: Font Awesome
@@ -111,8 +111,8 @@ googleAnaly:
 #comment config
 disqus:
   config: false
-  id: piznblog
+  id: dianacodyblog
 
 duoshuo:
   config: true
-  id: zhanxin
+  id: dianacody
