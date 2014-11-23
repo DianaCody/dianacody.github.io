@@ -1,17 +1,35 @@
 markdown:         rdiscount
 pygments:         true
-paginate:         6
+paginate:         4
 
-title:            PIZn's Blog theme
+title:            The One Theme
 url:              http://dianacody.github.io
-feed:             /blog/atom.xml
+feed:             /atom.xml
 author:
-    name:         DianaCody
+    name:         PIZn
     email:        dianacodyleaf@gmail.com
-    twitter:      twitter.com/
-description:      "DianaCody's blog theme -- violet 1.0 "
+    description:  "The one theme is another web theme design by DianaCody."
 
-copyright:
-    - Design by <a href="http://dianacody.github.io" rel="friend" title="pizn" target="_blank">DianaCody</a>
-    - "&copy; Copyright 2011, DianaCody. All Rights Reserved."
+about:            "I am DianaCody.I love all kinds of design, attention to the Internet dynamic, dedicated web front development, learn UI and UED."
+follow:
+    email:        dianacodyleaf@gmail.com
+    github:       https://github.com/dianacody
+    twitter:      http://www.twitter.com/
+    google:       https://plus.google.com/
+    facebook:     http://facebook.com/
+description:      Just another blog theme -- the One
 
+indexContent:     true
+imageLink:        http://www.pizn.net/static/images/20121109Monutain.jpg
+
+
+style:            /css/style.css
+blogName:         theOne 
+blogDesc:         Just another theme
+favicon:          /favicon.ico
+theme:            default
+
+disqus:           piznblog
+
+copyright:        Copyright © 2011-2012 PIZn All rights reserved.
+test:             ok
