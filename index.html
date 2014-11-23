@@ -1,34 +1,41 @@
 ---
 layout: default
 title:
-description: DianaCody's blog
-keywords: DianaCody, GitHub, Jekyll, Plugins, Works, Archives, Quotes, Violet, css, html, javascript, wordpress, logo, design, geek
-isIndex: true
+description: Just a blog for DianaCody
+keywords: PIZn, GitHub, Jekyll, Plugins, Works, Archives, Quotes, Violet, css, html, javascript, wordpress, logo, design, geek
 ---
-
-{% for rpost in paginator.posts %}
-<article class="main-article">
-    <div class="violet-post">
-        <h3 class="main-article-title"><a href="{{ rpost.url }}" title="{{ rpost.title }}" rel="bookmark">{{ rpost.title }}</a></h3>
-        <p class="main-article-meta"><time pubdate="{{ rpost.date | date_to_utc | date: '%Y-%m-%d' }}">{{ rpost.date | date_to_utc | date: "%Y-%m-%d" }}</time></p>
-        <div class="main-article-contant">
-            <p>{{ rpost.description }}</p>
-            <p class="main-article-more"><a href="{{ rpost.url }}" title="Read More" rel="nofollow">Read More</a></p>
-        </div>
-    </div>
-</article>
+<section class="lotus-logo fn-clear">
+    <hgroup class="violet-site">
+        <h1><a href="{{ site.url }}" >{{ site.title }}</a></h1>
+        <h2>{{ site.subTitle }}</h2>
+    </hgroup><!-- //violet-site -->
+</section>
+<article class="lotus-article">
+{% for rpost in paginator.posts limit:1 %}
+    <h3><a href="{{ rpost.url }}" title="{{ rpost.title }}" rel="bookmark">{{ rpost.title }}</a></h3>
+    <p itemprop="description">{{ rpost.description }}</p>
 {% endfor %}
-{% if paginator.total_pages > 1 %}
-<nav class="pagination fn-clear" id="violet-paging">
-    <ul class="pagination-list">
-        {% for page in (1..paginator.total_pages) %}
-            {% if page == paginator.page %}
-                <li class="current"><a href="javascript:void(0);">{{ page }}</a></li>
-            {% else %}
-                <li><a href="{{ site.url }}/{%if page > 1 %}page{{ page }}/{% endif %}">{{ page }}</a></li>
+</article>
+<section class="lotus-double fn-clear">
+    <article class="article article-first">
+    <h3>最新文章</h3>
+        <ul>
+            {% for npost in site.posts limit:3 offset:2   %}
+            <li><a href="{{ npost.url }}" pubdate="{{ npost.date | date_to_utc | date: '%Y-%m-%d' }}" title="{{ npost.title }}" rel="bookmark">{{ npost.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </article>
+    <article class="article article-last">
+    <h3>相关页面</h3>
+    <ul>
+        <li>
+            {% for page in site.page %}
+            <a href="{{ page.url }}" rel="bookmark" title="{{page.text}}">{{ page.text }}</a>
+            {% if !page.last %}
+                <span class="lotus-squ">|</span>
             {% endif %}
-        {% endfor %}
+            {% endfor %}
+        </li>
     </ul>
-</nav>
-{% endif %}
-
+    </article>
+</section>
