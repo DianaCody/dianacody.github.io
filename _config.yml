@@ -1,4 +1,4 @@
-markdown:         rdiscount
+﻿markdown:         rdiscount
 pygments:         true
 paginate:         4
 
