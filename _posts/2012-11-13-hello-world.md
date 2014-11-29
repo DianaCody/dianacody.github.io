@@ -1,9 +1,12 @@
 ---
 layout: post
-title: Jekyll Blog 主题 Black Cube 1.0
-description: 基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法。
-key: pizn theme, Black Cube
+title: Jekyll Blog 主题 theOne 1.0
+description: 基于简单而又有轻量的理念，<a href="http://www.pizn.net" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法。
+keyword: pizn theme, Black Cube
 ---
+
+###"IMG"标签：
+<img src="{{ site.url }}/images/yujinxiang.jpeg" alt="thumb" >
 
 ###"BLACKQUERY"标签：
 
@@ -34,7 +37,9 @@ key: pizn theme, Black Cube
 * 基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法
 * 基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法
 
-###"CODE" 和 "PRE"：<code class="code">Hello world</code>
+###"CODE" 和 "PRE"：
+
+代码实例如下：
 
 <pre>
 .head {
@@ -45,8 +50,6 @@ key: pizn theme, Black Cube
 }
 </pre>
 
-###"IMG"标签：图片提供 3 种样式，分别是<code class="code">img-center</code>, <code class="code">img-right</code>, <code class="code">img-left</code>
-<img src="/images/psb.jpg" class="img-center" width: 400px; alt="thumb" >
 
 ###"TABLE"标签：
 

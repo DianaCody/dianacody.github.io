@@ -1,12 +1,3 @@
-###DianaCody's Blog
+###主题介绍
 
-* version :  1.0
-* name    :  Black Cube Theme
-* color   :  black
-* create  :  2014-04-25
-* author  :  DianaCody
-* support :  index, archives, contact
-
-####More
-
-This is DianaCody's Blog。
+<a href="http://www.pizn.net/14-11-2012/theone-blog-theme/" title="theOne">Jekyll 博客主题 theOne</a>
