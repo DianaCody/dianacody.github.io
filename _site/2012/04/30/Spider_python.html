@@ -12,7 +12,7 @@
     **
   -->
   <meta charset="utf-8" />
-  <title>我的新文章 | DianaCody's Shell</title>
+  <title>网易微博爬虫（python） | DianaCody's Shell</title>
   <meta name="generator" content="Jekyll" />
   <meta name="author" content="DianaCody" />
   <meta name="description" content="" />
@@ -47,102 +47,56 @@
 	<div class="content-cnt fn-clear">
 		<div class="main fn-clear">
 			<article class="entry">
-				<h1 class="title">我的新文章</h1>
-               	<p class="meta"><time class="date" pubdate="2012-04-27">27 Apr 2012</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
-               	<p class="description">这是我的新文章<a href="http://www.pizn.me" target="_blank">DianaCody</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法。</p>
- 			 	<h3>"BLACKQUERY"标签：</h3>
+				<h1 class="title">网易微博爬虫（python）</h1>
+               	<p class="meta"><time class="date" pubdate="2012-04-30">30 Apr 2012</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
+               	<p class="description">实现自定义输入关键词，指定要爬取的页面数据，根据关键词提取页面中的微博信息数据.</p>
+ 			 	<h2>网易微博爬虫（python版）</h2>
 
-<blockquote><p>Your time is limited, so don't waste it living someone else's life.…Don't let the noise of others' opinions drown out your own inner voice.</p></blockquote>
+<h3><strong>163 Tweet Crawler (python)</strong></h3>
 
-<h3>"H"标签：</h3>
+<h4><em>网易微博爬虫</em></h4>
 
-<h1>这里是DianaCody的主题(h1)</h1>
+<h5>实现自定义输入关键词，指定要爬取的页面数据，根据关键词提取页面中的微博信息数据。</h5>
 
-<h2>Jekyll 主题终于成功了(h2)</h2>
-
-<h3>如何创建漂亮的 Jekyll 模板(h3)</h3>
-
-<h4>如何创建漂亮的 Jekyll 模板(h4)</h4>
-
-<h5>如何创建漂亮的 Jekyll 模板(h5)</h5>
-
-<h5>如何创建漂亮的 Jekyll 模板(h6)</h5>
-
-<h3>"P"标签：</h3>
-
-<p>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">DianaCody</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</p>
-
-<h3>"LI"标签：</h3>
-
-<ul>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
+<blockquote><ul>
+<li>自定义搜索关键字</li>
+<li>自定义爬取页面数目</li>
+<li>非登录，爬取当天微博信息数据存储于本地文件</li>
+<li>解析微博页面获取微博文本内容信息</li>
+<li>软件为exe程序，无python环境也可运行</li>
 </ul>
+</blockquote>
 
+<h2>1.软件功能</h2>
 
-<h3>"CODE" 和 "PRE"：<code class="code">Hello world</code></h3>
+<p>实时爬取微博信息数据，数据源 http://t.163.com/tag/yourkey/</p>
 
-<pre>
-.head {
-    border: 1px solid #fefefe;
-    color: #F00;
-    background: #000;
-    text-align: center;
-}
-</pre>
+<h2>2.软件演示</h2>
 
+<p><i class="icon-chevron-sign-left"></i> 1.自定义关键词、抓取页面数量</p>
 
-<h3>"IMG"标签：图片提供 3 种样式，分别是<code class="code">img-center</code>, <code class="code">img-right</code>, <code class="code">img-left</code></h3>
+<p><img src="https://github.com/DianaCody/Spider_python/blob/master/Tweet163_Crawler/icon/TweetCrawler1.PNG" alt="file-list" /></p>
 
-<p><img src="/images/psb.jpg" class="img-center" width: 400px; alt="thumb" ></p>
+<p><i class="icon-chevron-sign-left"></i> 2.爬取结果显示微博文本内容</p>
 
-<h3>"TABLE"标签：</h3>
+<p><img src="https://github.com/DianaCody/Spider_python/blob/master/Tweet163_Crawler/icon/TweetCrawler2.PNG" alt="file-list" /></p>
 
-<table width="100%">
-    <tbody>
-        <tr>
-            <th width="20%">命令</th>
-            <th width="80%">作用（解释)</th>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:w</code>
-            </td>
-            <td>保存</td>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:wq</code>,
-                <code class="v-code">:x</code>
-            </td>
-            <td>保存并关闭</td>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:q</code>
-            </td>
-            <td>关闭（已保存）</td>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:q!</code>
-            </td>
-            <td>强制关闭</td>
-        </tr>
-    </tbody>
-</table>
+<hr />
 
+<h2>3.软件下载</h2>
 
+<p>软件地址： https://github.com/DianaCody/Spider_python/tree/master/Tweet163_Crawler/release</p>
 
+<p>也可以在这里下载：<a href="http://download.csdn.net/detail/dianacody/7659093">点击下载</a></p>
+
+<p>http://download.csdn.net/detail/dianacody/8001441</p>
 
                 <nav class="pagination-link">
                     
-                    <a class="prev" href="/2012/04/26/hello-world.html" rel="bookmark">&laquo;&nbsp;Jekyll Blog 主题 Black Cube...</a>
+                    <a class="prev" href="/2012/04/29/Spider_java.html" rel="bookmark">&laquo;&nbsp;Sina Tweet Crawler (java)</a>
                     
                     
-                    <a class="next" href="/2012/04/28/nlp.html" rel="bookmark">Jekyll Blog 主题 Black Cube...&nbsp;&raquo;</a>
+                    <a class="next" href="/2012/05/01/RecommandSystem.html" rel="bookmark">个性化用户推荐系统&nbsp;&raquo;</a>
                     
                  </nav>
 			</article><!-- .entry -->		

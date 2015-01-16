@@ -12,7 +12,7 @@
     **
   -->
   <meta charset="utf-8" />
-  <title>Jekyll Blog 主题 Black Cube 1.0 | DianaCody's Shell</title>
+  <title>个性化用户推荐系统 | DianaCody's Shell</title>
   <meta name="generator" content="Jekyll" />
   <meta name="author" content="DianaCody" />
   <meta name="description" content="" />
@@ -47,99 +47,35 @@
 	<div class="content-cnt fn-clear">
 		<div class="main fn-clear">
 			<article class="entry">
-				<h1 class="title">Jekyll Blog 主题 Black Cube 1.0</h1>
-               	<p class="meta"><time class="date" pubdate="2012-04-30">30 Apr 2012</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
-               	<p class="description">基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">DianaCody</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法。</p>
- 			 	<h3>"BLACKQUERY"标签：</h3>
+				<h1 class="title">个性化用户推荐系统</h1>
+               	<p class="meta"><time class="date" pubdate="2012-05-01">01 May 2012</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
+               	<p class="description">基于商品的协同过滤（Item-Based CF）</p>
+ 			 	<h2>个性化用户推荐系统</h2>
 
-<blockquote><p>Your time is limited, so don't waste it living someone else's life.…Don't let the noise of others' opinions drown out your own inner voice.</p></blockquote>
+<hr />
 
-<h3>"H"标签：</h3>
+<h3><strong>Personal Recommand System (Item-Based CF)</strong></h3>
 
-<h1>这里是DianaCody的主题(h1)</h1>
+<h4><em>用户推荐系统</em></h4>
 
-<h2>如何创建漂亮的 Jekyll 模板(h2)</h2>
+<h5>1. 基于商品的协同过滤（Item-Based CF）</h5>
 
-<h3>如何创建漂亮的 Jekyll 模板(h3)</h3>
-
-<h4>如何创建漂亮的 Jekyll 模板(h4)</h4>
-
-<h5>如何创建漂亮的 Jekyll 模板(h5)</h5>
-
-<h5>如何创建漂亮的 Jekyll 模板(h6)</h5>
-
-<h3>"P"标签：</h3>
-
-<p>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">DianaCody</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</p>
-
-<h3>"LI"标签：</h3>
-
-<ul>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
-<li>基于简单而又有质感的理念，<a href="http://www.pizn.me" target="_blank">PIZn</a> 设计并编写了这个主题。下面介绍文章页的一些标签使用方法</li>
+<blockquote><ul>
+<li>基于商品Item-Based CF, 保证在数据稀疏性的情况下, 减小算法扩展性差的特点（如果仅基于用户的协同过滤 User-Based CF）</li>
+<li>调整的余弦相似度计算, 基于关联计算相似度similarity, 并添加系数调整因子factor</li>
+<li>“加权求和”的预测打分值计算</li>
+<li>TopK商品item推荐</li>
+<li>数据： 训练集80000,测试集20000</li>
 </ul>
+</blockquote>
 
+<h5>2. 模型结果</h5>
 
-<h3>"CODE" 和 "PRE"：<code class="code">Hello world</code></h3>
-
-<pre>
-.head {
-    border: 1px solid #fefefe;
-    color: #F00;
-    background: #000;
-    text-align: center;
-}
-</pre>
-
-
-<h3>"IMG"标签：图片提供 3 种样式，分别是<code class="code">img-center</code>, <code class="code">img-right</code>, <code class="code">img-left</code></h3>
-
-<p><img src="/images/psb.jpg" class="img-center" width: 400px; alt="thumb" ></p>
-
-<h3>"TABLE"标签：</h3>
-
-<table width="100%">
-    <tbody>
-        <tr>
-            <th width="20%">命令</th>
-            <th width="80%">作用（解释)</th>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:w</code>
-            </td>
-            <td>保存</td>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:wq</code>,
-                <code class="v-code">:x</code>
-            </td>
-            <td>保存并关闭</td>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:q</code>
-            </td>
-            <td>关闭（已保存）</td>
-        </tr>
-        <tr>
-            <td>
-                <code class="v-code">:q!</code>
-            </td>
-            <td>强制关闭</td>
-        </tr>
-    </tbody>
-</table>
-
-
-
+<p><img src="https://github.com/DianaCody/RecommandSystem/blob/master/RecomSystem/icon/result.PNG" alt="file-list" /></p>
 
                 <nav class="pagination-link">
                     
-                    <a class="prev" href="/2012/04/29/IR.html" rel="bookmark">&laquo;&nbsp;Jekyll Blog 主题 Black Cube...</a>
+                    <a class="prev" href="/2012/04/30/Spider_python.html" rel="bookmark">&laquo;&nbsp;网易微博爬虫（python）</a>
                     
                     
                     <a class="next" href="/2015/01/16/dianacody.html" rel="bookmark">Dianacody&nbsp;&raquo;</a>
