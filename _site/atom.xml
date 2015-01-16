@@ -4,13 +4,31 @@
    <title>Black Cube Theme</title>
    <link href="http://dianacody.github.io/atom.xml" rel="self" type="application/atom+xml"/>
    <link href="http://dianacody.github.io" rel="alternate" type="text/html" />
-   <updated>2015-01-16T15:52:18+08:00</updated>
+   <updated>2015-01-16T15:56:27+08:00</updated>
    <id>http://dianacody.github.io</id>
    <author>
      <name>DianaCody</name>
      <email>dianacodyleaf@gmail.com</email>
    </author>
 
+   
+   <entry>
+     <title>Dianacody</title>
+     <link href="http://dianacody.github.io/2015/01/16/dianacody.html"/>
+     <updated>2015-01-16T00:00:00+08:00</updated>
+     <id>http://dianacody.github.io/2015/01/16/dianacody</id>
+     <content type="html">&lt;h3&gt;DianaCody&#39;s Blog&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;version :  1.0&lt;/li&gt;
+&lt;li&gt;name    :  Black Cube Theme&lt;/li&gt;
+&lt;li&gt;color   :  black&lt;/li&gt;
+&lt;li&gt;author  :  DianaCody&lt;/li&gt;
+&lt;li&gt;support :  index, archives, contact&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+   </entry>
    
    <entry>
      <title>Jekyll Blog 主题 Black Cube 1.0</title>
