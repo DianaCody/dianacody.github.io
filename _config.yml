@@ -3,7 +3,7 @@ pygments:         true
 paginate:         4
 
 #Site config
-title: Black Cube Theme
+title: DianaCody's Shell
 url: http://dianacody.github.io
 feed: /atom.xml
 author:
@@ -11,7 +11,7 @@ author:
     email: dianacodyleaf@gmail.com
 description: "DianaCody's blog "
 
-about: "DianaCody, a postgraduate student of Beijing University of Posts and Telecommunications.My interests: Search Engine, DataMining, MachineLearning, NLP. Love coding and writing. My Open-Source Project: SinaTweet Spider, PersonalRecommandSystem."
+about: "DianaCody, a postgraduate student of Beijing University of Posts and Telecommunications. My interests: Search Engine, DataMining, MachineLearning, NLP. Love coding and writing. My Open-Source Project: SinaTweet Spider, PersonalRecommandSystem."
 follow:
     github: https://github.com/dianacody/
     linkedin: http://www.linkedin.com/
@@ -24,5 +24,5 @@ description: "DianaCody's Blog Theme -- Black Cube Theme 1.0 "
 
 
 style: 			  /css/style.css
-blogName: 		  DianaCody
+blogName: 		  DianaCody's Shell
 blogDesc: 		  Machine Learning & IR.
