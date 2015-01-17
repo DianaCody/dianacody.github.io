@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
  
    <title>DianaCody's Shell</title>
-   <link href="http://dianacody.github.io/atom.xml" rel="self" type="application/atom+xml"/>
-   <link href="http://dianacody.github.io" rel="alternate" type="text/html" />
-   <updated>2015-01-16T22:24:19+08:00</updated>
-   <id>http://dianacody.github.io</id>
+   <link href="http://www.dianacody.com/atom.xml" rel="self" type="application/atom+xml"/>
+   <link href="http://www.dianacody.com" rel="alternate" type="text/html" />
+   <updated>2015-01-17T21:05:12+08:00</updated>
+   <id>http://www.dianacody.com</id>
    <author>
      <name>DianaCody</name>
      <email>dianacodyleaf@gmail.com</email>
@@ -14,9 +14,9 @@
    
    <entry>
      <title>Dianacody</title>
-     <link href="http://dianacody.github.io/2015/01/16/dianacody.html"/>
+     <link href="http://www.dianacody.com/2015/01/16/dianacody.html"/>
      <updated>2015-01-16T00:00:00+08:00</updated>
-     <id>http://dianacody.github.io/2015/01/16/dianacody</id>
+     <id>http://www.dianacody.com/2015/01/16/dianacody</id>
      <content type="html">&lt;h3&gt;DianaCody&#39;s Blog&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -32,9 +32,9 @@
    
    <entry>
      <title>个性化用户推荐系统</title>
-     <link href="http://dianacody.github.io/2012/05/01/RecommandSystem.html"/>
+     <link href="http://www.dianacody.com/2012/05/01/RecommandSystem.html"/>
      <updated>2012-05-01T00:00:00+08:00</updated>
-     <id>http://dianacody.github.io/2012/05/01/RecommandSystem</id>
+     <id>http://www.dianacody.com/2012/05/01/RecommandSystem</id>
      <content type="html">&lt;h2&gt;个性化用户推荐系统&lt;/h2&gt;
 
 &lt;hr /&gt;
@@ -62,9 +62,9 @@
    
    <entry>
      <title>网易微博爬虫（python）</title>
-     <link href="http://dianacody.github.io/2012/04/30/Spider_python.html"/>
+     <link href="http://www.dianacody.com/2012/04/30/Spider_python.html"/>
      <updated>2012-04-30T00:00:00+08:00</updated>
-     <id>http://dianacody.github.io/2012/04/30/Spider_python</id>
+     <id>http://www.dianacody.com/2012/04/30/Spider_python</id>
      <content type="html">&lt;h2&gt;网易微博爬虫（python版）&lt;/h2&gt;
 
 &lt;h3&gt;&lt;strong&gt;163 Tweet Crawler (python)&lt;/strong&gt;&lt;/h3&gt;
@@ -110,9 +110,9 @@
    
    <entry>
      <title>Sina Tweet Crawler (java)</title>
-     <link href="http://dianacody.github.io/2012/04/29/Spider_java.html"/>
+     <link href="http://www.dianacody.com/2012/04/29/Spider_java.html"/>
      <updated>2012-04-29T00:00:00+08:00</updated>
-     <id>http://dianacody.github.io/2012/04/29/Spider_java</id>
+     <id>http://www.dianacody.com/2012/04/29/Spider_java</id>
      <content type="html">&lt;h2&gt;新浪微博爬虫（java版）&lt;/h2&gt;
 
 &lt;hr /&gt;
@@ -148,9 +148,9 @@
    
    <entry>
      <title>Jekyll Blog 主题 Black Cube 1.0</title>
-     <link href="http://dianacody.github.io/2012/04/28/nlp.html"/>
+     <link href="http://www.dianacody.com/2012/04/28/nlp.html"/>
      <updated>2012-04-28T00:00:00+08:00</updated>
-     <id>http://dianacody.github.io/2012/04/28/nlp</id>
+     <id>http://www.dianacody.com/2012/04/28/nlp</id>
      <content type="html">&lt;h3&gt;&quot;BLACKQUERY&quot;标签：&lt;/h3&gt;
 
 &lt;blockquote&gt;&lt;p&gt;Your time is limited, so don&#39;t waste it living someone else&#39;s life.…Don&#39;t let the noise of others&#39; opinions drown out your own inner voice.&lt;/p&gt;&lt;/blockquote&gt;
@@ -242,9 +242,9 @@
    
    <entry>
      <title>Jekyll Blog 主题 Black Cube 1.0</title>
-     <link href="http://dianacody.github.io/2012/04/26/hello-world.html"/>
+     <link href="http://www.dianacody.com/2012/04/26/hello-world.html"/>
      <updated>2012-04-26T00:00:00+08:00</updated>
-     <id>http://dianacody.github.io/2012/04/26/hello-world</id>
+     <id>http://www.dianacody.com/2012/04/26/hello-world</id>
      <content type="html">&lt;h3&gt;&quot;BLACKQUERY&quot;标签：&lt;/h3&gt;
 
 &lt;blockquote&gt;&lt;p&gt;Your time is limited, so don&#39;t waste it living someone else&#39;s life.…Don&#39;t let the noise of others&#39; opinions drown out your own inner voice.&lt;/p&gt;&lt;/blockquote&gt;

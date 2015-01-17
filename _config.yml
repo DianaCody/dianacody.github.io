@@ -9,9 +9,16 @@ feed: /atom.xml
 author:
     name: DianaCody
     email: dianacodyleaf@gmail.com
-description: "DianaCody's blog "
+description: "DianaCody's blog"
 
-about: "DianaCody, a postgraduate student of Beijing University of Posts and Telecommunications. My interests: Search Engine, DataMining, MachineLearning, NLP. Love coding and writing. My Open-Source Project: SinaTweet Spider, PersonalRecommandSystem."
+about:
+    name: "I'M DianaCody"
+    email: "dianacodyleaf@gmail.com"
+    experience_1: "postgraduate student @BUPT WT&T LABS"
+    experience_2: "Software Developer @HUAWEI"
+    experience_3: "Background Data Developer @ALEIYE"
+    person: "DianaCody, a postgraduate student of Beijing University of Posts and Telecommunications. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes."
+    interests: "Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. " 
 follow:
     github: https://github.com/dianacody/
     linkedin: http://www.linkedin.com/
@@ -25,4 +32,4 @@ description: "DianaCody's Blog Theme -- Black Cube Theme 1.0 "
 
 style: 			  /css/style.css
 blogName: 		  DianaCody's Shell
-blogDesc: 		  Machine Learning & IR.
+blogDesc: 		  Focus on Search Engine, ML & IR & NLP.
