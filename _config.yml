@@ -4,7 +4,7 @@ paginate:         4
 
 #Site config
 title: DianaCody's Shell
-url: http://dianacody.github.io
+url: http://www.dianacody.com
 feed: /atom.xml
 author:
     name: DianaCody
