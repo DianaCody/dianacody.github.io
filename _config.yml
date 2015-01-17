@@ -5,6 +5,7 @@ paginate:         4
 #Site config
 title: DianaCody's Shell
 url: http://www.dianacody.com
+csdnBlog: http://blog.csdn.net/dianacody/
 feed: /atom.xml
 author:
     name: DianaCody
@@ -14,9 +15,6 @@ description: "DianaCody's blog"
 about:
     name: "I'M DianaCody"
     email: "dianacodyleaf@gmail.com"
-    experience_1: "postgraduate student @BUPT WT&T LABS"
-    experience_2: "Software Developer @HUAWEI"
-    experience_3: "Background Data Developer @ALEIYE"
     person: "DianaCody, a postgraduate student of Beijing University of Posts and Telecommunications. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes."
     interests: "Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. " 
 follow:
