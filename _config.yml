@@ -1,6 +1,6 @@
 markdown:         rdiscount
 pygments:         true
-paginate:         4
+paginate:         5
 
 #Site config
 title: DianaCody's Shell
