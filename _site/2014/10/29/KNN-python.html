@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    **
+    *
+    * Author:         DianaCody
+    * Contact:        dianacodyleaf@gmail.com
+    * Theme Name:     Block Rude
+    * Version:        1.0
+    *
+    **
+  -->
+  <meta charset="utf-8" />
+  <title>KNN算法-python实现 | DianaCody's Shell</title>
+  <meta name="generator" content="Jekyll" />
+  <meta name="author" content="DianaCody" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="/css/style.css" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+  <link rel="shortcut icon" href="images/favicon.jpg" type="image/x-icon" />
+</head>
+<body>
+    <header class="head">
+	<div class="header fn-clear">
+		<section class="header-cnt fn-clear">
+			<div class="logo">
+				<div class="logo-cnt">
+				 	<h1><a href="/">DianaCody's Shell</a></h1>
+				 	<h2>Focus on Search Engine, ML & IR & NLP.</h2>
+				</div>
+			</div>
+			<nav class="nav">
+				<ul>
+					<li><a href="/" >Home</a></li>
+					<li><a href="/archives.html" >Archives</a></li>					
+					<li><a href="/contact.html" >About & Contact</a></li>
+					<!--<li><a href="/resume.html" >Resume</a></li>-->
+					<li><a href="/atom.xml" target="_blank" >Rss</a></li>
+				</ul>
+			</nav>
+		</section>
+	</div>
+</header> 
+  <section id="content">
+    <article id="contenter">
+      <section class="content">
+	<div class="content-cnt fn-clear">
+		<div class="main fn-clear">
+			<article class="entry">
+				<h1 class="title">KNN算法-python实现</h1>
+               	<p class="meta"><time class="date" pubdate="2014-10-29">29 Oct 2014</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
+               	<p class="description">KNN算法的学习及实现源码。</p>
+ 			 	<h5>一、算法原理</h5>
+
+<ol>
+<li>计算抑制类别数据集中的点与当前点的距离（欧氏距离、马氏距离等）</li>
+<li>按照距离递增依次排序</li>
+<li>选取当前点距离最小的k个点</li>
+<li>确定前k个点所在类别出现频率</li>
+<li>返回前k个点出现频率最高的类别作为当前点的预测分类</li>
+</ol>
+
+
+<p>注意：</p>
+
+<ol>
+<li><p>关于k值个数的选择，其取决于数据。一般地，在分类时，较大k值可以减小噪声的影响，但会使类别界限变得模糊。</p>
+
+<blockquote><ul>
+<li>好的k值可以通过各种启发式技术来获取（eg.交叉验证）</li>
+<li>噪声和非相关性特征向量的存在会使k近邻算法的准确性减小</li>
+</ul>
+</blockquote></li>
+<li><p>近邻算法具有较强的一致性结果，随着数据趋于无线，算法的错误率不会超过贝叶斯算法错误率的2倍。对于一些好的k值，k近邻保证错误率不会超过贝叶斯理论误差率。</p></li>
+</ol>
+
+
+<h5>二、源码实现</h5>
+
+<pre><code class="python">from numpy import *  
+import time  
+import matplotlib.pyplot as plt  
+
+
+# calculate Euclidean distance  
+def euclDistance(vector1, vector2):  
+    return sqrt(sum(power(vector2 - vector1, 2)))  
+
+# init centroids with random samples  
+def initCentroids(dataSet, k):  
+    numSamples, dim = dataSet.shape  
+    centroids = zeros((k, dim))  
+    for i in range(k):  
+        index = int(random.uniform(0, numSamples))  
+        centroids[i, :] = dataSet[index, :]  
+    return centroids  
+
+# k-means cluster  
+def kmeans(dataSet, k):  
+    numSamples = dataSet.shape[0]  
+    # first column stores which cluster this sample belongs to,  
+    # second column stores the error between this sample and its centroid  
+    clusterAssment = mat(zeros((numSamples, 2)))  
+    clusterChanged = True  
+
+    ## step 1: init centroids  
+    centroids = initCentroids(dataSet, k)  
+
+    while clusterChanged:  
+        clusterChanged = False  
+        ## for each sample  
+        for i in xrange(numSamples):  
+            minDist  = 100000.0  
+            minIndex = 0  
+            ## for each centroid  
+            ## step 2: find the centroid who is closest  
+            for j in range(k):  
+                distance = euclDistance(centroids[j, :], dataSet[i, :])  
+                if distance &lt; minDist:  
+                    minDist  = distance  
+                    minIndex = j  
+
+            ## step 3: update its cluster  
+            if clusterAssment[i, 0] != minIndex:  
+                clusterChanged = True  
+                clusterAssment[i, :] = minIndex, minDist**2  
+
+        ## step 4: update centroids  
+        for j in range(k):  
+            pointsInCluster = dataSet[nonzero(clusterAssment[:, 0].A == j)[0]]  
+            centroids[j, :] = mean(pointsInCluster, axis = 0)  
+
+    print 'Congratulations, cluster complete!'  
+    return centroids, clusterAssment  
+
+# show your cluster only available with 2-D data  
+def showCluster(dataSet, k, centroids, clusterAssment):  
+    numSamples, dim = dataSet.shape  
+    if dim != 2:  
+        print "Sorry! I can not draw because the dimension of your data is not 2!"  
+        return 1  
+
+    mark = ['or', 'ob', 'og', 'ok', '^r', '+r', 'sr', 'dr', '&lt;r', 'pr']  
+    if k &gt; len(mark):  
+        print "Sorry! Your k is too large! please contact Zouxy"  
+        return 1  
+
+    # draw all samples  
+    for i in xrange(numSamples):  
+        markIndex = int(clusterAssment[i, 0])  
+        plt.plot(dataSet[i, 0], dataSet[i, 1], mark[markIndex])  
+
+    mark = ['Dr', 'Db', 'Dg', 'Dk', '^b', '+b', 'sb', 'db', '&lt;b', 'pb']  
+    # draw the centroids  
+    for i in range(k):  
+        plt.plot(centroids[i, 0], centroids[i, 1], mark[i], markersize = 12)  
+
+plt.show() 
+</code></pre>
+
+<h5>三、测试代码</h5>
+
+<pre><code>from numpy import *  
+import time  
+import matplotlib.pyplot as plt  
+
+## step 1: load data  
+print "step 1: load data..."  
+dataSet = []  
+fileIn = open('E:/Python/Machine Learning in Action/testSet.txt')  
+for line in fileIn.readlines():  
+    lineArr = line.strip().split('\t')  
+    dataSet.append([float(lineArr[0]), float(lineArr[1])])  
+
+## step 2: clustering...  
+print "step 2: clustering..."  
+dataSet = mat(dataSet)  
+k = 4  
+centroids, clusterAssment = kmeans(dataSet, k)  
+
+## step 3: show the result  
+print "step 3: show the result..."  
+showCluster(dataSet, k, centroids, clusterAssment)  
+</code></pre>
+
+                <nav class="pagination-link">
+                    
+                    <a class="prev" href="/2014/10/01/spider_5.html" rel="bookmark">&laquo;&nbsp;防止爬虫被墙的方法总结</a>
+                    
+                    
+                    <a class="next" href="/2014/11/01/GBRT.html" rel="bookmark">迭代决策树GBRT（渐进梯度回归树）&nbsp;&raquo;</a>
+                    
+                 </nav>
+			</article><!-- .entry -->		
+		</div>
+		<div class="aside fn-clear">
+			<div class="box fn-clear">
+	<img src="/images/psb.jpg" alt="about theme"/>
+	<!-- modify by dianacody-->
+	<ul>
+		<li><b>I'M DianaCody</b></li>
+		<li><i>dianacodyleaf@gmail.com</i></li>
+		<li>DianaCody, a postgraduate student from BUPT. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes.</li>
+		<li>Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. </li>
+	</ul>
+	
+</div>
+			<div class="box fn-clear">
+	<h3 class="title">GitHub Project</h3>
+	<ul>
+		<li>&#8227;<a href="https://github.com/DianaCody/RecommandSystem/">Personal Recommand System</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Spider_SinaTweetCrawler_java/">Spider SinaWeibo_Crawler</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Spider_python/">Tweet Crawler</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Translator/">Translator Plugin</a></li>
+	</ul>
+</div>
+			<div class="box fn-clear">
+	<h3 class="title">CSDN Blog</h3>
+	<ul>
+		<li><a href="http://blog.csdn.net/dianacody">http://blog.csdn.net/dianacody</a></li>
+	</ul>
+
+	<!--
+	<p>This is a jekyll blog theme.</p>
+	-->	
+</div>
+		</div>
+	</div>
+</section>
+    </article>
+  </section>
+    <footer class="foot">
+	<div class="foot-cnt fn-clear">
+		<div class="foot-cnt-det fn-clear">
+			<article class="blogroll">
+				<h4 class="title">Links</h4>
+				<ul>
+					<li>&#8227;<a href="https://github.com/dianacody">DianaCody's Github</a></li>
+					<li>&#8227;<a href="http://blog.csdn.net/dianacody">My csdn Blog</a></li>
+					<!-- <li>&#8227;<a href="http://www.jekyllrb.com">www.jekyllrb.com</a></li> -->
+				</ul>
+			</article>
+			<article class="about">
+				<h4 class="title">About Me</h4>
+				<p>DianaCody, a postgraduate student from BUPT. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes.</p>
+				<p>Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. </p>
+			</article>
+			<article class="follow">
+				<h4 class="title">Follow Me</h4>
+				<ul>
+					<li><a href="https://github.com/dianacody/" class="ico-github" target="_blank">github</a></li>
+					<li><a href="/atom.xml" class="ico-rss" target="_blank">rss</a></li>
+					<li><a href="http://www.linkedin.com/" class="ico-linkedin">linkedin</a></li>
+					<li><a href="http://www.google.com/" class="ico-google">google</a></li>
+					<li><a href="http://www.flickr.com/" class="ico-flickr">flickr</a></li>
+					<li><a href="http://www.twitter.com/dianacody/" class="ico-twitter">twitter</a></li>
+					<li><a href="http://www.facebook.com/" class="ico-facebook">facebook</a></li>
+					<li><a href="http://www.vimeo.com/" class="ico-vimeo">vimeo</a></li>
+				</ul>
+			</article>
+		</div>
+	</div>
+	<div class="foot-btn">
+		<div class="foot-btn-det">
+			<p class="copyright">© 2013-2015 DianaCody. All rights reserved.</p>
+			<p class="author">Powered by <a href="http://www.jekyllrb.com">Jekyll</a>. Design by <a href="http://dianacody.github.io">DianaCody</a>.</p>
+		</div>
+	</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    **
+    *
+    * Author:         DianaCody
+    * Contact:        dianacodyleaf@gmail.com
+    * Theme Name:     Block Rude
+    * Version:        1.0
+    *
+    **
+  -->
+  <meta charset="utf-8" />
+  <title>迭代决策树GBRT（渐进梯度回归树） | DianaCody's Shell</title>
+  <meta name="generator" content="Jekyll" />
+  <meta name="author" content="DianaCody" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="/css/style.css" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+  <link rel="shortcut icon" href="images/favicon.jpg" type="image/x-icon" />
+</head>
+<body>
+    <header class="head">
+	<div class="header fn-clear">
+		<section class="header-cnt fn-clear">
+			<div class="logo">
+				<div class="logo-cnt">
+				 	<h1><a href="/">DianaCody's Shell</a></h1>
+				 	<h2>Focus on Search Engine, ML & IR & NLP.</h2>
+				</div>
+			</div>
+			<nav class="nav">
+				<ul>
+					<li><a href="/" >Home</a></li>
+					<li><a href="/archives.html" >Archives</a></li>					
+					<li><a href="/contact.html" >About & Contact</a></li>
+					<!--<li><a href="/resume.html" >Resume</a></li>-->
+					<li><a href="/atom.xml" target="_blank" >Rss</a></li>
+				</ul>
+			</nav>
+		</section>
+	</div>
+</header> 
+  <section id="content">
+    <article id="contenter">
+      <section class="content">
+	<div class="content-cnt fn-clear">
+		<div class="main fn-clear">
+			<article class="entry">
+				<h1 class="title">迭代决策树GBRT（渐进梯度回归树）</h1>
+               	<p class="meta"><time class="date" pubdate="2014-11-01">01 Nov 2014</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
+               	<p class="description">单决策树C4.5由于功能太简单，并且非常容易出现过拟合的现象，于是引申出了许多变种决策树，就是将单决策树进行模型组合，形成多决策树，比较典型的就是迭代决策树GBRT和随机森林RF.</p>
+ 			 	<h5>一、决策树模型组合</h5>
+
+<p>单决策树C4.5由于功能太简单，并且非常容易出现过拟合的现象，于是引申出了许多变种决策树，就是将单决策树进行<strong>模型组合</strong>，形成多决策树，比较典型的就是迭代决策树GBRT和随机森林RF。
+在最近几年的paper上，如iccv这种重量级会议，iccv 09年的里面有不少文章都是与Boosting和随机森林相关的。模型组合+决策树相关算法有两种比较基本的形式：随机森林RF与GBDT，其他比较新的模型组合+决策树算法都是来自这两种算法的延伸。
+<strong>核心思想：其实很多“渐进梯度” Gradient Boost都只是一个框架，里面可以套用很多不同的算法。</strong></p>
+
+<p>首先说明一下，GBRT这个算法有很多名字，但都是同一个算法：
+GBRT (Gradient BoostRegression Tree) 渐进梯度回归树
+GBDT (Gradient BoostDecision Tree) 渐进梯度决策树
+MART (MultipleAdditive Regression Tree) 多决策回归树
+Tree Net决策树网络</p>
+
+<h5>二、GBRT</h5>
+
+<p>迭代决策树算法，在阿里内部用得比较多（所以阿里算法岗位面试时可能会问到），由多棵决策树组成，所有树的输出结果累加起来就是最终答案。它在被提出之初就和SVM一起被认为是泛化能力（generalization)较强的算法。近些年更因为被用于搜索排序的机器学习模型而引起大家关注。</p>
+
+<p>GBRT是回归树，不是分类树。其核心就在于，每一棵树是从之前所有树的残差中来学习的。为了防止过拟合，和Adaboosting一样，也加入了boosting这一项。</p>
+
+<p>提起决策树（DT, DecisionTree）不要只想到C4.5单分类决策树，GBRT不是<strong>分类树</strong>而是<strong>回归树</strong>！
+决策树分为<strong>回归树</strong>和<strong>分类树</strong>：</p>
+
+<p><strong>回归树</strong>用于预测实数值，如明天温度、用户年龄</p>
+
+<p><strong>分类树</strong>用于分类标签值，如晴天/阴天/雾/雨、用户性别</p>
+
+<p>注意前者结果加减是有意义的，如10岁+5岁-3岁=12岁，后者结果加减无意义，如男+女=到底是男还是女？GBRT的核心在于累加所有树的结果作为最终结果，而分类树是没有办法累加的。所以GBDT中的树都是回归树而非分类树。</p>
+
+<p>第一棵树是正常的，之后所有的树的决策全是由<strong>残差</strong>（此次的值与上次的值之差）来作决策。</p>
+
+<h5>三、算法原理</h5>
+
+<p>0.给定一个初始值</p>
+
+<p>1.建立M棵决策树（迭代M次）</p>
+
+<p>2.对函数估计值F(x)进行Logistic变换</p>
+
+<p>3.对于K各分类进行下面的操作（其实这个for循环也可以理解为向量的操作，每个样本点xi都对应了K种可能的分类yi，所以yi，F(xi)，p(xi)都是一个K维向量）</p>
+
+<p>4.求得残差减少的梯度方向</p>
+
+<p>5.根据每个样本点x，与其残差减少的梯度方向，得到一棵由J个叶子节点组成的决策树</p>
+
+<p><strong>6.当决策树建立完成后，通过这个公式，可以得到每个叶子节点的增益（这个增益在预测时候用的）</strong></p>
+
+<p>每个增益的组成其实也是一个K维向量，表示如果在决策树预测的过程中，如果某个样本点掉入了这个叶子节点，则其对应的K个分类的值是多少。比如GBDT得到了三棵决策树，一个样本点在预测的时候，也会掉入3个叶子节点上，其增益分别为（假设为3分类问题）：
+(0.5, 0.8, 0.1), (0.2, 0.6, 0.3), (0.4, .0.3, 0.3)，那么这样最终得到的分类为第二个，因为选择分类2的决策树是最多的。</p>
+
+<p>7.将当前得到的决策树与之前的那些决策树合并起来，作为一个新的模型（跟6中的例子差不多）</p>
+
+<h5>四、GBRT适用范围</h5>
+
+<p>该版本的GBRT几乎可用于所有的回归问题（线性/非线性），相对logistic regression仅能用于线性回归，GBRT的适用面非常广。亦可用于二分类问题（设定阈值，大于阈值为正例，反之为负例）。</p>
+
+<h5>五、搜索引擎排序应用RankNet</h5>
+
+<p>搜索排序关注各个doc的顺序而不是绝对值，所以需要一个新的cost function，而RankNet基本就是在定义这个cost function，它可以兼容不同的算法（GBDT、神经网络...）。</p>
+
+<p>实际的搜索排序使用的是Lambda MART算法，必须指出的是由于这里要使用排序需要的cost function，LambdaMART迭代用的并不是残差。Lambda在这里充当替代残差的计算方法，它使用了一种类似Gradient*步长模拟残差的方法。这里的MART在求解方法上和之前说的残差略有不同。</p>
+
+<p>搜索排序也需要训练集，但多数用人工标注实现，即对每个(query, doc)pair给定一个分值（如1, 2, 3, 4），分值越高越相关，越应该排到前面。RankNet就是基于此制定了一个学习误差衡量方法，即cost function。RankNet对任意两个文档A,B，通过它们的人工标注分差，用sigmoid函数估计两者顺序和逆序的概率P1。然后同理用机器学习到的分差计算概率P2（sigmoid的好处在于它允许机器学习得到的分值是任意实数值，只要它们的分差和标准分的分差一致，P2就趋近于P1）。这时利用P1和P2求的两者的交叉熵，该交叉熵就是cost function。</p>
+
+<p>有了cost function，可以求导求Gradient，Gradient即每个文档得分的一个下降方向组成的N维向量，N为文档个数（应该说是query-doc pair个数）。这里仅仅是把”求残差“的逻辑替换为”求梯度“。每个样本通过Shrinkage累加都会得到一个最终得分，直接按分数从大到小排序就可以了。</p>
+
+                <nav class="pagination-link">
+                    
+                    <a class="prev" href="/2014/10/29/KNN-python.html" rel="bookmark">&laquo;&nbsp;KNN算法-python实现</a>
+                    
+                    
+                    <a class="next" href="/2014/11/02/Bayes.html" rel="bookmark">文本分类：朴素贝叶斯Bayes&nbsp;&raquo;</a>
+                    
+                 </nav>
+			</article><!-- .entry -->		
+		</div>
+		<div class="aside fn-clear">
+			<div class="box fn-clear">
+	<img src="/images/psb.jpg" alt="about theme"/>
+	<!-- modify by dianacody-->
+	<ul>
+		<li><b>I'M DianaCody</b></li>
+		<li><i>dianacodyleaf@gmail.com</i></li>
+		<li>DianaCody, a postgraduate student from BUPT. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes.</li>
+		<li>Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. </li>
+	</ul>
+	
+</div>
+			<div class="box fn-clear">
+	<h3 class="title">GitHub Project</h3>
+	<ul>
+		<li>&#8227;<a href="https://github.com/DianaCody/RecommandSystem/">Personal Recommand System</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Spider_SinaTweetCrawler_java/">Spider SinaWeibo_Crawler</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Spider_python/">Tweet Crawler</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Translator/">Translator Plugin</a></li>
+	</ul>
+</div>
+			<div class="box fn-clear">
+	<h3 class="title">CSDN Blog</h3>
+	<ul>
+		<li><a href="http://blog.csdn.net/dianacody">http://blog.csdn.net/dianacody</a></li>
+	</ul>
+
+	<!--
+	<p>This is a jekyll blog theme.</p>
+	-->	
+</div>
+		</div>
+	</div>
+</section>
+    </article>
+  </section>
+    <footer class="foot">
+	<div class="foot-cnt fn-clear">
+		<div class="foot-cnt-det fn-clear">
+			<article class="blogroll">
+				<h4 class="title">Links</h4>
+				<ul>
+					<li>&#8227;<a href="https://github.com/dianacody">DianaCody's Github</a></li>
+					<li>&#8227;<a href="http://blog.csdn.net/dianacody">My csdn Blog</a></li>
+					<!-- <li>&#8227;<a href="http://www.jekyllrb.com">www.jekyllrb.com</a></li> -->
+				</ul>
+			</article>
+			<article class="about">
+				<h4 class="title">About Me</h4>
+				<p>DianaCody, a postgraduate student from BUPT. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes.</p>
+				<p>Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. </p>
+			</article>
+			<article class="follow">
+				<h4 class="title">Follow Me</h4>
+				<ul>
+					<li><a href="https://github.com/dianacody/" class="ico-github" target="_blank">github</a></li>
+					<li><a href="/atom.xml" class="ico-rss" target="_blank">rss</a></li>
+					<li><a href="http://www.linkedin.com/" class="ico-linkedin">linkedin</a></li>
+					<li><a href="http://www.google.com/" class="ico-google">google</a></li>
+					<li><a href="http://www.flickr.com/" class="ico-flickr">flickr</a></li>
+					<li><a href="http://www.twitter.com/dianacody/" class="ico-twitter">twitter</a></li>
+					<li><a href="http://www.facebook.com/" class="ico-facebook">facebook</a></li>
+					<li><a href="http://www.vimeo.com/" class="ico-vimeo">vimeo</a></li>
+				</ul>
+			</article>
+		</div>
+	</div>
+	<div class="foot-btn">
+		<div class="foot-btn-det">
+			<p class="copyright">© 2013-2015 DianaCody. All rights reserved.</p>
+			<p class="author">Powered by <a href="http://www.jekyllrb.com">Jekyll</a>. Design by <a href="http://dianacody.github.io">DianaCody</a>.</p>
+		</div>
+	</div>
+</footer>
+</body>
+</html>

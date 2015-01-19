@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    **
+    *
+    * Author:         DianaCody
+    * Contact:        dianacodyleaf@gmail.com
+    * Theme Name:     Block Rude
+    * Version:        1.0
+    *
+    **
+  -->
+  <meta charset="utf-8" />
+  <title>最大匹配算法扩展 | DianaCody's Shell</title>
+  <meta name="generator" content="Jekyll" />
+  <meta name="author" content="DianaCody" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="/css/style.css" type="text/css" />
+  <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+  <link rel="shortcut icon" href="images/favicon.jpg" type="image/x-icon" />
+</head>
+<body>
+    <header class="head">
+	<div class="header fn-clear">
+		<section class="header-cnt fn-clear">
+			<div class="logo">
+				<div class="logo-cnt">
+				 	<h1><a href="/">DianaCody's Shell</a></h1>
+				 	<h2>Focus on Search Engine, ML & IR & NLP.</h2>
+				</div>
+			</div>
+			<nav class="nav">
+				<ul>
+					<li><a href="/" >Home</a></li>
+					<li><a href="/archives.html" >Archives</a></li>					
+					<li><a href="/contact.html" >About & Contact</a></li>
+					<!--<li><a href="/resume.html" >Resume</a></li>-->
+					<li><a href="/atom.xml" target="_blank" >Rss</a></li>
+				</ul>
+			</nav>
+		</section>
+	</div>
+</header> 
+  <section id="content">
+    <article id="contenter">
+      <section class="content">
+	<div class="content-cnt fn-clear">
+		<div class="main fn-clear">
+			<article class="entry">
+				<h1 class="title">最大匹配算法扩展</h1>
+               	<p class="meta"><time class="date" pubdate="2014-11-16">16 Nov 2014</time> By <a href="/contact.html" class="author" title="author">DianaCody</a><g:plusone size="small"></g:plusone></p>
+               	<p class="description">基于简单的中文分词匹配法做了扩展，中文分词算法提供了一个C版本的mmseg供研究使用。</p>
+ 			 	<p>基于简单的中文分词匹配法做了扩展，其中比较有名的就是台湾蔡志浩老师1996年写的“MMSEG: A Word Identification System for Mandarin Chinese Text Based on Two Variants of the Maximum Matching Algorithm”，在这篇文章的页面中，不仅介绍了相关的中文分词算法，并且提供了一个C版本的mmseg供研究使用，目前根据该文及其代码移植的mmseg程序版本包括C++版、Java版、Python版及Ruby版，影响甚广。</p>
+
+<p>此文是英文版本，建议有条件的读者直接读原文。不过国内也有该文的简介文章：《MMSeg分词算法简述》，原文似乎出自www.solol.org。</p>
+
+<p>MMSEG中文分词系统的可以由一句话总结：The system consisted of a lexicon, two matching algorithms, and four ambiguity resolution rules（该系统包括一个词典，两种匹配算法，以及四种歧义消解规则）：</p>
+
+<p><strong>1、词典（The Lexicon）</strong>：</p>
+
+<p>分两种形式，对于单个汉字的汉语词，除了汉字本身外，还包括其统计频率（这个频率属于先验知识，可以来自于已经人工分好词的训练语料库），而对于二字长及以上的汉语词，只要词条本身就可以了。</p>
+
+<p><strong>2、匹配算法（Matching Algorithm）</strong>：</p>
+
+<p>a) 简单匹配:对于字符串中的汉字Cn，用词典匹配以Cn开头的子串并查找所有可能的匹配；</p>
+
+<p>b) 复杂匹配:对于字符串中的汉字Cn，查找所有可能以Cn开头的三词chunks，无论第一个汉语词是否有歧义。</p>
+
+<p><strong>3、歧义消解规则（Ambiguity Resolution Rules）</strong>：</p>
+
+<p><strong><em>规则一：最大匹配(Maximum matching)</em></strong></p>
+
+<p>a) 简单最大匹配算法,也就是我们常说的最大匹配法，不过作者采取的是正向匹配，并且按长度从小到大搜索词典：假设C1,C2,….代表一个字符串中的汉字，首先搜索词典，看 <em>C1</em>是否为一个单字组成的词语，然后搜索 <em>C1C2</em>来看是否为两个汉字组成的词语，以此类推，直至找到字典中最长的匹配。</p>
+
+<p>b) 复杂最大匹配算法,由Chen 和Liu（1992）提出，其核心的假设是：The most plausible segmentation is the three-word chunk with maximum length. 请注意three-word chunk，可以将其翻译为“三词语块”，这也是MMSEG中比较核心的一个概念，这个最大匹配规则考虑问题比较全面，在对句子中的某个词进行切分时，如果有歧义拿不定主意，就再向后展望两个汉语词，并且找出所有可能的“三词语块”。例如，对于如下的“三词语块”，请注意括号中是注明的语块长度（以汉语单字为基本单位）：</p>
+
+<ol>
+<li><em>C1</em> <em>C2</em> <em>C3C4</em>（4）</li>
+<li><em>C1C2</em> <em>C3C4</em> <em>C5</em>（5）</li>
+<li><em>C1C2</em> <em>C3C4</em> <em>C5C6</em>（6）</li>
+</ol>
+
+
+<p>最大长度的“三词语块”是第3个，所以其第一汉语词<em>C1C2</em>将被作为正确的分词形式。以此类推，接下来我们从C3开始，找出所有可能的“三词语块”，重复上述规则，直到句子的最后一个词被划分。直观一点，对于以“眼”开头的如下5个“三词语块”,利用该规则，则“眼看”是正确的词语划分：</p>
+
+<ol>
+<li>眼看 就要 来了（6）</li>
+<li>眼看 就要 来（5）</li>
+<li>眼看 就 要(4)</li>
+<li>眼 看 就要(4)</li>
+<li>眼 看 就(3)</li>
+</ol>
+
+
+<p><strong><em>规则二：最大平均词长（Largest average word length）</em></strong></p>
+
+<p>在句子的末尾，很可能得到的“三词语块”只有一个或两个词（其他位置补空），例如，对于如下两个“三词语块”，他们拥有同样的长度：</p>
+
+<ol>
+<li><em>C1</em> <em>C2</em> <em>C3</em>（平均词长=1）</li>
+<li><em>C1C2C3</em>（平均词长=3）</li>
+</ol>
+
+
+<p>这时规则1就无法解决其歧义消解问题，因此引入规则2：最大平均词长，也就是从这些语块中找出平均词长最大的语块，并选取其第一词语作为正确的词语切分形式。这个规则的前提假设是：It is more likely to encounter multi-character words than one-character words（在句子中遇到多字-词语的情况比单字-词语更有可能）.</p>
+
+<p>因此，上述两个“三词语块”中第二个<em>C1C2C3</em>就是最佳候选。直观一点，对于如下位于句尾三种形式的“三词语块”：</p>
+
+<ol>
+<li>国际化（平均词长=3）</li>
+<li>国际 化（平均词长=1.5）</li>
+<li>国 际 化（平均词长=1）</li>
+</ol>
+
+
+<p>在规则1无法求解的情况下，根据规则2，则“国际化”为最佳候选语块，因此该语块的第一个词“国际化”就是最佳的分词形式。</p>
+
+<p><strong><em>规则三：最小词长方差（Smallest variance of word lengths）</em></strong></p>
+
+<p>还有一些歧义是规则一和规则二无法解决的，例如，如下的两个“三词语块”拥有同样的长度和同样的平均词长：</p>
+
+<ol>
+<li><em>C1C2</em> <em>C3C4</em> <em>C5C6</em></li>
+<li><em>C1C2C3</em> <em>C4</em> <em>C5C6</em></li>
+</ol>
+
+
+<p>因此引入规则三：最小词长方差，也就是找出词长方差最小的语块，并选取其第一个词语作为正确的词语切分形式。在概率论和统计学中，一个随机变量的方差（Variance）描述的是它的离散程度，也就是该变量离其期望值的距离。因此该规则的前提假设是：Word lengths are usually evenly distributed（句子中的词语长度经常是均匀分布的）。直观来说，对于如下两个“三词语块”：</p>
+
+<ol>
+<li>研究 生命 起源</li>
+<li>研究生 命 起源</li>
+</ol>
+
+
+<p>其长度为6，平均词长为2，规则一和规则二无能无力，利用规则三：
+* 语块1的方差 = ((2-2)<sup>2</sup>+(2-2)<sup>2</sup>+(2-2)<sup>2</sup>)/3 = 0
+* 语块2的方差 = ((3-2)<sup>2</sup>+(1-2)<sup>2</sup>+(2-2)<sup>2</sup>)/3 = 2/3</p>
+
+<p>则语块1为最佳候选，因此该语块的第一个词“研究”为最佳的分词形式。</p>
+
+<p><strong><em>规则四：最大单字词语语素自由度之和（Largest sum of degree of morphemic freedom of one-character words）</em></strong>：</p>
+
+<p>如下所示，例子中的两个“三词语块”拥有同样的长度、平均词长及方差，因此上述三个规则都无法解决其歧义消解问题：</p>
+
+<ol>
+<li><em>C1</em> <em>C2</em> <em>C3C4</em></li>
+<li><em>C1</em> <em>C2C3</em> <em>C4</em></li>
+</ol>
+
+
+<p>这两个语块都包括了两个单字（one-character）词语和一个两字（two-character）词语，规则四主要关注其中的单字词语。直观来看，有些汉字很少作为词语出现，而另一些汉字则常常作为词语出现，从统计角度来看，在语料库中出现频率高的汉字就很可能是一个单字词语，反之可能性就小。计算单词词语语素自由度之和的公式是对“三词语块”中的单字词语频率取对数并求和（The formula used to calculate the sum of degree of morphemic freedom is to sum log(frequency) of all one-character word(s) in a chunk.）规则四则选取其中和最大的语块，并将该语块的第一词语作为最佳的词语切分形式。</p>
+
+<p>关于MMSEG中文分词系统的框架就介绍到此，需要指出的是：</p>
+
+<p><em>“It has to be noted that MMSEG was not designed to be a “professional level” system whose goal is 100% correct identification. Rather, MMSEG should be viewed as a general platform on which new ambiguity resolution algorithms can be tested.”</em></p>
+
+<p>所以，不要认为有了MMSEG就可以解决中文分词的问题，更应该将MMSEG视为一个基本的平台，在该平台的基础上，可以尝试添加新的歧义消解算法以解决中文分词中的难点问题。</p>
+
+                <nav class="pagination-link">
+                    
+                    <a class="prev" href="/2014/11/07/HMM.html" rel="bookmark">&laquo;&nbsp;中文分词-最大匹配算法</a>
+                    
+                    
+                 </nav>
+			</article><!-- .entry -->		
+		</div>
+		<div class="aside fn-clear">
+			<div class="box fn-clear">
+	<img src="/images/psb.jpg" alt="about theme"/>
+	<!-- modify by dianacody-->
+	<ul>
+		<li><b>I'M DianaCody</b></li>
+		<li><i>dianacodyleaf@gmail.com</i></li>
+		<li>DianaCody, a postgraduate student from BUPT. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes.</li>
+		<li>Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. </li>
+	</ul>
+	
+</div>
+			<div class="box fn-clear">
+	<h3 class="title">GitHub Project</h3>
+	<ul>
+		<li>&#8227;<a href="https://github.com/DianaCody/RecommandSystem/">Personal Recommand System</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Spider_SinaTweetCrawler_java/">Spider SinaWeibo_Crawler</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Spider_python/">Tweet Crawler</a></li>
+		<li>&#8227;<a href="https://github.com/DianaCody/Translator/">Translator Plugin</a></li>
+	</ul>
+</div>
+			<div class="box fn-clear">
+	<h3 class="title">CSDN Blog</h3>
+	<ul>
+		<li><a href="http://blog.csdn.net/dianacody">http://blog.csdn.net/dianacody</a></li>
+	</ul>
+
+	<!--
+	<p>This is a jekyll blog theme.</p>
+	-->	
+</div>
+		</div>
+	</div>
+</section>
+    </article>
+  </section>
+    <footer class="foot">
+	<div class="foot-cnt fn-clear">
+		<div class="foot-cnt-det fn-clear">
+			<article class="blogroll">
+				<h4 class="title">Links</h4>
+				<ul>
+					<li>&#8227;<a href="https://github.com/dianacody">DianaCody's Github</a></li>
+					<li>&#8227;<a href="http://blog.csdn.net/dianacody">My csdn Blog</a></li>
+					<!-- <li>&#8227;<a href="http://www.jekyllrb.com">www.jekyllrb.com</a></li> -->
+				</ul>
+			</article>
+			<article class="about">
+				<h4 class="title">About Me</h4>
+				<p>DianaCody, a postgraduate student from BUPT. 1/2 coder, 1/2 writer. Love coding, writing and open-source, also reading and traveling sometimes.</p>
+				<p>Interest Fields：Search Engine, Data Mining, Machine Learning, NLP. </p>
+			</article>
+			<article class="follow">
+				<h4 class="title">Follow Me</h4>
+				<ul>
+					<li><a href="https://github.com/dianacody/" class="ico-github" target="_blank">github</a></li>
+					<li><a href="/atom.xml" class="ico-rss" target="_blank">rss</a></li>
+					<li><a href="http://www.linkedin.com/" class="ico-linkedin">linkedin</a></li>
+					<li><a href="http://www.google.com/" class="ico-google">google</a></li>
+					<li><a href="http://www.flickr.com/" class="ico-flickr">flickr</a></li>
+					<li><a href="http://www.twitter.com/dianacody/" class="ico-twitter">twitter</a></li>
+					<li><a href="http://www.facebook.com/" class="ico-facebook">facebook</a></li>
+					<li><a href="http://www.vimeo.com/" class="ico-vimeo">vimeo</a></li>
+				</ul>
+			</article>
+		</div>
+	</div>
+	<div class="foot-btn">
+		<div class="foot-btn-det">
+			<p class="copyright">© 2013-2015 DianaCody. All rights reserved.</p>
+			<p class="author">Powered by <a href="http://www.jekyllrb.com">Jekyll</a>. Design by <a href="http://dianacody.github.io">DianaCody</a>.</p>
+		</div>
+	</div>
+</footer>
+</body>
+</html>
