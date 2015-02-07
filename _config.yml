@@ -27,6 +27,11 @@ follow:
     vimeo: http://www.vimeo.com/
 description: "DianaCody's Blog Theme -- Black Cube Theme 1.0 "
 
+comments:
+    provider: duoshuo
+    duoshuo:
+        short_name: dianacody
+
 
 style: 			  /css/style.css
 blogName: 		  DianaCody's Shell
