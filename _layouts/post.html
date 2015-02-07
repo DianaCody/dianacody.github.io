@@ -17,44 +17,46 @@ layout: default
                     <a class="next" href="{{ page.next.url }}" rel="bookmark">{{ page.next.title | truncatewords:5 }}&nbsp;&raquo;</a>
                     {% endif %}
                  </nav>
-			</article><!-- .entry -->		
+			</article><!-- .entry -->
+
+			<!-- 多说评论框 -->
+	    	<div class="ds-thread" data-thread-key={{page.id}} data-title={{page.title}} data-url="dianacody.github.io{{page.url}}">
+	    	</div>
+
+	    	<!-- 多说公共JS代码 -->
+			<script type="text/javascript">
+			var duoshuoQuery = {short_name:"dianacody"};
+				(function() {
+					var ds = document.createElement('script');
+					ds.type = 'text/javascript';ds.async = true;
+					ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+					ds.charset = 'UTF-8';
+					(document.getElementsByTagName('head')[0] 
+					 || document.getElementsByTagName('body')[0]).appendChild(ds);
+				})();
+			</script>
+
+			<!-- 多说分享插件 -->
+			<div class="ds-share" data-thread-key={{page.id}} data-title={{page.title}} data-images="" data-content="" data-url={{page.url}}>
+		    	<div class="ds-share-inline">
+		      		<ul  class="ds-share-icons-16">      	
+		      			<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+		        		<li><a class="ds-weibo" href="http://weibo.com" data-service="weibo">新浪微博</a></li>
+		        		<li><a class="ds-qzone" href="http://qzone.qq.com" data-service="qzone">QQ空间</a></li>
+		        		<li><a class="ds-qqt" href="http://t.qq.com" data-service="qqt">腾讯微博</a></li>
+		        		<li><a class="ds-wechat" href="http://wx.qq.com" data-service="wechat">微信</a></li>
+		      		</ul>
+		      		<div class="ds-share-icons-more"></div>
+		    	</div>
+	 		</div>
 		</div>
+
+		<!-- 侧边栏aside -->
 		<div class="aside fn-clear">
 			{% include wg-contact.html %}
 			{% include wg-project.html %}
 			{% include wg-other.html %}
 		</div>
-
-		<!-- 多说评论框 -->
-    	<div class="ds-thread" data-thread-key={{page.id}} data-title={{page.title}} data-url="dianacody.github.io{{page.url}}">
-    	</div>
-		
-		<!-- 多说公共JS代码 -->
-		<script type="text/javascript">
-		var duoshuoQuery = {short_name:"dianacody"};
-			(function() {
-				var ds = document.createElement('script');
-				ds.type = 'text/javascript';ds.async = true;
-				ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-				ds.charset = 'UTF-8';
-				(document.getElementsByTagName('head')[0] 
-				 || document.getElementsByTagName('body')[0]).appendChild(ds);
-			})();
-		</script>
-
-		<!-- 多说分享插件 -->
-		<div class="ds-share" data-thread-key={{page.id}} data-title={{page.title}} data-images="" data-content="" data-url={{page.url}}>
-	    	<div class="ds-share-inline">
-	      		<ul  class="ds-share-icons-16">      	
-	      			<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
-	        		<li><a class="ds-weibo" href="http://weibo.com" data-service="weibo">新浪微博</a></li>
-	        		<li><a class="ds-qzone" href="http://qzone.qq.com" data-service="qzone">QQ空间</a></li>
-	        		<li><a class="ds-qqt" href="http://t.qq.com" data-service="qqt">腾讯微博</a></li>
-	        		<li><a class="ds-wechat" href="http://wx.qq.com" data-service="wechat">微信</a></li>
-	      		</ul>
-	      		<div class="ds-share-icons-more"></div>
-	    	</div>
- 		</div>
 
 	</div>
 </section>
