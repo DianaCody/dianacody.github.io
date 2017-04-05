@@ -1,4 +1,4 @@
-###DianaCody's Blog
+### DianaCody's Blog
 
 * version :  1.0
 * name    :  Black Cube Theme
