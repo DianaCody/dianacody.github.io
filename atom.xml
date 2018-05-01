@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2018-05-01T07:43:33.000Z</updated>
+  <updated>2018-05-01T09:00:52.000Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -14,6 +14,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Transferring Deep Visual Semantic Features to Large-Scale Multimodal Learning to Rank</title>
+    <link href="http://www.dianacody.com/2017/10/23/2017-10-23-DeepVisual/"/>
+    <id>http://www.dianacody.com/2017/10/23/2017-10-23-DeepVisual/</id>
+    <published>2017-10-22T16:00:00.000Z</published>
+    <updated>2018-05-01T09:00:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>One consideration to make is that large modern CNNs require large amounts of training data. The amount of examples available to an individual query model can be in the low hundreds, particularly for queries in the long tail. This makes training one deep CNN per query from scratch prone to overfitting. Transfer learning is a popular method for dealing with this problem, with many expels in computer vision.<br>Learning to rank search results has received considerable attention over the past decade, and it is at the core of modern information retrieval. </p>
+<h5 id="Works"><a href="#Works" class="headerlink" title="Works"></a>Works</h5><h6 id="1-Multimodal-Listing-Embedding"><a href="#1-Multimodal-Listing-Embedding" class="headerlink" title="(1) Multimodal Listing Embedding"></a>(1) <strong>Multimodal Listing Embedding</strong></h6><p>Our listing contains text information such as descriptive title and tags, as well as an image of the item for sale. To measure the value of including image information, we embed listings in a multimodal space (consisting of high-level text …)</p>
+<h6 id="2-Training-Models"><a href="#2-Training-Models" class="headerlink" title="(2) Training Models"></a>(2) <strong>Training Models</strong></h6><p>we extend our existing learning to rank models with image information. At first, we embed listings for the learning to rank task in both single modality and multimodal settings. Then, the listing embedded in both modalities are incorporated into a learning to rank framework.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      Search is at the heart of modern e-commerce. Traditional models optimize over a few hand-constructed features based on the item’s text. Now, there is a multimodal learning to rank model that combines these traditional features with visual semantic features transferred from a deep convolutional neural net work.
+    
+    </summary>
+    
+      <category term="Deep Visual" scheme="http://www.dianacody.com/categories/Deep-Visual/"/>
+    
+    
+      <category term="Learning to rank" scheme="http://www.dianacody.com/tags/Learning-to-rank/"/>
+    
+      <category term="Computer vision" scheme="http://www.dianacody.com/tags/Computer-vision/"/>
+    
+      <category term="Deep learning" scheme="http://www.dianacody.com/tags/Deep-learning/"/>
+    
+  </entry>
   
   <entry>
     <title>Targeted Content for a Real-Time Activity Feed, For First Time Visitors to Power Users</title>
