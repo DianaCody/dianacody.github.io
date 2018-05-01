@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="pLSA,LDA," />
 
 
 
@@ -89,15 +89,16 @@
 
 
 
-<meta name="description" content="Researcher, Focus on Artificial Intelligence">
-<meta property="og:type" content="website">
-<meta property="og:title" content="DianaCody">
-<meta property="og:url" content="http://www.dianacody.com/index.html">
+<meta name="description" content="pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布，其原因是共轭分布时先验概率和后验概率的形式相同。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主题模型（二）：pLSA和LDA">
+<meta property="og:url" content="http://www.dianacody.com/2014/11/04/2014-11-04-Theme2_pLSA, LDA/index.html">
 <meta property="og:site_name" content="DianaCody">
-<meta property="og:description" content="Researcher, Focus on Artificial Intelligence">
+<meta property="og:description" content="pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布，其原因是共轭分布时先验概率和后验概率的形式相同。">
+<meta property="og:updated_time" content="2018-04-30T10:58:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DianaCody">
-<meta name="twitter:description" content="Researcher, Focus on Artificial Intelligence">
+<meta name="twitter:title" content="主题模型（二）：pLSA和LDA">
+<meta name="twitter:description" content="pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布，其原因是共轭分布时先验概率和后验概率的形式相同。">
 
 
 
@@ -125,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://www.dianacody.com/"/>
+  <link rel="canonical" href="http://www.dianacody.com/2014/11/04/2014-11-04-Theme2_pLSA, LDA/"/>
 
 
 
 
 
-  <title> DianaCody </title>
+  <title> 主题模型（二）：pLSA和LDA | DianaCody </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -166,9 +167,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -293,9 +292,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -304,7 +303,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2017/09/22/2017-09-22-RealTimeFeed/">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2014/11/04/2014-11-04-Theme2_pLSA, LDA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="DianaCody">
@@ -325,10 +324,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2017/09/22/2017-09-22-RealTimeFeed/" itemprop="url">
-                  Targeted Content for a Real-Time Activity Feed, For First Time Visitors to Power Users
-                </a>
+                主题模型（二）：pLSA和LDA
               
             
           </h1>
@@ -343,302 +339,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-22T00:00:00+08:00">
-                2017-09-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Recommender-System/" itemprop="url" rel="index">
-                    <span itemprop="name">Recommender System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          The Activity Feed (AF) is our taking on the ubiquitous “web feed” - a continuous stream of aggregated content, personalized for each user. These streams have become the defacto means of serving advertisements in the context of social media.
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/22/2017-09-22-RealTimeFeed/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2017/09/21/2017-09-21-LongTail/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/21/2017-09-21-LongTail/" itemprop="url">
-                  Style in the Long Tail, Discovering Unique Interests with Latent Variable Models in Large Scale Social E-commerce
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-21T00:00:00+08:00">
-                2017-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Recommender-System/" itemprop="url" rel="index">
-                    <span itemprop="name">Recommender System</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          An online marketplace for handmade and vintage goods with over 30 million diverse listings, the problem of capturing the taste is particularly important - users come to the site specifically to find items that match their eclectic styles.
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/21/2017-09-21-LongTail/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2014/11/16/2014-11-16-HMM2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/16/2014-11-16-HMM2/" itemprop="url">
-                  最大匹配算法扩展
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-16T00:00:00+08:00">
-                2014-11-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-04T00:00:00+08:00">
+                2014-11-04
               </time>
             
 
@@ -683,152 +385,9 @@
           
 
           
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          基于简单的中文分词匹配法做了扩展，中文分词算法提供了一个C版本的mmseg供研究使用。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/11/16/2014-11-16-HMM2/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2014/11/07/2014-11-07-HMM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/07/2014-11-07-HMM/" itemprop="url">
-                  中文分词-最大匹配算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-07T00:00:00+08:00">
-                2014-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NLP/" itemprop="url" rel="index">
-                    <span itemprop="name">NLP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
+              <div class="post-description">
+                  pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布，其原因是共轭分布时先验概率和后验概率的形式相同。
+              </div>
           
 
         </div>
@@ -842,201 +401,127 @@
       
 
       
+        <h5 id="一、pLSA（概率潜在语义分析）"><a href="#一、pLSA（概率潜在语义分析）" class="headerlink" title="一、pLSA（概率潜在语义分析）"></a>一、pLSA（概率潜在语义分析）</h5><p>pLSA:    <em>——-有过拟合问题，就是求D, Z, W</em></p>
+<p>pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。</p>
+<p>在论文《GoogleNews Personalization Scalable Online CF》一文中提级针对用户聚类，利用相似用户性信息计算喜欢的news。其中包含min-hash以及plsi，plsi是model-based 推荐算法，属于topic(aspect) model，其在NLP领域中用途很大。</p>
+<p>引入：在文本挖掘时，计算文档相似性是很基础的操作，通常，对文本进行分词，构建VSM，通过jaccard或者cosin计算距离或者相似性，这是基于corpus的思路，仅仅考虑词组，并未考虑文本的语义信息。针对下面情况，基于cropus很难处理：</p>
+<ul>
+<li>如果时间回到2006年，马云和杨致远的手还会握在一起吗</li>
+<li>阿里巴巴集团和雅虎就股权回购一事签署了最终协议</li>
+</ul>
+<p>如果采用基于corpus的jaccard距离等算法，那么这两个文本的完全不相关，但是事实上，马云和阿里巴巴集团，杨致远和雅虎有着密切的联系，从语义上看，两者都和“阿里巴巴”有关系。</p>
+<p>此外，另一个case：</p>
+<ul>
+<li>富士苹果真好，赶快买</li>
+<li>苹果四代真好，赶快买</li>
+</ul>
+<p>从corpus上来看，两者非常相似，但是事实上，2个句子从语义上来讲，没有任何关系，一个是”水果“另一个是”手机”。</p>
+<p>通过上面的例子，差不多也看出来topic model是什么以及解决什么问题。</p>
+<p>概念：topic model是针对文本隐含主题的建模方法，针对第一个case，马云对应的主题是阿里巴巴，阿里巴巴集团也隐含阿里巴巴主题，这样两个文本的主题匹配上，认为他们是相关的，针对第二个，分别针对水果以及手机主题，我们认为他们是不相关的。</p>
+<p>究竟什么是主题？[接下来参考baidu搜索研发部官方博客中对语义主题的定义]主题就是一个概念、一个方面。它表现为一系列相关的词，能够代表这个主题。比如如果是”阿里巴巴“主题，那么”马云“”电子商务“等词会很高的频率出现，而设计到“腾讯”主题，那么“马化腾”“游戏”“QQ”会以较高的频率出现。如果用数学来描述一下的话，主题就是词汇表上词语的条件概率分布，与主题密切相关的词，条件概率p(w|z)越大。主题就像一个桶，装了出现频率很高的词语，这些词语和主题有很强的相关性，或者说这些词语定义了这个主题。同时，一个词语，可能来自于这个桶，也可能来自那个桶，比如“电子商务”可以来自“阿里巴巴”主题，也可以来自“京东“主题，所以一段文字往往包含多个主题，也就是说，一段文字不只有一个主题。</p>
+<p>上面介绍了主题的概念，我们最为关心的是如何得到这些主题？这就是topic model要解决的问题。</p>
+<p>define： d表示文档，w表示词语，z表示隐含的主题。</p>
+<p>其中 p(w|d)表示w在文档d中出现的概率，针对训练语料，对文本进行分词，w的频度除以文档所有词语的频度和，可以求出，对于未知数据，model用来计算该value.</p>
+<p>p(w|z)表示在给定主题情况下词语的出现的概率是多少，刻画词语和主题的相关程度。</p>
+<p>p(z|d)表示文档中每个主题出现的概率</p>
+<p>所以主题模型就是：利用大量已知的p(w|d)词语-文档信息，训练出来主题-文档p(z|d)以及词语-主题p(w|z)。</p>
+<p><strong> plsa模型 </strong>：</p>
+<ul>
+<li><p>plsa是一种topic model，它属于生成模型(不是很理解)，给定文档d后，以一定的概率选择d对应的主题z，然后以一定概率选择z中的词语w.</p>
+</li>
+<li><p>plsa提供了一种模型求解的方法，采用之前介绍的EM算法，EM算法在之前已经介绍，现在不作处理，直接利用EM信息对topic model进行求解。</p>
+</li>
+</ul>
+<p><strong> 主题模型的用途 </strong>：</p>
+<p>1.计算文本的相似性，考虑到文本语义，更好的刻画文本相似性，避免多义词，同义词的影响</p>
+<p>2.文本聚类，用户聚类(RS)</p>
+<p>3.去除噪音，只保留最重要的主题，更好的刻画文档</p>
+<p><strong> plsa在推荐系统中的应用 </strong>：</p>
+<p>上面介绍的是文档和词语的关系，映射到推荐系统中，表示为用户和ITEM的关系，ITEM可以使网，视频等。</p>
+<p>这样可以看出来描述的完全是同样的问题，求解p(s|u)=∑zp(s|z)p(z|u)，模型参数为p(s|z)?p(z|u)，里面上面的推导过程可以求得。</p>
+<p>具体的可以参考：</p>
+<ul>
+<li><p>Unsupervised learning by probabilisticlatent semantic analysis *</p>
+</li>
+<li><p>Latent Semantic Models for collaborativefiltering *</p>
+</li>
+<li><p>Google News Personalization Scalable OnlineCF *</p>
+</li>
+</ul>
+<h5 id="二、LDA（潜在狄瑞雷克模型）"><a href="#二、LDA（潜在狄瑞雷克模型）" class="headerlink" title="二、LDA（潜在狄瑞雷克模型）"></a>二、LDA（潜在狄瑞雷克模型）</h5><p>　　和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布，其原因是共轭分布时先验概率和后验概率的形式相同。</p>
+
+      
+    </div>
+
+    <div>
+      
         
-          中文分词在中文信息处理中是最最基础的，无论机器翻译亦或信息检索还是其他相关应用，如果涉及中文，都离不开中文分词，因此中文分词具有极高的地位。中文分词入门最简单应该是最大匹配法了。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/11/07/2014-11-07-HMM/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2014/11/05/2014-11-05-cn_cutwords/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/05/2014-11-05-cn_cutwords/" itemprop="url">
-                  中文分词：原理及分词算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-05T00:00:00+08:00">
-                2014-11-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NLP/" itemprop="url" rel="index">
-                    <span itemprop="name">NLP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/pLSA/" rel="tag"># pLSA</a>
           
-
+            <a href="/tags/LDA/" rel="tag"># LDA</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
         
-          词是最小的能够独立活动的有意义的语言成分，英文单词之间是以空格作为自然分界符的，Lucene中对中文的处理是基于自动切分的单字切分，或者二元切分。除此之外，还有最大切分（包括向前、向后、以及前后相结合）、最少切分、全切分等等。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/11/05/2014-11-05-cn_cutwords/">
-              Read more &raquo;
-            </a>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/11/03/2014-11-03-Theme1_matrix/" rel="next" title="主题模型（一）：条件概率、矩阵分解">
+                <i class="fa fa-chevron-left"></i> 主题模型（一）：条件概率、矩阵分解
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/05/2014-11-05-cn_cutwords/" rel="prev" title="中文分词：原理及分词算法">
+                中文分词：原理及分词算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -1044,6 +529,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
 
         </div>
         
@@ -1063,8 +554,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/psb.jpg"
@@ -1177,6 +677,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、pLSA（概率潜在语义分析）"><span class="nav-number">1.</span> <span class="nav-text">一、pLSA（概率潜在语义分析）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、LDA（潜在狄瑞雷克模型）"><span class="nav-number">2.</span> <span class="nav-text">二、LDA（潜在狄瑞雷克模型）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -1283,6 +799,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
@@ -1314,6 +834,10 @@
   
     
 
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
     
   
 
@@ -1465,26 +989,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

@@ -1,0 +1,984 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="HMM," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DianaCody" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="中文分词在中文信息处理中是最最基础的，无论机器翻译亦或信息检索还是其他相关应用，如果涉及中文，都离不开中文分词，因此中文分词具有极高的地位。中文分词入门最简单应该是最大匹配法了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中文分词-最大匹配算法">
+<meta property="og:url" content="http://www.dianacody.com/2014/11/07/2014-11-07-HMM/index.html">
+<meta property="og:site_name" content="DianaCody">
+<meta property="og:description" content="中文分词在中文信息处理中是最最基础的，无论机器翻译亦或信息检索还是其他相关应用，如果涉及中文，都离不开中文分词，因此中文分词具有极高的地位。中文分词入门最简单应该是最大匹配法了。">
+<meta property="og:updated_time" content="2018-04-30T10:47:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="中文分词-最大匹配算法">
+<meta name="twitter:description" content="中文分词在中文信息处理中是最最基础的，无论机器翻译亦或信息检索还是其他相关应用，如果涉及中文，都离不开中文分词，因此中文分词具有极高的地位。中文分词入门最简单应该是最大匹配法了。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'DianaCody'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.dianacody.com/2014/11/07/2014-11-07-HMM/"/>
+
+
+
+
+
+  <title> 中文分词-最大匹配算法 | DianaCody </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?401273a24c3ce73d59b8b4083481a0be";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DianaCody</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">subtitle,subtitle,subtitle</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2014/11/07/2014-11-07-HMM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                中文分词-最大匹配算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-11-07T00:00:00+08:00">
+                2014-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index">
+                    <span itemprop="name">NLP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  中文分词在中文信息处理中是最最基础的，无论机器翻译亦或信息检索还是其他相关应用，如果涉及中文，都离不开中文分词，因此中文分词具有极高的地位。中文分词入门最简单应该是最大匹配法了。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>正向最大匹配法算法如下所示:</p>
+<p>逆向匹配法思想与正向一样，只是从右向左切分，这里举一个例子：</p>
+<p>输入例句：S1=”计算语言学课程有意思” ；</p>
+<p>定义：最大词长MaxLen = 5；S2= ” “；分隔符 = “/”；</p>
+<p>假设存在词表：…，计算语言学，课程，意思，…；</p>
+<p>最大逆向匹配分词算法过程如下：</p>
+<ol>
+<li><p>S2=””；S1不为空，从S1右边取出候选子串W=”课程有意思”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”程有意思”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”有意思”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”意思”</p>
+</li>
+<li><p>查词表，“意思”在词表中，将W加入到S2中，S2=” 意思/”，并将W从S1中去掉，此时S1=”计算语言学课程有”；</p>
+</li>
+<li><p>S1不为空，于是从S1左边取出候选子串W=”言学课程有”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”学课程有”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”课程有”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”程有”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”有”，这W是单字，将W加入到S2中，S2=“ /有 /意思”，并将W从S1中去掉，此时S1=”计算语言学课程”；</p>
+</li>
+<li><p>S1不为空，于是从S1左边取出候选子串W=”语言学课程”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”言学课程”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”学课程”；</p>
+</li>
+<li><p>查词表，W不在词表中，将W最左边一个字去掉，得到W=”课程”；</p>
+</li>
+<li><p>查词表，“意思”在词表中，将W加入到S2中，S2=“ 课程/ 有/ 意思/”，并将W从S1中去掉，此时S1=”计算语言学”；</p>
+</li>
+<li><p>S1不为空，于是从S1左边取出候选子串W=”计算语言学”；</p>
+</li>
+<li><p>查词表，“计算语言学”在词表中，将W加入到S2中，S2=“计算语言学/ 课程/ 有/ 意思/”，并将W从S1中去掉，此时S1=””；</p>
+</li>
+<li><p>S1为空，输出S2作为分词结果，分词过程结束。</p>
+</li>
+</ol>
+<p>相应程序示例：</p>
+<p>准备文件：建立一个词表文件wordlexicon，格式如下</p>
+<ul>
+<li>计算语言学</li>
+<li>课程</li>
+<li>意思</li>
+</ul>
+<p>输入文件：test,格式如下</p>
+<ul>
+<li>计算语言学课程有意思</li>
+</ul>
+<p>编译后执行如下：SegWord.exe test，输出分词结果文件：SegmentResult.txt</p>
+<p><strong>源代码如下：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">// Dictionary.h</div><div class="line">#include &lt;iostream&gt;</div><div class="line">#include &lt;string&gt;</div><div class="line">#include &lt;fstream&gt;</div><div class="line">#include &lt;sstream&gt;</div><div class="line">#include &lt;hash_map&gt;</div><div class="line">using namespace std;</div><div class="line">using namespace stdext;</div><div class="line">class CDictionary</div><div class="line">&#123;</div><div class="line">	public:</div><div class="line">		CDictionary(); //将词典文件读入并构造为一个哈希词典</div><div class="line">		~CDictionary();</div><div class="line">		int FindWord(string w); //在哈希词典中查找词</div><div class="line">	private:</div><div class="line">		string strtmp; //读取词典的每一行</div><div class="line">		string word; //保存每个词</div><div class="line">		hash_map&lt;string, int&gt; wordhash; // 用于读取词典后的哈希</div><div class="line">		hash_map&lt;string, int &gt;::iterator worditer; //</div><div class="line">		typedef pair&lt;string, int&gt; sipair;</div><div class="line">&#125;;</div><div class="line">//将词典文件读入并构造为一个哈希词典</div><div class="line">CDictionary::CDictionary()</div><div class="line">&#123;</div><div class="line">	ifstream infile(“wordlexicon”); // 打开词典</div><div class="line">	if (!infile.is_open()) // 打开词典失败则退出程序</div><div class="line">	&#123;</div><div class="line">		cerr &lt;&lt; &quot;Unable to open input file: &quot; &lt;&lt; &quot;wordlexicon&quot;</div><div class="line">&lt;&lt; &quot; -- bailing out!&quot; &lt;&lt; endl;</div><div class="line">		exit(-1);</div><div class="line">	&#125;</div><div class="line">	while (getline(infile, strtmp, &apos;\\n&apos;)) // 读入词典的每一行并将其添加入哈希中</div><div class="line">	&#123;</div><div class="line">		istringstream istr(strtmp);</div><div class="line">		istr &gt;&gt; word; //读入每行第一个词</div><div class="line">		wordhash.insert(sipair(word, 1)); //插入到哈希中</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">CDictionary::~CDictionary()</div><div class="line">&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//在哈希词典中查找词，若找到，则返回，否则返回</div><div class="line">int CDictionary::FindWord(string w)</div><div class="line">&#123;</div><div class="line">	if (wordhash.find(w) != wordhash.end())</div><div class="line">	&#123;</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	else</div><div class="line">	&#123;</div><div class="line">		return 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>主程序main.cpp</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">#include “Dictionary.h”</div><div class="line"># define MaxWordLength 10 // 最大词长为个字节（即个汉字）</div><div class="line"># define Separator “/ ” // 词界标记</div><div class="line">CDictionary WordDic; //初始化一个词典</div><div class="line">//对字符串用最大匹配法（正向或逆向）处理</div><div class="line">string SegmentSentence(string s1)</div><div class="line">&#123;</div><div class="line">	string s2 = “”; //用s2存放分词结果</div><div class="line">	while(!s1.empty())</div><div class="line">	&#123;</div><div class="line">		int len =(int) s1.length(); // 取输入串长度</div><div class="line">		if (len &gt; MaxWordLength) // 如果输入串长度大于最大词长</div><div class="line">		&#123;</div><div class="line">			len = MaxWordLength; // 只在最大词长范围内进行处理</div><div class="line">		&#125;</div><div class="line">		//string w = s1.substr(0, len); // （正向用）将输入串左边等于最大词长长度串取出作为候选词</div><div class="line">		string w = s1.substr(s1.length() – len, len); //逆向用</div><div class="line">		int n = WordDic.FindWord(w); // 在词典中查找相应的词</div><div class="line">		while(len &gt; 2 &amp;&amp; n == 0) // 如果不是词</div><div class="line">		&#123;</div><div class="line">			len -= 2; // 从候选词右边减掉一个汉字，将剩下的部分作为候选词</div><div class="line">			//w = w.substr(0, len); //正向用</div><div class="line">			w = s1.substr(s1.length() – len, len); //逆向用</div><div class="line">			n = WordDic.FindWord(w);</div><div class="line">		&#125;</div><div class="line">		//s2 += w + Separator; // (正向用）将匹配得到的词连同词界标记加到输出串末尾</div><div class="line">		w = w + Separator; // (逆向用)</div><div class="line">		s2 = w + s2 ; // (逆向用)</div><div class="line">		//s1 = s1.substr(w.length(), s1.length()); //(正向用)从s1-w处开始</div><div class="line">		s1 = s1.substr(0, s1.length() – len); // (逆向用)</div><div class="line">	&#125;</div><div class="line">	return s2;</div><div class="line">&#125;</div><div class="line">//对句子进行最大匹配法处理，包含对特殊字符的处理</div><div class="line">string SegmentSentenceMM (string s1)</div><div class="line">&#123;</div><div class="line">	string s2 = “”; //用s2存放分词结果</div><div class="line">	int i;</div><div class="line">	int dd;</div><div class="line">	while(!s1.empty() )</div><div class="line">	&#123;</div><div class="line">		unsigned char ch = (unsigned char)s1[0];</div><div class="line">		if (ch &lt; 128) // 处理西文字符</div><div class="line">		&#123;</div><div class="line">			i = 1;</div><div class="line">			dd = (int)s1.length();</div><div class="line">			while (i &lt; dd &amp;&amp; ((unsigned char)s1[i] &lt; 128) &amp;&amp; (s1[i] != 10) &amp;&amp; (s1[i] != 13)) // s1[i]不能是换行符或回车符</div><div class="line">			&#123;</div><div class="line">				i++;</div><div class="line">			&#125;</div><div class="line">			if ((ch != 32) &amp;&amp; (ch != 10) &amp;&amp; (ch != 13)) // 如果不是西文空格或换行或回车符</div><div class="line">			&#123;</div><div class="line">				s2 += s1.substr(0,i) + Separator;</div><div class="line">			&#125;</div><div class="line">			else</div><div class="line">			&#123;</div><div class="line">				//if (ch == 10 || ch == 13) // 如果是换行或回车符，将它拷贝给s2输出</div><div class="line">				if (ch == 10 || ch == 13 || ch == 32) //谢谢读者mces89的指正</div><div class="line">				&#123;</div><div class="line">					s2 += s1.substr(0, i);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			s1 = s1.substr(i,dd);</div><div class="line">			continue;</div><div class="line">		&#125;</div><div class="line">		else</div><div class="line">		&#123;</div><div class="line">			if (ch &lt; 176) // 中文标点等非汉字字符</div><div class="line">			&#123;</div><div class="line">				i = 0;</div><div class="line">				dd = (int)s1.length();</div><div class="line">				while(i &lt; dd &amp;&amp; ((unsigned char)s1[i] &lt; 176) &amp;&amp; ((unsigned char)s1[i] &gt;= 161)</div><div class="line">				&amp;&amp; (!((unsigned char)s1[i] == 161 &amp;&amp; ((unsigned char)s1[i+1] &gt;= 162 &amp;&amp; (unsigned char)s1[i+1] &lt;= 168)))</div><div class="line">				&amp;&amp; (!((unsigned char)s1[i] == 161 &amp;&amp; ((unsigned char)s1[i+1] &gt;= 171 &amp;&amp; (unsigned char)s1[i+1] &lt;= 191)))</div><div class="line">				&amp;&amp; (!((unsigned char)s1[i] == 163 &amp;&amp; ((unsigned char)s1[i+1] == 172 || (unsigned char)s1[i+1] == 161)</div><div class="line">				|| (unsigned char)s1[i+1] == 168 || (unsigned char)s1[i+1] == 169 || (unsigned char)s1[i+1] == 186</div><div class="line">				|| (unsigned char)s1[i+1] == 187 || (unsigned char)s1[i+1] == 191)))</div><div class="line">			&#123;</div><div class="line">				i = i + 2; // 假定没有半个汉字</div><div class="line">			&#125;</div><div class="line">			if (i == 0)</div><div class="line">			&#123;</div><div class="line">				i = i + 2;</div><div class="line">			&#125;</div><div class="line">			if (!(ch == 161 &amp;&amp; (unsigned char)s1[1] == 161)) // 不处理中文空格</div><div class="line">			&#123;</div><div class="line">				s2+=s1.substr(0, i) + Separator; // 其他的非汉字双字节字符可能连续输出</div><div class="line">			&#125;</div><div class="line">			s1 = s1.substr(i, dd);</div><div class="line">			continue;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		// 以下处理汉字串</div><div class="line">		i = 2;</div><div class="line">		dd = (int)s1.length();</div><div class="line">		while(i &lt; dd &amp;&amp; (unsigned char)s1[i] &gt;= 176)</div><div class="line">		&#123;</div><div class="line">			i += 2;</div><div class="line">		&#125;</div><div class="line">		s2 += SegmentSentence(s1.substr(0, i));</div><div class="line">		s1 = s1.substr(i,dd);</div><div class="line">	&#125;</div><div class="line">	return s2;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char *argv[])</div><div class="line">&#123;</div><div class="line">	string strtmp; //用于保存从语料库中读入的每一行</div><div class="line">	string line; //用于输出每一行的结果</div><div class="line">	ifstream infile(argv[1]); // 打开输入文件</div><div class="line">	if (!infile.is_open()) // 打开输入文件失败则退出程序</div><div class="line">	&#123;</div><div class="line">		cerr &lt;&lt; &quot;Unable to open input file: &quot; &lt;&lt; argv[1]</div><div class="line">&lt;&lt; &quot; -- bailing out!&quot; &lt;&lt; endl;</div><div class="line">		exit(-1);</div><div class="line">&#125;</div><div class="line">	ofstream outfile1(&quot;SegmentResult.txt&quot;); //确定输出文件</div><div class="line">	if (!outfile1.is_open())</div><div class="line">	&#123;</div><div class="line">		cerr &lt;&lt; &quot;Unable to open file：SegmentResult.txt&quot;</div><div class="line">&lt;&lt; &quot;--bailing out!&quot; &lt;&lt; endl;</div><div class="line">		exit(-1);</div><div class="line">	&#125;</div><div class="line">	while (getline(infile, strtmp, &apos;n&apos;)) //读入语料库中的每一行并用最大匹配法处理</div><div class="line">	&#123;</div><div class="line">		line = strtmp;</div><div class="line">		line = SegmentSentenceMM(line); // 调用分词函数进行分词处理</div><div class="line">		outfile1 &lt;&lt; line &lt;&lt; endl; // 将分词结果写入目标文件</div><div class="line">	&#125;</div><div class="line">	return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>补充说明：如果使用正向匹配法，请将源代码中的相关注释 “//“互换。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HMM/" rel="tag"># HMM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/11/05/2014-11-05-cn_cutwords/" rel="next" title="中文分词：原理及分词算法">
+                <i class="fa fa-chevron-left"></i> 中文分词：原理及分词算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/16/2014-11-16-HMM2/" rel="prev" title="最大匹配算法扩展">
+                最大匹配算法扩展 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/psb.jpg"
+               alt="DianaCody" />
+          <p class="site-author-name" itemprop="name">DianaCody</p>
+           
+              <p class="site-description motion-element" itemprop="description">Researcher, Focus on Artificial Intelligence</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dianacody" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/dianacody" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/dianacody" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/dianacody" title="CSDN Blog" target="_blank">CSDN Blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DianaCody</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+</body>
+</html>
