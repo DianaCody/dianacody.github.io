@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2018-05-01T09:00:52.000Z</updated>
+  <updated>2018-11-04T09:35:05.000Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -14,6 +14,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Recommender Data Query System</title>
+    <link href="http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/"/>
+    <id>http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/</id>
+    <published>2018-01-04T16:00:00.000Z</published>
+    <updated>2018-11-04T09:35:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>主要内容如下：</p>
+<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/RecDataQuerySystem" target="_blank" rel="external">https://github.com/DianaCody/RecDataQuerySystem</a></p>
+<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>项目预研、独立研究，项目主研，项目管理，产品定型梳理，指导团队成员。</p>
+<p>后端：离线画像数据需要可视化接口。基于Spring的mvc，在线接口数据逻辑分层框架设计、并发取数、数据截断、上线所有离线画像数据(增加索引模块，分目录索引查询，支持不同平台账号查询userId/uuid/skuId)、性能优化以加速查询。</p>
+<p>前端：基于javascript (jQuery)。</p>
+<ul>
+<li>(1)前端重构接口；</li>
+<li>(2)前端组件化，单个展示表格作为组件以响应单次请求；</li>
+<li>(3)性能优化，组件加载时间优化防止卡顿；</li>
+<li>(4)产品用户体验设计(UED)，优化视觉及操作体验效果</li>
+</ul>
+<p>其他：后期扩大为统一数据服务平台，项目进度排期、团队人员工作指导安排。</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      数据可视化工具，基于java-web的项目。
+    
+    </summary>
+    
+      <category term="Web" scheme="http://www.dianacody.com/categories/Web/"/>
+    
+    
+      <category term="Web" scheme="http://www.dianacody.com/tags/Web/"/>
+    
+      <category term="Spring" scheme="http://www.dianacody.com/tags/Spring/"/>
+    
+      <category term="javascript" scheme="http://www.dianacody.com/tags/javascript/"/>
+    
+      <category term="jQuery" scheme="http://www.dianacody.com/tags/jQuery/"/>
+    
+      <category term="Bootstrap" scheme="http://www.dianacody.com/tags/Bootstrap/"/>
+    
+      <category term="Freemarker" scheme="http://www.dianacody.com/tags/Freemarker/"/>
+    
+  </entry>
   
   <entry>
     <title>Transferring Deep Visual Semantic Features to Large-Scale Multimodal Learning to Rank</title>
@@ -94,9 +139,260 @@
       <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
     
     
+      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
+    
       <category term="Collaborative Filtering" scheme="http://www.dianacody.com/tags/Collaborative-Filtering/"/>
     
+  </entry>
+  
+  <entry>
+    <title>Scene Recommendation</title>
+    <link href="http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/"/>
+    <id>http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/</id>
+    <published>2017-06-25T16:00:00.000Z</published>
+    <updated>2018-11-04T09:26:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/SceneRecommendation" target="_blank" rel="external">https://github.com/DianaCody/SceneRecommendation</a></p>
+<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>改进LDA主题模型，跨不同商品分类进行场景主题聚合，基于用户近期点击和购买行为，将多类商品各自组成pair对/n元组作为场景，同一场景下数据集互为推荐集，pig+python处理数据。<br>规定：</p>
+<ul>
+<li>(1)场景为单一细粒度的明确主题；</li>
+<li>(2)数据组不全在一个三级分类cid3里(否则与三级类重复)，粒度小于二级类；</li>
+<li>(3)场景之间有足够向量距离；</li>
+<li>(4)覆盖率达99%以上，且防止数据元组分桶倾斜严重</li>
+</ul>
+<p>流程：场景scene-&gt;产品词pwd-&gt;商品sku；(1)数据准备N-Gram、自然序列(点击+订单)；(2)场景获取：人工、自动挖掘(Word2Vector+K-means计算词距离、LDA及改进lightLDA/SparseLDA适合长序列、Brown-Cluster层次聚类适合序列)；(3)结果评价：场景主题数、场景集覆盖率、单场景sku/pwd数、单场景准确率。</p>
+<p>前期初始化人工定义场景主题数2k；后期数据挖掘自动化模型，迭代生成场景主题数10k。</p>
+<p>专利论文《基于主题模型的场景推荐》。</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      改进的LDA主题模型，跨不同商品分类进行场景主题聚合。
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://www.dianacody.com/categories/Algorithm/"/>
+    
+    
+      <category term="LDA" scheme="http://www.dianacody.com/tags/LDA/"/>
+    
+      <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
+    
       <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
+    
+      <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
+    
+      <category term="N-Gram" scheme="http://www.dianacody.com/tags/N-Gram/"/>
+    
+      <category term="K-means" scheme="http://www.dianacody.com/tags/K-means/"/>
+    
+      <category term="word-embedding" scheme="http://www.dianacody.com/tags/word-embedding/"/>
+    
+      <category term="Word to Vector" scheme="http://www.dianacody.com/tags/Word-to-Vector/"/>
+    
+      <category term="Brown Cluster" scheme="http://www.dianacody.com/tags/Brown-Cluster/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Commodity Profile</title>
+    <link href="http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/"/>
+    <id>http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/</id>
+    <published>2017-06-17T16:00:00.000Z</published>
+    <updated>2018-11-06T06:40:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/ItemProfile" target="_blank" rel="external">https://github.com/DianaCody/ItemProfile</a></p>
+<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格。</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      商品画像，多维度商品特征。
+    
+    </summary>
+    
+      <category term="Profile" scheme="http://www.dianacody.com/categories/Profile/"/>
+    
+    
+      <category term="python" scheme="http://www.dianacody.com/tags/python/"/>
+    
+      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
+    
+      <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
+    
+      <category term="Item Profile" scheme="http://www.dianacody.com/tags/Item-Profile/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Tracing Analysis of User Purchasing</title>
+    <link href="http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/"/>
+    <id>http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/</id>
+    <published>2017-05-28T16:00:00.000Z</published>
+    <updated>2018-11-06T06:40:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/PurchaseTrace" target="_blank" rel="external">https://github.com/DianaCody/PurchaseTrace</a></p>
+<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>统计发现用户点击路径偏好，人群分布；基于session日志数据，统计用户小时/天/周/月/季度的点击+购物车+订单路径，入口标记；汇总人群占比。<br>获取用户购买途径固有模式和习惯分析，标记典型模式，用户打标和画像，其他固有行为模式挖掘及利用。</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      用户购物全路径分析，研究用户行为模式，根据用户日志。
+    
+    </summary>
+    
+      <category term="Profile" scheme="http://www.dianacody.com/categories/Profile/"/>
+    
+    
+      <category term="python" scheme="http://www.dianacody.com/tags/python/"/>
+    
+      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
+    
+      <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
+    
+      <category term="User Profile" scheme="http://www.dianacody.com/tags/User-Profile/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>User Profile</title>
+    <link href="http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/"/>
+    <id>http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/</id>
+    <published>2017-03-29T16:00:00.000Z</published>
+    <updated>2018-11-04T09:01:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/UserProfile" target="_blank" rel="external">https://github.com/DianaCody/UserProfile</a></p>
+<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>连通用户的不同平台渠道pc/app/weChat账号pin/uuid/openId行为，统一用户数据，实现跨平台数据推荐。<br>计算多维度用户特征：包括性别、年龄、地理位置、商品类目兴趣、产品词偏好、品牌词偏好、扩展属性、购买力、店铺偏好、折扣偏好、实时反馈、近期行为、孩子性别年龄，存储离线Hive表。</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      用户画像，多维度用户特征。
+    
+    </summary>
+    
+      <category term="Profile" scheme="http://www.dianacody.com/categories/Profile/"/>
+    
+    
+      <category term="python" scheme="http://www.dianacody.com/tags/python/"/>
+    
+      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
+    
+      <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
+    
+      <category term="User Profile" scheme="http://www.dianacody.com/tags/User-Profile/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Accompany Plan</title>
+    <link href="http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/"/>
+    <id>http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/</id>
+    <published>2016-12-24T16:00:00.000Z</published>
+    <updated>2018-11-04T08:55:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/Accompany" target="_blank" rel="external">https://github.com/DianaCody/Accompany</a></p>
+<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>主要内容如下：<br>线上接口升级：包括预测用户年龄、孩子模型排序接口。<br>离线用户特征维度升级：增加200个三级品类cid3，按照用户年龄性别季节不同扩展属性制定算法规则，计算候选集质量分，作为召回推荐商品依据。<br>产品发布：与后端开发、前端开发、产品、运营对接需求，联调。<br>提升价值：用户标签场景化（扩大召回源品类数据集）、商品推荐精准化（精细化各品类在年龄性别季节，提升商品推荐准确度）、用户画像档案拉新（将预测行为转化为档案数据，让更多用户参与迭代预测孩子模型）。<br>截止项目完成，App该入口已达成100w活跃建档用户数，PV/UV价值提升。</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      陪伴计划，一个小型的推荐系统。
+    
+    </summary>
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
+    
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/tags/Recommender-System/"/>
+    
+      <category term="Online" scheme="http://www.dianacody.com/tags/Online/"/>
+    
+      <category term="Java" scheme="http://www.dianacody.com/tags/Java/"/>
+    
+      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
+    
+      <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Personalized User Recommender System （Offline）</title>
+    <link href="http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/"/>
+    <id>http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/</id>
+    <published>2016-09-14T16:00:00.000Z</published>
+    <updated>2018-11-04T08:50:54.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>主要内容如下：</p>
+<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/RecOffline" target="_blank" rel="external">https://github.com/DianaCody/RecOffline</a></p>
+<h5 id="二、数据收集"><a href="#二、数据收集" class="headerlink" title="二、数据收集"></a>二、数据收集</h5><p>收集用户多天/月数据集(featureLog)；</p>
+<h5 id="三、数据预处理"><a href="#三、数据预处理" class="headerlink" title="三、数据预处理"></a>三、数据预处理</h5><p>数据清洗格式化、依据各推荐位埋点情况进行各比例的点击、订单数据采样、数据转换</p>
+<h5 id="四、模型训练"><a href="#四、模型训练" class="headerlink" title="四、模型训练"></a>四、模型训练</h5><p>Xgboost/TensorFlow训练模型，人工构造+自动提取特征；</p>
+<h5 id="五、模型评估"><a href="#五、模型评估" class="headerlink" title="五、模型评估"></a>五、模型评估</h5><ul>
+<li>特征重要性(featureImportance)</li>
+<li>预测命中率(click@4/20, order@4/20)</li>
+<li>模型上线评估(CTR/CVR)</li>
+</ul>
+<h5 id="六、模型迭代"><a href="#六、模型迭代" class="headerlink" title="六、模型迭代"></a>六、模型迭代</h5><p>迭代调整模型：</p>
+<ul>
+<li>增加训练集数量</li>
+<li>调整抽样比例</li>
+<li>训练的正负样本权重设置</li>
+</ul>
+<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+]]></content>
+    
+    <summary type="html">
+    
+      个性化用户推荐系统。离线推荐算法，离线特征工程。
+    
+    </summary>
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
+    
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/tags/Recommender-System/"/>
+    
+      <category term="python" scheme="http://www.dianacody.com/tags/python/"/>
+    
+      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
+    
+      <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
+    
+      <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Personalized User Recommender System （Online）</title>
+    <link href="http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/"/>
+    <id>http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/</id>
+    <published>2016-07-28T16:00:00.000Z</published>
+    <updated>2018-11-04T08:47:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>项目源码地址：<a href="https://github.com/DianaCody/RecOnline" target="_blank" rel="external">https://github.com/DianaCody/RecOnline</a></p>
+<p>获取个性化用户行为、冷启动数据模型，依据不同算法打分策略（线上+离线打分），从离线召回源选择合适数据，过滤排序召回集，作为线上推荐结果，上线AB-Test，观测实验数据bucket。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      个性化用户推荐系统，线上推荐算法。
+    
+    </summary>
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
+    
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/tags/Recommender-System/"/>
+    
+      <category term="Online" scheme="http://www.dianacody.com/tags/Online/"/>
+    
+      <category term="Java" scheme="http://www.dianacody.com/tags/Java/"/>
     
   </entry>
   
@@ -688,80 +984,6 @@
       <category term="crawler" scheme="http://www.dianacody.com/tags/crawler/"/>
     
       <category term="spider" scheme="http://www.dianacody.com/tags/spider/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>User-Based CF和Item-Based CF协同过滤推荐</title>
-    <link href="http://www.dianacody.com/2014/09/25/2014-09-25-CF/"/>
-    <id>http://www.dianacody.com/2014/09/25/2014-09-25-CF/</id>
-    <published>2014-09-24T16:00:00.000Z</published>
-    <updated>2018-04-30T10:44:04.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>（转载）之前一直觉得user-based和item-based差别不大，算法的差异小的我每次和别人说起都解释一下。后来慢慢的才发现丢脸了，其实从物理意义上2者差别大着呢，想想自己以前一直喜欢从物理角度给别人解说算法我就脸红。</p>
-<p>UserCF和ItemCF是协同过滤中最为古老的两种算法，早在20多年前就有学着提出来，由于简单，很多网站都应用。以我现在的阅读论文经验来说，YouTube等各大网站应用的算法，概括点说就是在数据清洗阶段不同，数据组织成矩阵存储之后，差不多都是有user-based和item-based的影子。我忘了和谁聊天了，似乎是面试官还是朋友说，数据挖掘，推荐引擎什么的其实也就那样，只不过外行的看起来很高深而已，做了才知道，弄来弄去不过如此。EMC一个博士在面试我的时候也提及了类似的观点，我实现的观点也觉得，只要把如果计算相似度的逻辑搞清楚了，其余剩下的没什么难度。User- based认为一个人会喜欢和他有相同爱好的人喜欢的东西，即人以群分，我在豆瓣上关注的人都是我喜欢的人，他们喜欢的东西我也喜欢，而Item-based认为一个人会喜欢和他以前喜欢的东西相似的东西，我喜欢文艺片，豆瓣会给我推荐文艺片。这两个假设都有其合理性。在网上看网友的博客指出，根据网友的测试，用UserCF和ItemCF做出的推荐列表中，只有50%是一样的，还有50%完全不同。但是这两个算法确有相似的精度。所以说，这两个算法是很互补的。这句话在很多书中也见过，但是没有做过测试检验。一下是网友的见解，粘贴过来：</p>
-<ul>
-<li>我一直认为这两个算法是推荐系统的根本，因为无论我们是用矩阵，还是用概率模型，我们都非常的依赖于前面说的两种假设。如果用户的行为不符合那两种假设，推荐系统就没必要存在了。因此我一直希望能够找出这两种算法的本质区别。他们有相似的精度，但是coverage相差很大，ItemCF coverage很大而UserCF很小。我还测试了很多其他指标，不过要从这些表象的指标差异找出这两个算法的本质区别还是非常困难。不过上周我基本发现了这两个算法推荐机理的本质区别。 *</li>
-</ul>
-<p>我们做如下假设。每个用户兴趣爱好都是广泛的，他们可能喜欢好几个领域的东西。不过每个用户肯定也有一个主要的领域，对这个领域会比其他领域更加关心。给定一个用户，假设他喜欢3个领域A,B,C，同时A是他喜欢的主要领域。这个时候我们来看UserCF和ItemCF倾向于做出什么推荐。</p>
-<p>结果如下，如果用UserCF, 它会将A,B,C三个领域中比较热门的东西推荐给用户【这个可以理解，算法会寻找同是喜欢这3个领域的用户，然后将这3个领域中最相似的物品进行推荐】。而如果用ItemCF，它会基本上只推荐A领域的东西给用户【A领域在用户偏好中占大部分，对应item-item相似度占比率大，被推荐概率大】。因为UserCF只推荐热门的，所以UserCF在推荐长尾上能力不足。而ItemCF只推荐A领域给用户，这样他有限的推荐列表中就可能包含了一定数量的不热门item，所以ItemCF推荐长尾的能力比较强。不过ItemCF的推荐对某一个用户而言，显然多样性不足。但是对整个系统而言，因为不同的用户的主要兴趣点不同，所以系统的coverage会很大。【终于明白了覆盖率大的含义】</p>
-<p>显然上面的两种推荐都有其合理性，但都不是最好的选择，因此他们的精度也会有损失。最好的选择是，如果我们给这个用户推荐30个item，我们既不是每个领域挑选10个最热门的给他，也不是推荐30个A领域的给他，而是比如推荐15个A领域的给他，剩下的15个从B,C中选择。【这个在实际应用中就不是很容易做到了，如何将用户兴趣分类？使用图论，连接矩阵将用户兴趣偏好识别？与其这样，还不如先将数据进行社区聚类，将数据根据图划分为几个小团体，针对小团体做推荐，这样就比如将只有上面提及的3中兴趣爱好的人组成的社区里面进行推荐。至于算法，小团体里大家都差不多，对应偏好矩阵稠密度较高，2个算法差距应该不大吧，具体有待考究】</p>
-<p>认识到这一点，可以给我们设计高精度的算法指明一个方向。就是当一个系统对个人推荐的多样性不足时，我们增加个人推荐的多样性可以提高精度。而当一个系统的整体多样性不足（比如只推荐popular的)，我们增加整体的多样性同样可以提高精度。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      User-Based CF和Item-Based CF是协同过滤中最为古老的两种算法，早在20多年前就有学者提出来，这两个算法是推荐系统的根本，因为无论是用矩阵，还是用概率模型，都非常依赖于前面两种假设。
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://www.dianacody.com/categories/Algorithm/"/>
-    
-    
-      <category term="Recommender System" scheme="http://www.dianacody.com/tags/Recommender-System/"/>
-    
-      <category term="CF" scheme="http://www.dianacody.com/tags/CF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mahout基于协同过滤(CF)的用户推荐</title>
-    <link href="http://www.dianacody.com/2014/09/05/2014-09-05-Mahout-CF/"/>
-    <id>http://www.dianacody.com/2014/09/05/2014-09-05-Mahout-CF/</id>
-    <published>2014-09-04T16:00:00.000Z</published>
-    <updated>2018-04-30T10:55:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="一、Mahout推荐算法简介"><a href="#一、Mahout推荐算法简介" class="headerlink" title="一、Mahout推荐算法简介"></a>一、Mahout推荐算法简介</h5><p>Mahout算法框架自带的推荐器有下面这些：</p>
-<blockquote>
-<ul>
-<li>GenericUserBasedRecommender：基于用户的推荐器，用户数量少时速度快；</li>
-<li>GenericItemBasedRecommender：基于商品推荐器，商品数量少时速度快，尤其当外部提供了商品相似度数据后效率更好；</li>
-<li>SlopeOneRecommender：基于slope-one算法的推荐器，在线推荐或更新较快，需要事先大量预处理运算，物品数量少时较好；</li>
-<li>SVDRecommender：奇异值分解，推荐效果较好，但之前需要大量预处理运算；</li>
-<li>KnnRecommender：基于k近邻算法(KNN)，适合于物品数量较小时；</li>
-<li>TreeClusteringRecommender：基于聚类的推荐器，在线推荐较快，之前需要大量预处理运算，用户数量较少时效果好；</li>
-</ul>
-</blockquote>
-<p>Mahout最常用的三个推荐器是上述的前三个，本文的实例仅“基于用户的推荐器”做个实验，其实大体原理都差不多。</p>
-<h5 id="二、基于协同过滤-CF-模型的用户推荐"><a href="#二、基于协同过滤-CF-模型的用户推荐" class="headerlink" title="二、基于协同过滤(CF)模型的用户推荐"></a>二、基于协同过滤(CF)模型的用户推荐</h5><p>Mahout里自带的基本CF模型原理如下：</p>
-<p>GenericUserBasedRecommender是基于用户(user-based)的简单推荐器实现类，推荐主要参照传入的DataModel和UserNeighborhood，总体是三个步骤：</p>
-<p>(1) 从UserNeighborhood获取当前用户Ui最相似的K个用户集合{U1, U2, …Uk}；</p>
-<p>(2) 从这K个用户集合排除Ui的偏好商品，剩下的Item集合为{Item0, Item1, …Itemm}；</p>
-<p>(3) 对Item集合里每个Itemj计算Ui可能偏好程度值pref(Ui, Itemj)，并把Item按此数值从高到低排序，前N个item推荐给用户Ui。</p>
-<h5 id="三、源码"><a href="#三、源码" class="headerlink" title="三、源码"></a>三、源码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.List;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.common.TasteException;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.model.DataModel;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.model.JDBCDataModel;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.recommender.RecommendedItem;  </div><div class="line"><span class="keyword">import</span> org.apache.mahout.cf.taste.similarity.UserSimilarity;  </div><div class="line">  </div><div class="line"><span class="keyword">import</span> com.mysql.MysqlDataSource;  </div><div class="line">  </div><div class="line"><span class="comment">/** </span></div><div class="line"> *  mahout基于协同过滤(CF)的推荐 </div><div class="line"> * </div><div class="line"> */  </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mahout</span> </span>&#123;  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> TasteException </span>&#123;  </div><div class="line">          </div><div class="line">        <span class="comment">//(1)----连接数据库部分  </span></div><div class="line">        MysqlDataSource dataSource = <span class="keyword">new</span> MysqlDataSource();  </div><div class="line">        dataSource.setServerName(<span class="string">"localhost"</span>);  </div><div class="line">        dataSource.setUser(<span class="string">"admin"</span>);  </div><div class="line">        dataSource.setPassword(<span class="string">"admin"</span>);  </div><div class="line">        dataSource.setDatabaseName(<span class="string">"mahoutDB"</span>);  </div><div class="line">        <span class="comment">//(2)----使用MySQLJDBCDataModel数据源读取MySQL里的数据  </span></div><div class="line">        JDBCDataModel dataModel = <span class="keyword">new</span> MySQLJDBCDataModel(dataSource, <span class="string">"table1"</span>, <span class="string">"userId"</span>, <span class="string">"itemId"</span>, <span class="string">"preference"</span>, <span class="string">"date"</span>);  </div><div class="line">          </div><div class="line">        <span class="comment">//(3)----数据模型部分  </span></div><div class="line">        <span class="comment">//把MySQLJDBCDataModel对象赋值给DataModel  </span></div><div class="line">        DataModel model = dataModel;  </div><div class="line">        <span class="comment">//用户相似度UserSimilarity:包含相似性度量和邻居参数  </span></div><div class="line">        UserSimilarity similarity = <span class="keyword">new</span> PearsonCorrelationSimilarity(model);  </div><div class="line">        <span class="comment">//相邻用户UserNeighborhood  </span></div><div class="line">        UserNeighborhood neighborhood = <span class="keyword">new</span> NearestNUserNeighborhood(<span class="number">2</span>, similarity, model);  </div><div class="line">        <span class="comment">//一旦确定相邻用户,一个普通的user-based推荐器被构建,构建一个GenericUserBasedRecommender推荐器需要数据源DataModel,用户相似性UserSimilarity,相邻用户相似度UserNeighborhood  </span></div><div class="line">        Recommender recommender = <span class="keyword">new</span> GenericUserBasedRecommender(model, neighborhood, similarity);  </div><div class="line">        <span class="comment">//向用户1推荐2个商品  </span></div><div class="line">        List&lt;RecommandedItem&gt; recommendations = recommender.recommend(<span class="number">1</span>, <span class="number">2</span>);  </div><div class="line">        <span class="keyword">for</span>(RecommendedItem recommendation : recommendations)&#123;  </div><div class="line">            <span class="comment">//输出推荐结果  </span></div><div class="line">            System.out.println(recommendation);  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      Mahout提供一些可扩展的机器学习领域经典算法的实现。
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://www.dianacody.com/categories/Algorithm/"/>
-    
-    
-      <category term="Recommender System" scheme="http://www.dianacody.com/tags/Recommender-System/"/>
     
   </entry>
   
