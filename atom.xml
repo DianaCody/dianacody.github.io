@@ -200,11 +200,10 @@
     <link href="http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/"/>
     <id>http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/</id>
     <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2018-11-06T06:40:51.000Z</updated>
+    <updated>2018-11-07T01:27:06.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：<a href="https://github.com/DianaCody/ItemProfile" target="_blank" rel="external">https://github.com/DianaCody/ItemProfile</a></p>
-<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+    <content type="html"><![CDATA[<h5 id="一、主要内容"><a href="#一、主要内容" class="headerlink" title="一、主要内容"></a>一、主要内容</h5><p>计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格。</p>
+<h5 id="二、参考文献"><a href="#二、参考文献" class="headerlink" title="二、参考文献"></a>二、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
 ]]></content>
     
     <summary type="html">
@@ -249,11 +248,11 @@
     
       <category term="python" scheme="http://www.dianacody.com/tags/python/"/>
     
+      <category term="User Profile" scheme="http://www.dianacody.com/tags/User-Profile/"/>
+    
       <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
     
       <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
-    
-      <category term="User Profile" scheme="http://www.dianacody.com/tags/User-Profile/"/>
     
   </entry>
   
@@ -280,11 +279,11 @@
     
       <category term="python" scheme="http://www.dianacody.com/tags/python/"/>
     
+      <category term="User Profile" scheme="http://www.dianacody.com/tags/User-Profile/"/>
+    
       <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
     
       <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
-    
-      <category term="User Profile" scheme="http://www.dianacody.com/tags/User-Profile/"/>
     
   </entry>
   
@@ -373,10 +372,9 @@
     <link href="http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/"/>
     <id>http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/</id>
     <published>2016-07-28T16:00:00.000Z</published>
-    <updated>2018-11-04T08:47:09.000Z</updated>
+    <updated>2018-11-07T01:27:34.000Z</updated>
     
-    <content type="html"><![CDATA[<p>项目源码地址：<a href="https://github.com/DianaCody/RecOnline" target="_blank" rel="external">https://github.com/DianaCody/RecOnline</a></p>
-<p>获取个性化用户行为、冷启动数据模型，依据不同算法打分策略（线上+离线打分），从离线召回源选择合适数据，过滤排序召回集，作为线上推荐结果，上线AB-Test，观测实验数据bucket。</p>
+    <content type="html"><![CDATA[<p>获取个性化用户行为、冷启动数据模型，依据不同算法打分策略（线上+离线打分），从离线召回源选择合适数据，过滤排序召回集，作为线上推荐结果，上线AB-Test，观测实验数据bucket。</p>
 ]]></content>
     
     <summary type="html">
