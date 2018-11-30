@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2018-11-11T02:39:00.000Z</updated>
+  <updated>2018-11-30T09:29:52.000Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/"/>
     <id>http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/</id>
     <published>2018-01-04T16:00:00.000Z</published>
-    <updated>2018-11-11T02:39:00.000Z</updated>
+    <updated>2018-11-30T09:29:52.000Z</updated>
     
     <content type="html"><![CDATA[<p>主要内容如下：</p>
 <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
@@ -34,7 +34,7 @@
 <li>(4)产品用户体验设计(UED)，优化视觉及操作体验效果</li>
 </ul>
 <p>其他：后期扩大为统一数据服务平台，项目进度排期、团队人员工作指导安排。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -61,96 +61,11 @@
   </entry>
   
   <entry>
-    <title>Transferring Deep Visual Semantic Features to Large-Scale Multimodal Learning to Rank</title>
-    <link href="http://www.dianacody.com/2017/10/23/2017-10-23-DeepVisual/"/>
-    <id>http://www.dianacody.com/2017/10/23/2017-10-23-DeepVisual/</id>
-    <published>2017-10-22T16:00:00.000Z</published>
-    <updated>2018-05-01T09:00:52.000Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>One consideration to make is that large modern CNNs require large amounts of training data. The amount of examples available to an individual query model can be in the low hundreds, particularly for queries in the long tail. This makes training one deep CNN per query from scratch prone to overfitting. Transfer learning is a popular method for dealing with this problem, with many expels in computer vision.<br>Learning to rank search results has received considerable attention over the past decade, and it is at the core of modern information retrieval. </p>
-<h5 id="Works"><a href="#Works" class="headerlink" title="Works"></a>Works</h5><h6 id="1-Multimodal-Listing-Embedding"><a href="#1-Multimodal-Listing-Embedding" class="headerlink" title="(1) Multimodal Listing Embedding"></a>(1) <strong>Multimodal Listing Embedding</strong></h6><p>Our listing contains text information such as descriptive title and tags, as well as an image of the item for sale. To measure the value of including image information, we embed listings in a multimodal space (consisting of high-level text …)</p>
-<h6 id="2-Training-Models"><a href="#2-Training-Models" class="headerlink" title="(2) Training Models"></a>(2) <strong>Training Models</strong></h6><p>we extend our existing learning to rank models with image information. At first, we embed listings for the learning to rank task in both single modality and multimodal settings. Then, the listing embedded in both modalities are incorporated into a learning to rank framework.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      Search is at the heart of modern e-commerce. Traditional models optimize over a few hand-constructed features based on the item’s text. Now, there is a multimodal learning to rank model that combines these traditional features with visual semantic features transferred from a deep convolutional neural net work.
-    
-    </summary>
-    
-      <category term="Deep Visual" scheme="http://www.dianacody.com/categories/Deep-Visual/"/>
-    
-    
-      <category term="Learning to rank" scheme="http://www.dianacody.com/tags/Learning-to-rank/"/>
-    
-      <category term="Computer vision" scheme="http://www.dianacody.com/tags/Computer-vision/"/>
-    
-      <category term="Deep learning" scheme="http://www.dianacody.com/tags/Deep-learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Targeted Content for a Real-Time Activity Feed, For First Time Visitors to Power Users</title>
-    <link href="http://www.dianacody.com/2017/09/22/2017-09-22-RealTimeFeed/"/>
-    <id>http://www.dianacody.com/2017/09/22/2017-09-22-RealTimeFeed/</id>
-    <published>2017-09-21T16:00:00.000Z</published>
-    <updated>2018-05-01T07:43:33.000Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>The Activity Feed is a frequently updated stream of content in the form of stories that flow from the top to the bottom of the page as time goes on. we addressed these issues in a new version of the Activity Feed that was built and deployed to all of our tens of millions of uses. These users cover the full gamut of our website engagement levels, ranging from the first-time visitor to the long-time power user. </p>
-<h5 id="Activity-Feeds"><a href="#Activity-Feeds" class="headerlink" title="Activity Feeds"></a>Activity Feeds</h5><p>Activity feeds are loosely time-ordered sets of varied content, and are commonly found on popular social networks such as Twitter, Facebook, and LinkedIn. The content in feeds is drawn from a set of content products. Typically, content producers are nodes in a user’s social graph, which represents the user’s interests based on explicit user action, for example, “following” another user. We call content generated from a user’s social graph organic content. We also note that the time-ordered nature of the AF makes it ideal for keeping up with the actions of your social graph, the users with whom one shares commonalities. Because AFs are singular source for “what is new” amongst a peer group, they often serve as a primary landing page for users.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      The Activity Feed (AF) is our taking on the ubiquitous “web feed” - a continuous stream of aggregated content, personalized for each user. These streams have become the defacto means of serving advertisements in the context of social media.
-    
-    </summary>
-    
-      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
-    
-    
-      <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
-    
-      <category term="Large-scale Systems" scheme="http://www.dianacody.com/tags/Large-scale-Systems/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Style in the Long Tail, Discovering Unique Interests with Latent Variable Models in Large Scale Social E-commerce</title>
-    <link href="http://www.dianacody.com/2017/09/21/2017-09-21-LongTail/"/>
-    <id>http://www.dianacody.com/2017/09/21/2017-09-21-LongTail/</id>
-    <published>2017-09-20T16:00:00.000Z</published>
-    <updated>2018-05-01T07:46:49.000Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>An online marketplace for handmade and vintage items, with over 30 million active users and 30 million active listings. This is a marketplace known for tis diverse and eclectic content (e.g. Figure 1); people come in order to find those unusual items that match the peculiarities of their style. Indeed, in its entirety could be considered part of the e-commerce long tail; in addition to wide ranging functions and styles, the handmade and vintage nature of the site means that most items for sale are unique.</p>
-<h5 id="Works"><a href="#Works" class="headerlink" title="Works"></a>Works</h5><h6 id="1-Recommendation-Systems"><a href="#1-Recommendation-Systems" class="headerlink" title="(1)Recommendation Systems"></a>(1)<strong>Recommendation Systems</strong></h6><p>recommender systems are nothing new, with the first papers on collaborative filtering appearing in the 1990s.The range of techniques available when building recommender systems is vast, too board to cover here. For a good overview of common techniques, we urge the curious reader to read the survey of Adomavicius and Tuzhilin. Also of note is the work of Koren, Kolinsky and others describing the approaches that won the Netflix prize.</p>
-<h6 id="2-Latent-Dirichlet-Allocation-LDA"><a href="#2-Latent-Dirichlet-Allocation-LDA" class="headerlink" title="(2)Latent Dirichlet Allocation (LDA)"></a>(2)<strong>Latent Dirichlet Allocation (LDA)</strong></h6><p>Latent Dirichlet Allocation (LDA) is an unsupervised, probabilistic, generative model that aims to find a low dimensional description that can summarize the contents of large document collections. </p>
-<h5 id="Identifying-User-Interests"><a href="#Identifying-User-Interests" class="headerlink" title="Identifying User Interests"></a>Identifying User Interests</h5><h6 id="1-Social-E-commerce"><a href="#1-Social-E-commerce" class="headerlink" title="(1)Social E-commerce"></a>(1)<strong>Social E-commerce</strong></h6><p>There are four important entities:<br>“User”: Anyone registered on our website, including sellers<br>“Seller”: our user who own a shop<br>“Shop”: A collection of items sold by the same seller. Each shop has its own online storefront.<br>“Listing”: Products/items listed in a shop, each with its unique listing id.<br>To give an idea of scale, we currently have approximately 1 million active sellers/shops, 30 million active listings, and 30 million active members.</p>
-<h6 id="2-Inferring-User-Interests"><a href="#2-Inferring-User-Interests" class="headerlink" title="(2)Inferring User Interests"></a>(2)<strong>Inferring User Interests</strong></h6><p>Our use of LDA is based on the premise that users with similar interests will act upon similar listings. We chose to user the social action of “favoriting” listings as a reliable signal for user style. This is done in lieu of more traditional user intent signals, for instance “purchasing” as is commonly done in collaborative filter development. </p>
-<h5 id="References"><a href="#References" class="headerlink" title="References"></a>References</h5><p>[1] G. Adomavicius and A. Tuzhilin. Toward the next generation of recommender systems: A survey of the state-of-the-art and possible extensions. IEEE Trans. on Knowl. and Data Eng., 2005.<br>[2] R. S. Arora and A. M. Elgammal. Towards automated classification of fine-art painting style: A comparative study. In ICPR, 2012.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      An online marketplace for handmade and vintage goods with over 30 million diverse listings, the problem of capturing the taste is particularly important - users come to the site specifically to find items that match their eclectic styles.
-    
-    </summary>
-    
-      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
-    
-    
-      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
-    
-      <category term="Collaborative Filtering" scheme="http://www.dianacody.com/tags/Collaborative-Filtering/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Scene Recommendation</title>
     <link href="http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/"/>
     <id>http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/</id>
     <published>2017-06-25T16:00:00.000Z</published>
-    <updated>2018-11-11T02:40:04.000Z</updated>
+    <updated>2018-11-30T09:29:36.000Z</updated>
     
     <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
 <h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>改进LDA主题模型，跨不同商品分类进行场景主题聚合，基于用户近期点击和购买行为，将多类商品各自组成pair对/n元组作为场景，同一场景下数据集互为推荐集，pig+python处理数据。<br>规定：</p>
@@ -163,7 +78,7 @@
 <p>流程：场景scene-&gt;产品词pwd-&gt;商品sku；(1)数据准备N-Gram、自然序列(点击+订单)；(2)场景获取：人工、自动挖掘(Word2Vector+K-means计算词距离、LDA及改进lightLDA/SparseLDA适合长序列、Brown-Cluster层次聚类适合序列)；(3)结果评价：场景主题数、场景集覆盖率、单场景sku/pwd数、单场景准确率。</p>
 <p>前期初始化人工定义场景主题数2k；后期数据挖掘自动化模型，迭代生成场景主题数10k。</p>
 <p>专利论文《基于主题模型的场景推荐》。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -200,10 +115,10 @@
     <link href="http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/"/>
     <id>http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/</id>
     <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2018-11-07T01:27:06.000Z</updated>
+    <updated>2018-11-30T09:29:18.000Z</updated>
     
     <content type="html"><![CDATA[<h5 id="一、主要内容"><a href="#一、主要内容" class="headerlink" title="一、主要内容"></a>一、主要内容</h5><p>计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格。</p>
-<h5 id="二、参考文献"><a href="#二、参考文献" class="headerlink" title="二、参考文献"></a>二、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="二、参考文献"><a href="#二、参考文献" class="headerlink" title="二、参考文献"></a>二、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -230,11 +145,11 @@
     <link href="http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/"/>
     <id>http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/</id>
     <published>2017-05-28T16:00:00.000Z</published>
-    <updated>2018-11-11T02:40:32.000Z</updated>
+    <updated>2018-11-30T09:29:01.000Z</updated>
     
     <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
 <h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>统计发现用户点击路径偏好，人群分布；基于session日志数据，统计用户小时/天/周/月/季度的点击+购物车+订单路径，入口标记；汇总人群占比。<br>获取用户购买途径固有模式和习惯分析，标记典型模式，用户打标和画像，其他固有行为模式挖掘及利用。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -261,11 +176,11 @@
     <link href="http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/"/>
     <id>http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/</id>
     <published>2017-03-29T16:00:00.000Z</published>
-    <updated>2018-11-11T02:40:48.000Z</updated>
+    <updated>2018-11-30T09:28:45.000Z</updated>
     
     <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
 <h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>连通用户的不同平台渠道pc/app/weChat账号pin/uuid/openId行为，统一用户数据，实现跨平台数据推荐。<br>计算多维度用户特征：包括性别、年龄、地理位置、商品类目兴趣、产品词偏好、品牌词偏好、扩展属性、购买力、店铺偏好、折扣偏好、实时反馈、近期行为、孩子性别年龄，存储离线Hive表。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -288,15 +203,100 @@
   </entry>
   
   <entry>
+    <title>Transferring Deep Visual Semantic Features to Large-Scale Multimodal Learning to Rank</title>
+    <link href="http://www.dianacody.com/2017/02/23/2017-02-23-DeepVisual/"/>
+    <id>http://www.dianacody.com/2017/02/23/2017-02-23-DeepVisual/</id>
+    <published>2017-02-22T16:00:00.000Z</published>
+    <updated>2018-11-30T09:25:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>One consideration to make is that large modern CNNs require large amounts of training data. The amount of examples available to an individual query model can be in the low hundreds, particularly for queries in the long tail. This makes training one deep CNN per query from scratch prone to overfitting. Transfer learning is a popular method for dealing with this problem, with many expels in computer vision.<br>Learning to rank search results has received considerable attention over the past decade, and it is at the core of modern information retrieval. </p>
+<h5 id="Works"><a href="#Works" class="headerlink" title="Works"></a>Works</h5><h6 id="1-Multimodal-Listing-Embedding"><a href="#1-Multimodal-Listing-Embedding" class="headerlink" title="(1) Multimodal Listing Embedding"></a>(1) <strong>Multimodal Listing Embedding</strong></h6><p>Our listing contains text information such as descriptive title and tags, as well as an image of the item for sale. To measure the value of including image information, we embed listings in a multimodal space (consisting of high-level text …)</p>
+<h6 id="2-Training-Models"><a href="#2-Training-Models" class="headerlink" title="(2) Training Models"></a>(2) <strong>Training Models</strong></h6><p>we extend our existing learning to rank models with image information. At first, we embed listings for the learning to rank task in both single modality and multimodal settings. Then, the listing embedded in both modalities are incorporated into a learning to rank framework.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      Search is at the heart of modern e-commerce. Traditional models optimize over a few hand-constructed features based on the item’s text. Now, there is a multimodal learning to rank model that combines these traditional features with visual semantic features transferred from a deep convolutional neural net work.
+    
+    </summary>
+    
+      <category term="Deep Visual" scheme="http://www.dianacody.com/categories/Deep-Visual/"/>
+    
+    
+      <category term="Learning to rank" scheme="http://www.dianacody.com/tags/Learning-to-rank/"/>
+    
+      <category term="Computer vision" scheme="http://www.dianacody.com/tags/Computer-vision/"/>
+    
+      <category term="Deep learning" scheme="http://www.dianacody.com/tags/Deep-learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Targeted Content for a Real-Time Activity Feed, For First Time Visitors to Power Users</title>
+    <link href="http://www.dianacody.com/2017/01/22/2017-01-22-RealTimeFeed/"/>
+    <id>http://www.dianacody.com/2017/01/22/2017-01-22-RealTimeFeed/</id>
+    <published>2017-01-21T16:00:00.000Z</published>
+    <updated>2018-11-30T09:26:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>The Activity Feed is a frequently updated stream of content in the form of stories that flow from the top to the bottom of the page as time goes on. we addressed these issues in a new version of the Activity Feed that was built and deployed to all of our tens of millions of uses. These users cover the full gamut of our website engagement levels, ranging from the first-time visitor to the long-time power user. </p>
+<h5 id="Activity-Feeds"><a href="#Activity-Feeds" class="headerlink" title="Activity Feeds"></a>Activity Feeds</h5><p>Activity feeds are loosely time-ordered sets of varied content, and are commonly found on popular social networks such as Twitter, Facebook, and LinkedIn. The content in feeds is drawn from a set of content products. Typically, content producers are nodes in a user’s social graph, which represents the user’s interests based on explicit user action, for example, “following” another user. We call content generated from a user’s social graph organic content. We also note that the time-ordered nature of the AF makes it ideal for keeping up with the actions of your social graph, the users with whom one shares commonalities. Because AFs are singular source for “what is new” amongst a peer group, they often serve as a primary landing page for users.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      The Activity Feed (AF) is our taking on the ubiquitous “web feed” - a continuous stream of aggregated content, personalized for each user. These streams have become the defacto means of serving advertisements in the context of social media.
+    
+    </summary>
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
+    
+    
+      <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
+    
+      <category term="Large-scale Systems" scheme="http://www.dianacody.com/tags/Large-scale-Systems/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Style in the Long Tail, Discovering Unique Interests with Latent Variable Models in Large Scale Social E-commerce</title>
+    <link href="http://www.dianacody.com/2017/01/21/2017-01-21-LongTail/"/>
+    <id>http://www.dianacody.com/2017/01/21/2017-01-21-LongTail/</id>
+    <published>2017-01-20T16:00:00.000Z</published>
+    <updated>2018-11-30T09:26:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h5><p>An online marketplace for handmade and vintage items, with over 30 million active users and 30 million active listings. This is a marketplace known for tis diverse and eclectic content (e.g. Figure 1); people come in order to find those unusual items that match the peculiarities of their style. Indeed, in its entirety could be considered part of the e-commerce long tail; in addition to wide ranging functions and styles, the handmade and vintage nature of the site means that most items for sale are unique.</p>
+<h5 id="Works"><a href="#Works" class="headerlink" title="Works"></a>Works</h5><h6 id="1-Recommendation-Systems"><a href="#1-Recommendation-Systems" class="headerlink" title="(1)Recommendation Systems"></a>(1)<strong>Recommendation Systems</strong></h6><p>recommender systems are nothing new, with the first papers on collaborative filtering appearing in the 1990s.The range of techniques available when building recommender systems is vast, too board to cover here. For a good overview of common techniques, we urge the curious reader to read the survey of Adomavicius and Tuzhilin. Also of note is the work of Koren, Kolinsky and others describing the approaches that won the Netflix prize.</p>
+<h6 id="2-Latent-Dirichlet-Allocation-LDA"><a href="#2-Latent-Dirichlet-Allocation-LDA" class="headerlink" title="(2)Latent Dirichlet Allocation (LDA)"></a>(2)<strong>Latent Dirichlet Allocation (LDA)</strong></h6><p>Latent Dirichlet Allocation (LDA) is an unsupervised, probabilistic, generative model that aims to find a low dimensional description that can summarize the contents of large document collections. </p>
+<h5 id="Identifying-User-Interests"><a href="#Identifying-User-Interests" class="headerlink" title="Identifying User Interests"></a>Identifying User Interests</h5><h6 id="1-Social-E-commerce"><a href="#1-Social-E-commerce" class="headerlink" title="(1)Social E-commerce"></a>(1)<strong>Social E-commerce</strong></h6><p>There are four important entities:<br>“User”: Anyone registered on our website, including sellers<br>“Seller”: our user who own a shop<br>“Shop”: A collection of items sold by the same seller. Each shop has its own online storefront.<br>“Listing”: Products/items listed in a shop, each with its unique listing id.<br>To give an idea of scale, we currently have approximately 1 million active sellers/shops, 30 million active listings, and 30 million active members.</p>
+<h6 id="2-Inferring-User-Interests"><a href="#2-Inferring-User-Interests" class="headerlink" title="(2)Inferring User Interests"></a>(2)<strong>Inferring User Interests</strong></h6><p>Our use of LDA is based on the premise that users with similar interests will act upon similar listings. We chose to user the social action of “favoriting” listings as a reliable signal for user style. This is done in lieu of more traditional user intent signals, for instance “purchasing” as is commonly done in collaborative filter development. </p>
+<h5 id="References"><a href="#References" class="headerlink" title="References"></a>References</h5><p>[1] …<br>[2] …</p>
+]]></content>
+    
+    <summary type="html">
+    
+      An online marketplace for handmade and vintage goods with over 30 million diverse listings, the problem of capturing the taste is particularly important - users come to the site specifically to find items that match their eclectic styles.
+    
+    </summary>
+    
+      <category term="Recommender System" scheme="http://www.dianacody.com/categories/Recommender-System/"/>
+    
+    
+      <category term="Collaborative Filtering" scheme="http://www.dianacody.com/tags/Collaborative-Filtering/"/>
+    
+      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Accompany Plan</title>
     <link href="http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/"/>
     <id>http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/</id>
     <published>2016-12-24T16:00:00.000Z</published>
-    <updated>2018-11-11T02:41:00.000Z</updated>
+    <updated>2018-11-30T09:28:26.000Z</updated>
     
     <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
 <h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>主要内容如下：<br>线上接口升级：包括预测用户年龄、孩子模型排序接口。<br>离线用户特征维度升级：增加200个三级品类cid3，按照用户年龄性别季节不同扩展属性制定算法规则，计算候选集质量分，作为召回推荐商品依据。<br>产品发布：与后端开发、前端开发、产品、运营对接需求，联调。<br>提升价值：用户标签场景化（扩大召回源品类数据集）、商品推荐精准化（精细化各品类在年龄性别季节，提升商品推荐准确度）、用户画像档案拉新（将预测行为转化为档案数据，让更多用户参与迭代预测孩子模型）。<br>截止项目完成，App该入口已达成100w活跃建档用户数，PV/UV价值提升。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -325,7 +325,7 @@
     <link href="http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/"/>
     <id>http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/</id>
     <published>2016-09-14T16:00:00.000Z</published>
-    <updated>2018-11-11T02:41:14.000Z</updated>
+    <updated>2018-11-30T09:27:51.000Z</updated>
     
     <content type="html"><![CDATA[<p>主要内容如下：</p>
 <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
@@ -343,7 +343,7 @@
 <li>调整抽样比例</li>
 <li>训练的正负样本权重设置</li>
 </ul>
-<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1]xxx会议.2016<br>[2]SIGIR会议.2016<br>[3]IEEE.2015</p>
+<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
