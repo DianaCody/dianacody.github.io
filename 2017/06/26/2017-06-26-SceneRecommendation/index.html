@@ -95,10 +95,13 @@
 <meta property="og:url" content="http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/index.html">
 <meta property="og:site_name" content="DianaCody">
 <meta property="og:description" content="改进的LDA主题模型，跨不同商品分类进行场景主题聚合。">
-<meta property="og:updated_time" content="2018-11-30T09:29:36.000Z">
+<meta property="og:image" content="http://www.dianacody.com/resources/scene-histogram.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/scene-process.jpg">
+<meta property="og:updated_time" content="2018-12-01T13:01:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scene Recommendation">
 <meta name="twitter:description" content="改进的LDA主题模型，跨不同商品分类进行场景主题聚合。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/scene-histogram.jpg">
 
 
 
@@ -401,18 +404,123 @@
       
 
       
-        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>改进LDA主题模型，跨不同商品分类进行场景主题聚合，基于用户近期点击和购买行为，将多类商品各自组成pair对/n元组作为场景，同一场景下数据集互为推荐集，pig+python处理数据。<br>规定：</p>
-<ul>
-<li>(1)场景为单一细粒度的明确主题；</li>
-<li>(2)数据组不全在一个三级分类cid3里(否则与三级类重复)，粒度小于二级类；</li>
-<li>(3)场景之间有足够向量距离；</li>
-<li>(4)覆盖率达99%以上，且防止数据元组分桶倾斜严重</li>
-</ul>
-<p>流程：场景scene-&gt;产品词pwd-&gt;商品sku；(1)数据准备N-Gram、自然序列(点击+订单)；(2)场景获取：人工、自动挖掘(Word2Vector+K-means计算词距离、LDA及改进lightLDA/SparseLDA适合长序列、Brown-Cluster层次聚类适合序列)；(3)结果评价：场景主题数、场景集覆盖率、单场景sku/pwd数、单场景准确率。</p>
-<p>前期初始化人工定义场景主题数2k；后期数据挖掘自动化模型，迭代生成场景主题数10k。</p>
-<p>专利论文《基于主题模型的场景推荐》。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一般地，商品分类体系都是按照类目进行划分的，最多分为三个不同级别层次类目。但是，如此分类难以满足特殊情形下用户购买需求，比如“旅行背包、运动鞋、运动衣、徒步手杖、自拍杆”这些商品不属于一个商品类目体系，但可能属于一个特殊场景“户外徒步”，在这种情况下，可以给用户推荐“自拍杆”，达到场景推荐的目的，像这种人工总结的场景是一般地、实际地存在，并且有可以转化的价值。类似地，还可以提炼出其他场景主题。为了丰富召回数据体系，我们采用改进LDA主题模型来实现场景推荐。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最终的目的是，跨不同商品分类进行场景主题聚合，基于用户近期点击和购买行为，将多类商品各自组成pair对/n元组作为场景，同一场景下数据集互为推荐集，pig+python处理数据。<br>规定：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)场景为单一细粒度的明确主题；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)数据组不全在一个三级分类cid3里(否则与三级类重复)，粒度小于二级类；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)场景之间有足够向量距离；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4)覆盖率达99%以上，且防止数据元组分桶倾斜严重</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前期初始化人工定义场景主题数2k；后期数据挖掘自动化模型，迭代生成场景主题数10k。</p>
+<h5 id="三、基于频繁项集-FP-Growth-方案"><a href="#三、基于频繁项集-FP-Growth-方案" class="headerlink" title="三、基于频繁项集(FP-Growth)方案"></a>三、基于频繁项集(FP-Growth)方案</h5><h6 id="3-1-数据获取"><a href="#3-1-数据获取" class="headerlink" title="3.1 数据获取"></a>3.1 数据获取</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户最近的click数据和order数据，来自于session。抽取用户最近数据，比如点击、搜索、加购物车、订单，将这些数据组合为2~4元组，比如(click, order), (order, order), (search-word + cart, order)。然后，将每种方法抽取出来的排序较高的组合作为可信度较高的组合，收集30天数据，然后把出现频率较高的topN作为候选集。用3-4个月的候选集，然后对每个月数据取交集，得到一些集合。</p>
+<h6 id="3-2-数据评测"><a href="#3-2-数据评测" class="headerlink" title="3.2 数据评测"></a>3.2 数据评测</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【方法一】从每种方法取出的组合中，随机挑选出10%的组合，人工评测组合存在场景的比例。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【方法二】选一个月订单和sample一定比例的click序列作为评测数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用这些组合来预测评测的数据，观测能匹配到多少数据，即每种方法的召回率。</p>
+<h6 id="3-3-召回聚类、打标"><a href="#3-3-召回聚类、打标" class="headerlink" title="3.3 召回聚类、打标"></a>3.3 召回聚类、打标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对这些规则计算相似度进行聚类，比如可以通过计算组合中每个元素pw\cid3\cid2\cid1重叠度，然后人工打标。</p>
+<h6 id="3-4-结论"><a href="#3-4-结论" class="headerlink" title="3.4 结论"></a>3.4 结论</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过分析数据可以发现，按频数排序的话，选频数大于10的产品词组合，发现组合都集中在销量较高的日百商品类别，如”湿巾”、”洗发水”等，经过聚类后发现只有400多个组合，而且分布不能覆盖大部分商品类别。为此考虑另外一种方案来挖掘场景数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目前基于频率的自动挖掘的方法会导致数据集中在高频购买的商品中，为了保证场景的覆盖率，我们人工定义出了一些场景，然后再把自动挖掘的数据添加到这些场景中，丰富这些场景。</p>
+<h5 id="四、基于LDA主题模型方案"><a href="#四、基于LDA主题模型方案" class="headerlink" title="四、基于LDA主题模型方案"></a>四、基于LDA主题模型方案</h5><h6 id="4-1-主题分类体系"><a href="#4-1-主题分类体系" class="headerlink" title="4.1 主题分类体系"></a>4.1 主题分类体系</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从之前基于频繁项集方式自动挖掘的数据发现，自动挖掘的场景扎堆严重，且一些场景之间“距离”过近。实际上是用户行为太少、太集中，没有“基于场景的冷启动数据”而导致的数据分桶倾斜严重。<br><img src="/resources/scene-histogram.jpg" alt="figure-scene-histogram"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以需要通过从顶层设计一个场景分类体系来统领自动挖掘出的场景数据。目前的三级品类分类体系不能完全适合现在的数据。通过建立分类体系，一方面可以掌握场景在整个全站商品中的分布，对场景有一个直观认识；另一方面，可以保证以后挖掘的场景对所有商品覆盖率更高。目前的分类体系考虑二级分类，即“主类目-topic”。有12个主类目，大概有200多个场景主题(topic)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目前采用两种方法结合：<br>【方法一】人工建立场景分类体系框架，人工填入产品词；<br>【方法二】数据自动挖掘，找用户购买的商品id，对应分到人工定义好的框架的桶里；</p>
+<h6 id="4-2-自动数据挖掘"><a href="#4-2-自动数据挖掘" class="headerlink" title="4.2 自动数据挖掘"></a>4.2 自动数据挖掘</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将每种方法抽取出来的组合选取topN作为可信度较高的组合作为候选组合。例如“沐浴露、洗发水、牙刷、牙膏”可以提炼出场景主题模型为“日常清洁”。<br>但是存在下面几个问题：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 4个产品词的场景重复的较多，需要合并，目前合并之后又不能构成一个场景；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 商品sku级别的场景的sku数量太少，同样需要泛化；</p>
+<h6 id="4-3-结构流程图"><a href="#4-3-结构流程图" class="headerlink" title="4.3 结构流程图"></a>4.3 结构流程图</h6><p><img src="/resources/scene-process.jpg" alt="figure-scene-process"><br>第一阶段：达到1000个场景。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将候选组合放到现有的一级类中，人工把这些数据映射到topic上，定义出场景。根据场景得到sku。目前人工整理了一个场景列表，把场景对应的产品词找到，再映射到sku。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;流程：场景scene-&gt;产品词pwd-&gt;商品sku；<br>第二阶段：达到10000个场景。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用第一阶段的方法，人力成本太高，考虑另一种方法。解决办法：可以考虑先对”产品词pwd”、”商品sku” 进行聚类。<br>①计算词与词之间的距离<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a.用word-embedding的方式计算<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b.用互信息和卡方统计量计算<br>②k-means++聚类<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a.保证一个类里有5-7个产品词；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b.在得到聚类的情况下，去召回3天购买的sku。<br>【自动挖掘场景】<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以考虑先对满足threshold1的四元组产品词\sku进行聚类：<br>①kmeans<br>计算词与词之间的距离，用(word-embedding &amp; cos-similarity)的方式计算。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优点：已完成一些结果，pw的效果还可以，值得尝试；sku的效果不行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缺点：理论上不太合理，找到的pw会存在相似的情况。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决办法：人工review产品词结果，然后映射成sku。<br>②LDA<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优点：把场景看成一个topic，设置好topic数目即可得到pwd或sku<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题：如果把4元组看成一个序列，LDA不太适合短文本；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决方法：可以用更长序列，如用户7天点击序列看成一个doc，这样保证一个doc有多个重复的item，而且没有停用词的干扰；<br>③Brown-cluster<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优点：属于层次聚类，完成聚类后也可以把控聚类的堆大小；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题：对序列比较有效，对元组的数据不敢保证。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决方法：用更长序列，通过控制一些阈值来保证足够多（N）的类里有5-7个产品词；在得到聚类的情况下，去召回一个月的，窗口为3/7天购买的sku，每个类选取top300的sku作为召回数据。</p>
+<h6 id="4-4-调参-amp-评测"><a href="#4-4-调参-amp-评测" class="headerlink" title="4.4 调参 &amp; 评测"></a>4.4 调参 &amp; 评测</h6><p>(1)以场景集作为评价对象：整个场景集按其大小、覆盖分类体系的情况、场景之间最小“距离”、topic下平均场景数定义如下评测指标：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 总场景数、分品类场景数<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 场景品类覆盖率、topic整体覆盖率、分品类topic覆盖率<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) topic下平均场景数、分品类topic下平均场景数<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) 整个场景集场景间最小“距离”、分品类场景间最小“距离”<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e) 场景平均产品词/SKU数、分品类场景平均产品词/SKU数<br>(2)以单个场景作为评价对象：按场景准确度、场景流量、销量、价格段定义如下评测指标。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 场景准确度<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 场景1月内产品涉及流量占比<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) 场景1月内产品涉及销量占比<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) 场景产品整体价格段</p>
+<h6 id="4-5-线上接口"><a href="#4-5-线上接口" class="headerlink" title="4.5 线上接口"></a>4.5 线上接口</h6><p>(1) 离线数据：存储为3个HBase表</p>
+<table>
+<thead>
+<tr>
+<th>TableName</th>
+<th>Field1</th>
+<th>Field2</th>
+<th>Field3</th>
+<th>Field4</th>
+<th>Field5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SceneTable</td>
+<td>scene_id</td>
+<td>scene_name</td>
+<td>scene_sku</td>
+<td>scene_image</td>
+<td>scene_info</td>
+</tr>
+<tr>
+<td>ListTable</td>
+<td>scene_id</td>
+<td>list_id</td>
+<td>list_sku</td>
+<td>/</td>
+<td>/</td>
+</tr>
+<tr>
+<td>ArticleTable</td>
+<td>scene_id</td>
+<td>article_id</td>
+<td>article_text</td>
+<td>/</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>(2) 线上接口<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 请求入参：推荐位、pin，type=0，返回结果：10个场景id、场景名、场景图片、场景说明；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 请求入参：推荐位、pin、type=1，返回结果：场景id、场景名、场景图片；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) 请求入参：推荐位、pin、场景id，返回结果：sku、清单id、清单sku、文章id、文章文本；</p>
+<h6 id="4-6-召回结果的排序方案"><a href="#4-6-召回结果的排序方案" class="headerlink" title="4.6 召回结果的排序方案"></a>4.6 召回结果的排序方案</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序涉及两个部分的排序：场景模块间排序，场景内sku的排序。场景内sku排序可以参考传统推荐位排序方案。同时，可以从两个角度来考虑排序，一是从匹配用户与场景相似度的角度，二是从场景触发的角度来考虑。</p>
+<h6 id="4-6-1-匹配用户与场景相似度"><a href="#4-6-1-匹配用户与场景相似度" class="headerlink" title="4.6.1 匹配用户与场景相似度"></a>4.6.1 匹配用户与场景相似度</h6><p>(a)场景单边特征<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一周内，场景浏览占比、场景浏览用户数占比、场景下sku销量占比、下单用户数占比、场景复购周期。<br>(b)用户-场景双边特征</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Window</th>
+<th>Granularity/Attribute</th>
+<th>Statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>browse</td>
+<td>latest click: 1 time, 6times, 10times, 3 minutes, 10 minutes, 1 hour, 1 day, 2days, 3days</td>
+<td>scene</td>
+<td>number, ratio</td>
+</tr>
+<tr>
+<td>order</td>
+<td>1 day, 2 days, 1 week, 2weeks, 1 month, 2 months, 3 months</td>
+<td>scene</td>
+<td>number, ratio</td>
+</tr>
+<tr>
+<td>add-cart</td>
+<td>1 day, 2days, 1 week</td>
+<td>scene</td>
+<td>number, ratio</td>
+</tr>
+</tbody>
+</table>
+<p>(c)用户-场景-产品词多边特征<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑冷启的问题，用户没有场景数据的时候，利用用户最近行为和场景的产品词的重合度，得到重合度为top5的场景ID和得分。</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Window</th>
+<th>Granularity/Attribute</th>
+<th>Statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>browse</td>
+<td>latest click: 50 times</td>
+<td>Coincidence degree of scene</td>
+<td>score</td>
+</tr>
+<tr>
+<td>order</td>
+<td>3 day, 2 weeks, 1 month, 2 months, 3 months</td>
+<td>Coincidence degree of scene</td>
+<td>score</td>
+</tr>
+<tr>
+<td>add-cart</td>
+<td>1 day, 1week</td>
+<td>Coincidence degree of scene</td>
+<td>score</td>
+</tr>
+</tbody>
+</table>
+<h6 id="4-6-2-场景触发"><a href="#4-6-2-场景触发" class="headerlink" title="4.6.2 场景触发"></a>4.6.2 场景触发</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;场景触发可以考虑对场景内产品词的weight。</p>
+<h5 id="五、工作成果"><a href="#五、工作成果" class="headerlink" title="五、工作成果"></a>五、工作成果</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;专利论文《基于主题模型的场景推荐》。</p>
+<h5 id="六、参考文献"><a href="#六、参考文献" class="headerlink" title="六、参考文献"></a>六、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
       
     </div>
@@ -664,7 +772,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、主要内容"><span class="nav-number">2.</span> <span class="nav-text">二、主要内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、参考文献"><span class="nav-number">3.</span> <span class="nav-text">三、参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、简介"><span class="nav-number">2.</span> <span class="nav-text">二、简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、基于频繁项集-FP-Growth-方案"><span class="nav-number">3.</span> <span class="nav-text">三、基于频繁项集(FP-Growth)方案</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-数据获取"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 数据获取</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-数据评测"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 数据评测</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-召回聚类、打标"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 召回聚类、打标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-4-结论"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 结论</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、基于LDA主题模型方案"><span class="nav-number">4.</span> <span class="nav-text">四、基于LDA主题模型方案</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-主题分类体系"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 主题分类体系</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-自动数据挖掘"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 自动数据挖掘</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-结构流程图"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 结构流程图</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-4-调参-amp-评测"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 调参 & 评测</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-5-线上接口"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 线上接口</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-6-召回结果的排序方案"><span class="nav-number">4.6.</span> <span class="nav-text">4.6 召回结果的排序方案</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-6-1-匹配用户与场景相似度"><span class="nav-number">4.7.</span> <span class="nav-text">4.6.1 匹配用户与场景相似度</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-6-2-场景触发"><span class="nav-number">4.8.</span> <span class="nav-text">4.6.2 场景触发</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、工作成果"><span class="nav-number">5.</span> <span class="nav-text">五、工作成果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、参考文献"><span class="nav-number">6.</span> <span class="nav-text">六、参考文献</span></a></li></ol></div>
             
 
           </div>
