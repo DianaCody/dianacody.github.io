@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2018-11-30T09:29:52.000Z</updated>
+  <updated>2018-12-01T13:37:13.000Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -20,12 +20,10 @@
     <link href="http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/"/>
     <id>http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/</id>
     <published>2018-01-04T16:00:00.000Z</published>
-    <updated>2018-11-30T09:29:52.000Z</updated>
+    <updated>2018-12-01T13:37:13.000Z</updated>
     
-    <content type="html"><![CDATA[<p>主要内容如下：</p>
-<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>项目预研、独立研究，项目主研，项目管理，产品定型梳理，指导团队成员。</p>
-<p>后端：离线画像数据需要可视化接口。基于Spring的mvc，在线接口数据逻辑分层框架设计、并发取数、数据截断、上线所有离线画像数据(增加索引模块，分目录索引查询，支持不同平台账号查询userId/uuid/skuId)、性能优化以加速查询。</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>后端：离线画像数据需要可视化接口。基于Spring的mvc，在线接口数据逻辑分层框架设计、并发取数、数据截断、上线所有离线画像数据(增加索引模块，分目录索引查询，支持不同平台账号查询userId/uuid/skuId)、性能优化以加速查询。</p>
 <p>前端：基于javascript (jQuery)。</p>
 <ul>
 <li>(1)前端重构接口；</li>
@@ -33,6 +31,8 @@
 <li>(3)性能优化，组件加载时间优化防止卡顿；</li>
 <li>(4)产品用户体验设计(UED)，优化视觉及操作体验效果</li>
 </ul>
+<p>搜索引擎效果：<br><img src="/resources/rdqs-search.jpg" alt="figure-rdqs-search"></p>
+<p>项目预研、独立研究，项目主研，项目管理，产品定型梳理，指导团队成员。</p>
 <p>其他：后期扩大为统一数据服务平台，项目进度排期、团队人员工作指导安排。</p>
 <h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
@@ -197,9 +197,9 @@
     
       <category term="LDA" scheme="http://www.dianacody.com/tags/LDA/"/>
     
-      <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
-    
       <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
+    
+      <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
     
       <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
     
@@ -281,10 +281,10 @@
     <link href="http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/"/>
     <id>http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/</id>
     <published>2017-03-29T16:00:00.000Z</published>
-    <updated>2018-11-30T09:28:45.000Z</updated>
+    <updated>2018-12-01T13:34:06.000Z</updated>
     
     <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>连通用户的不同平台渠道pc/app/weChat账号pin/uuid/openId行为，统一用户数据，实现跨平台数据推荐。<br>计算多维度用户特征：包括性别、年龄、地理位置、商品类目兴趣、产品词偏好、品牌词偏好、扩展属性、购买力、店铺偏好、折扣偏好、实时反馈、近期行为、孩子性别年龄，存储离线Hive表。</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;连通用户的不同平台渠道pc/app/weChat账号pin/uuid/openId行为，统一用户数据，实现跨平台数据推荐。<br><img src="/resources/user-profile.jpg" alt="figure-user-profile"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;计算多维度用户特征：包括性别、年龄、地理位置、商品类目兴趣、产品词偏好、品牌词偏好、扩展属性、购买力、店铺偏好、折扣偏好、实时反馈、近期行为、孩子性别年龄，存储离线Hive表。</p>
 <h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
