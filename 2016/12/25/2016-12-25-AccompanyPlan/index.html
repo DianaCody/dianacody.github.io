@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Recommender System,Online,Java,Offline,Hive," />
+  <meta name="keywords" content="Recommender System,Offline,Hive,Online,Java," />
 
 
 
@@ -95,10 +95,12 @@
 <meta property="og:url" content="http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/index.html">
 <meta property="og:site_name" content="DianaCody">
 <meta property="og:description" content="陪伴计划，一个小型的推荐系统。">
-<meta property="og:updated_time" content="2018-11-30T09:28:26.000Z">
+<meta property="og:image" content="http://www.dianacody.com/resources/accompany-flow.jpg">
+<meta property="og:updated_time" content="2018-12-02T09:21:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Accompany Plan">
 <meta name="twitter:description" content="陪伴计划，一个小型的推荐系统。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/accompany-flow.jpg">
 
 
 
@@ -401,9 +403,38 @@
       
 
       
-        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>主要内容如下：<br>线上接口升级：包括预测用户年龄、孩子模型排序接口。<br>离线用户特征维度升级：增加200个三级品类cid3，按照用户年龄性别季节不同扩展属性制定算法规则，计算候选集质量分，作为召回推荐商品依据。<br>产品发布：与后端开发、前端开发、产品、运营对接需求，联调。<br>提升价值：用户标签场景化（扩大召回源品类数据集）、商品推荐精准化（精细化各品类在年龄性别季节，提升商品推荐准确度）、用户画像档案拉新（将预测行为转化为档案数据，让更多用户参与迭代预测孩子模型）。<br>截止项目完成，App该入口已达成100w活跃建档用户数，PV/UV价值提升。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新增的一个用户入口，若用户没有注册档案，则调用预测用户接口，将预测用户展现在前端，用户可以快速将预测的孩子数据转化为孩子档案。用此方法，提升孩子档案转化率，并且可以通过线上填写和线下BI结合来提升孩子模型预测精准度、扩大数据源召回范围。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据流向：用户孩子档案 -&gt; 挖掘新用户 –&gt; 通过陪伴计划将预测的孩子作为召回 –&gt; 更新用户档案 -&gt; ……（循环）<br><img src="/resources/accompany-flow.jpg" alt="figure-accompany-flow"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据逻辑：将用户填写的高质量潜在孩子档案作为种子用户，进行新用户预测。通过数据分析发现，用户随着孩子年龄增长，购买的商品有明显的序列特征。并可以通过挖掘母音用户在时间轴的不同阶段对商品、品类、品牌、产品属性的不同喜好的行为特征。并且通过数据可以看出，母婴用户在不同年龄段购买的商品特征非常明显，可以考虑结合该特征预测更多潜在用户。</p>
+<h5 id="三、主要内容"><a href="#三、主要内容" class="headerlink" title="三、主要内容"></a>三、主要内容</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个小型的推荐系统，在原有基础上进行升级开发，包括线上接口升级、离线模型升级。</p>
+<h6 id="3-1-线上接口升级"><a href="#3-1-线上接口升级" class="headerlink" title="3.1 线上接口升级"></a>3.1 线上接口升级</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包括预测用户年龄、孩子模型排序接口，并按照用户特定模式进行不同过滤排序逻辑展示。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标签推荐：一级标签排序之后，再以二级标签逻辑排序（二级标签为点击一级标签之后展示的子级别标签）。判断用户是否有订阅标签，若是则优先按时间排序展示订阅标签，其余按照用户默认顺序排列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据流向：商品类目 -&gt; 用户账号 –&gt; 相关类目质量分 -&gt; 通过标签汇总。</p>
+<h6 id="3-2-离线用户特征维度升级"><a href="#3-2-离线用户特征维度升级" class="headerlink" title="3.2 离线用户特征维度升级"></a>3.2 离线用户特征维度升级</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;增加200个三级品类cid3，按照用户年龄性别季节不同扩展属性制定算法规则，计算候选集质量分，作为召回推荐商品依据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;形成每个商品会有以下维度，所在三级类、年龄（学龄）标签，性别标签、属性（tag）标签，sku id，排序质量分，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>category</th>
+<th>age</th>
+<th>gender</th>
+<th>season</th>
+<th>attribute</th>
+<th>sku-id</th>
+<th>rank quality score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12345</td>
+<td>72~83 months (6-year-old)</td>
+<td>male</td>
+<td>summer</td>
+<td>1</td>
+<td>1234567890</td>
+<td>4.19615</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于cid3确定品类年龄、季节、性别区分度进行数据过滤，以及sku的质量分加和计算标签（或cid3）的排序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据召回：根据前端请求参数中的小孩年龄、性别、季节，找到对应年龄、性别、季节下的sku，对这些sku按其绑定的不同标签属性进行分组展示。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线过滤：主要是一些库存过滤。</p>
+<h5 id="四、提升价值"><a href="#四、提升价值" class="headerlink" title="四、提升价值"></a>四、提升价值</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户标签场景化：扩大召回源品类数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品推荐精准化：精细化各品类在年龄性别季节，提升商品推荐准确度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户画像档案拉新：将预测行为转化为档案数据，让更多用户参与迭代预测孩子模型。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;截止项目完成，App该入口已达成100w活跃建档用户数，PV/UV价值提升。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
       
     </div>
@@ -435,13 +466,13 @@
           
             <a href="/tags/Recommender-System/" rel="tag"># Recommender System</a>
           
-            <a href="/tags/Online/" rel="tag"># Online</a>
-          
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
             <a href="/tags/Offline/" rel="tag"># Offline</a>
           
             <a href="/tags/Hive/" rel="tag"># Hive</a>
+          
+            <a href="/tags/Online/" rel="tag"># Online</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -647,7 +678,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、主要内容"><span class="nav-number">2.</span> <span class="nav-text">二、主要内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、参考文献"><span class="nav-number">3.</span> <span class="nav-text">三、参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、简介"><span class="nav-number">2.</span> <span class="nav-text">二、简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、主要内容"><span class="nav-number">3.</span> <span class="nav-text">三、主要内容</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-线上接口升级"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 线上接口升级</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-离线用户特征维度升级"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 离线用户特征维度升级</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、提升价值"><span class="nav-number">4.</span> <span class="nav-text">四、提升价值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、参考文献"><span class="nav-number">5.</span> <span class="nav-text">五、参考文献</span></a></li></ol></div>
             
 
           </div>
