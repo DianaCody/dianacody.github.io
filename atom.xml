@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2018-12-01T13:37:13.000Z</updated>
+  <updated>2018-12-02T02:45:39.000Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -16,25 +16,25 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Recommender Data Query System</title>
+    <title>Recommendation Datum Query System</title>
     <link href="http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/"/>
     <id>http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/</id>
     <published>2018-01-04T16:00:00.000Z</published>
-    <updated>2018-12-01T13:37:13.000Z</updated>
+    <updated>2018-12-02T02:45:39.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>后端：离线画像数据需要可视化接口。基于Spring的mvc，在线接口数据逻辑分层框架设计、并发取数、数据截断、上线所有离线画像数据(增加索引模块，分目录索引查询，支持不同平台账号查询userId/uuid/skuId)、性能优化以加速查询。</p>
-<p>前端：基于javascript (jQuery)。</p>
-<ul>
-<li>(1)前端重构接口；</li>
-<li>(2)前端组件化，单个展示表格作为组件以响应单次请求；</li>
-<li>(3)性能优化，组件加载时间优化防止卡顿；</li>
-<li>(4)产品用户体验设计(UED)，优化视觉及操作体验效果</li>
-</ul>
-<p>搜索引擎效果：<br><img src="/resources/rdqs-search.jpg" alt="figure-rdqs-search"></p>
-<p>项目预研、独立研究，项目主研，项目管理，产品定型梳理，指导团队成员。</p>
-<p>其他：后期扩大为统一数据服务平台，项目进度排期、团队人员工作指导安排。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离线画像数据主要包括用户画像、商品画像、召回源数据信息、用户账户信息等几大类。然而这些数据存储在不同的数据库服务中，比如HBase、Redis、Hive表、MemoryCache，以及基于这些底层数据库封装好的中间层数据服务中，查询整合不同的数据并观测调试数据变得相当麻烦，即离线画像数据需要可视化界面接口。于是基于Spring的mvc结构，开发出了这套java-web的推荐数据查询系统RDQS。</p>
+<h5 id="三、架构设计"><a href="#三、架构设计" class="headerlink" title="三、架构设计"></a>三、架构设计</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据逻辑分层框架设计，如下图所示：<br><img src="/resources/rdqs-architecture.jpg" alt="figure-rdqs-architecture"><br>(1) 数据库层：访问数据库及数据服务，将取回的数据进行初步处理。<br>(2) 数据逻辑层：独立于数据库的数据结构，按照业务逻辑整合数据。<br>(3) 前端界面层：产品用户体验设计(UED)，优化视觉及操作体验效果。</p>
+<h5 id="四、后端"><a href="#四、后端" class="headerlink" title="四、后端"></a>四、后端</h5><h6 id="4-1-数据库层"><a href="#4-1-数据库层" class="headerlink" title="4.1 数据库层"></a>4.1 数据库层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一、数据截断，为了防止一次性读取过多数据，返回超时，所以一般地需要将取回的数据截断为200条以内，同时用户在界面上也无需查看更多的数据；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二、并发取数，当用户选择同时查询多个画像数据，请求数据量较大，通常可以达到几万条数据，需要在0.1s内（人视觉观测不出现明显延迟）将数据全部加载完成，所以在取数逻辑上需要做并行优化；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三、数据预加载，预先加载用户之前读取过的数据、经常访问的数据到缓存，而非每次到数据库读取，可以加快查询速度；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第四、数据滚动加载，为了减小数据访问延迟，采用后端分页的方式，滚动请求加载数据，用户在第一页停留时实际只请求第一页的数据，当用户点击第二页时，再次请求后端数据库取回第二页的数据；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第五、数据格式整理，主要是为了方便前端逻辑展示；</p>
+<h6 id="4-2-数据逻辑层"><a href="#4-2-数据逻辑层" class="headerlink" title="4.2 数据逻辑层"></a>4.2 数据逻辑层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一，底层数据的封装，主要按业务逻辑划分为用户画像、商品画像、召回源数据、用户账户信息四大类数据，按照这四类做成检索目录，用户查询需要选择目录，增加索引模块，分目录索引查询；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二，支持不同平台账号查询userId/uuid/skuId，此处增加userId-uuid的映射表，定时更新，直接读取表中数据；</p>
+<h6 id="4-3-数据展示层"><a href="#4-3-数据展示层" class="headerlink" title="4.3 数据展示层"></a>4.3 数据展示层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供前后端交互接口，前后端相互发送http请求进行数据交互。</p>
+<h5 id="五、前端"><a href="#五、前端" class="headerlink" title="五、前端"></a>五、前端</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于javascript (jQuery)/Bootstrap，由于此系统未达到大型系统规模，所以目前尚未分离前端架构作为前端系统，事实上一些成熟的前端框架例如AngularJS、React等都不特别符合当前需求，所以直接采用javascript做些组件足矣。</p>
+<h6 id="5-1-前端重构接口"><a href="#5-1-前端重构接口" class="headerlink" title="5.1 前端重构接口"></a>5.1 前端重构接口</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接口的重构是为了更好地适应后台数据。</p>
+<h6 id="5-2-前端组件化（前端工程）"><a href="#5-2-前端组件化（前端工程）" class="headerlink" title="5.2 前端组件化（前端工程）"></a>5.2 前端组件化（前端工程）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前端工程是一个复杂的课题，从最简单的层面上讲，即是前端组件化，一个页面由不同的部分构成，那么这些部分就是各个独立互不干扰的组件，可以抽象出来以作后续复用。依照功能模块为主导划分开发结构、甚至团队人员分工，这样利于后续维护，而不是依照文件目录划分开发结构。有关前端工程课题，在我的另外系列博客里面有详述。</p>
+<h6 id="5-3-搜索功能"><a href="#5-3-搜索功能" class="headerlink" title="5.3 搜索功能"></a>5.3 搜索功能</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;支持用户交互式选择不同账号查询数据，用户可以从下拉菜单中选择是用userId、uuid、skuId查询。支持键盘上下选择与鼠标点击选择，请求后台返回数据，输入内容后，自动弹出下拉层，里面有若干匹配输入内容的输入建议项，按下键盘的上下键可以在下面的输入提示项中进行选择，选中的项自动将文字填补到搜索输入框中（如图），也可以用鼠标点击来选中项。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交互式选择方案如下图所示：<br><img src="/resources/rdqs-search.jpg" alt="figure-rdqs-search"></p>
+<h6 id="5-4-多级目录展示"><a href="#5-4-多级目录展示" class="headerlink" title="5.4 多级目录展示"></a>5.4 多级目录展示</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多级目录分层展示，分为三级菜单，选中之后只能查询当前目录对应的数据。此处与一般信息检索系统目录结构类似，不再赘述。</p>
+<h5 id="六、其他"><a href="#六、其他" class="headerlink" title="六、其他"></a>六、其他</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后期扩大为统一数据服务平台，对接所有离线数据。</p>
+<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
@@ -197,9 +197,9 @@
     
       <category term="LDA" scheme="http://www.dianacody.com/tags/LDA/"/>
     
-      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
-    
       <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
+    
+      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
     
       <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
     
