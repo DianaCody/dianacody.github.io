@@ -95,7 +95,7 @@
 <meta property="og:url" content="http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/index.html">
 <meta property="og:site_name" content="DianaCody">
 <meta property="og:description" content="用户购物全路径分析，研究用户行为模式，根据用户日志。">
-<meta property="og:updated_time" content="2018-11-30T09:29:01.000Z">
+<meta property="og:updated_time" content="2018-12-02T07:34:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tracing Analysis of User Purchasing">
 <meta name="twitter:description" content="用户购物全路径分析，研究用户行为模式，根据用户日志。">
@@ -401,9 +401,38 @@
       
 
       
-        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、主要内容"><a href="#二、主要内容" class="headerlink" title="二、主要内容"></a>二、主要内容</h5><p>统计发现用户点击路径偏好，人群分布；基于session日志数据，统计用户小时/天/周/月/季度的点击+购物车+订单路径，入口标记；汇总人群占比。<br>获取用户购买途径固有模式和习惯分析，标记典型模式，用户打标和画像，其他固有行为模式挖掘及利用。</p>
-<h5 id="三、参考文献"><a href="#三、参考文献" class="headerlink" title="三、参考文献"></a>三、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;统计发现用户点击路径偏好，人群分布；基于session日志数据，统计用户小时/天/周/月/季度的点击+购物车+订单路径，入口标记；汇总人群占比。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取用户购买途径固有模式和习惯分析，标记典型模式，用户打标和画像，其他固有行为模式挖掘及利用。</p>
+<h6 id="2-1-商品类目cid3偏好属性"><a href="#2-1-商品类目cid3偏好属性" class="headerlink" title="2.1 商品类目cid3偏好属性"></a>2.1 商品类目cid3偏好属性</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置信度反映该用户的“隐形”偏好，一个用户浏览了许多商品，比如筛选了100多次，则有99%的置信度是这个偏好，但是该用户筛选了100次，但也不能保证是99.9%，也只可能有99.5%的可能性/置信度，是说明有这个偏好。① 搜索词 、② 筛选偏好词（搜索过滤词）、③ 排序、 ④搜索结果列表页里，点击、浏览（商品详情页面浏览的列表展示，一般有共同属性）；或者反例，反例sku上停留时间特别短，注意过滤只看有效信息，噪音不看；（dwell-time是统计瞬时时间，一个session内的时间，主要用来判断误点击，过滤；不是用来判断长期时间的，即联合多个session的dwell-time基本没什么意义）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户画像方面，增加产品中心词提取、产品关键属性词提取算法，包括自动挖掘用户的复购，浏览，加购的产品词和产品属性的共性数据。</p>
+<h6 id="2-2-购物-下单（cart-order）路径"><a href="#2-2-购物-下单（cart-order）路径" class="headerlink" title="2.2 购物+下单（cart+order）路径"></a>2.2 购物+下单（cart+order）路径</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从哪个入口进来的，按单个用户计数；最终统计所有用户结果汇总，观测总的人群占比（宏观的调研）。</p>
+<h6 id="2-3-点击-关注（click-follow）路径"><a href="#2-3-点击-关注（click-follow）路径" class="headerlink" title="2.3 点击+关注（click+follow）路径"></a>2.3 点击+关注（click+follow）路径</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这部分用户画像是用户behavior行为，和购物不相关。</p>
+<h5 id="三、方案"><a href="#三、方案" class="headerlink" title="三、方案"></a>三、方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以session为单位，完整（或挑选关注部分完整）记录用户访问行为以完整勾勒出访问全路径，据此数据进行分析。<br>步骤：<br>(1) 通过读取Session Pruner剪辑后的输出结果数据，统计每个用户相当长一段时期（例如半年以上），全部有购物的session及其购买途径，寻找是否存在一定模式和规律。<br>(2) 两种方式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 对于部分用户中存在的典型模式，进行定义、标记，并按此给这部分用户打标、画像。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 类似地，通过对每个用户时间纵向session数据的深度统计分析，寻找其中某些可能反复出现的模式，对其定义、标记；<br>(3) 根据这些固有模式，优化推荐结果和算法。</p>
+<h5 id="四、数据分析"><a href="#四、数据分析" class="headerlink" title="四、数据分析"></a>四、数据分析</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间段：（1day, 3days, 7days）；dwell_time、avg_time、sum_time，看sku的数量。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征：乘以“时间窗口”（1day,3days,7days）</p>
+<h6 id="4-1-实验数据"><a href="#4-1-实验数据" class="headerlink" title="4.1 实验数据"></a>4.1 实验数据</h6><table>
+<thead>
+<tr>
+<th>数据来源</th>
+<th>时间跨度</th>
+<th>数据大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户浏览加购物车数据</td>
+<td>1 month</td>
+<td>1.1 GB</td>
+</tr>
+<tr>
+<td>用户购买行为数据</td>
+<td>3 month</td>
+<td>3.0 GB</td>
+</tr>
+</tbody>
+</table>
+<h6 id="4-2-方法与结果"><a href="#4-2-方法与结果" class="headerlink" title="4.2 方法与结果"></a>4.2 方法与结果</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 将用户搜索加购产生的sku组成四元组，并统计四元组频数。根据”jaccard相似度”进行聚类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 将(1)方法中的四元组作为语料，训练”word2vec模型”，利用”kmeans方法”进行聚类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) 收集同一用户六个月的购买商品的”产品词”作为语料，训练”word2vec模型”，利用”kmeans算法”聚类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) 由于kmeans方法对于初始节点的选择依赖性过强，执行多次算法产生多份数据进行合并。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) 尝试以一份kmeans产生的聚类结果为基础，计算所有产品词词向量与每一个聚类的余弦相似度进行二次划分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(6) 尝试将较大规模的类利用kmeans方法，二次聚类。但是效果不理想，仍然不能将大类细分。</p>
+<h6 id="4-3-结果分析"><a href="#4-3-结果分析" class="headerlink" title="4.3 结果分析"></a>4.3 结果分析</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. 存在着一些cluster包含的产品词数量太多太杂，无法聚合为固定模式，数据比较稀疏。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. 存在着一些cluster内的产品词相似度过高。</p>
+<h5 id="五、改进方案"><a href="#五、改进方案" class="headerlink" title="五、改进方案"></a>五、改进方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. 缩小order数据的时间跨度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. 数据采样应该更多遵循用户模式规律。</p>
+<h5 id="六、参考文献"><a href="#六、参考文献" class="headerlink" title="六、参考文献"></a>六、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
       
     </div>
@@ -645,7 +674,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、主要内容"><span class="nav-number">2.</span> <span class="nav-text">二、主要内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、参考文献"><span class="nav-number">3.</span> <span class="nav-text">三、参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、简介"><span class="nav-number">2.</span> <span class="nav-text">二、简介</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-商品类目cid3偏好属性"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 商品类目cid3偏好属性</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-购物-下单（cart-order）路径"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 购物+下单（cart+order）路径</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-3-点击-关注（click-follow）路径"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 点击+关注（click+follow）路径</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、方案"><span class="nav-number">3.</span> <span class="nav-text">三、方案</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、数据分析"><span class="nav-number">4.</span> <span class="nav-text">四、数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-实验数据"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 实验数据</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-方法与结果"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 方法与结果</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-结果分析"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 结果分析</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、改进方案"><span class="nav-number">5.</span> <span class="nav-text">五、改进方案</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、参考文献"><span class="nav-number">6.</span> <span class="nav-text">六、参考文献</span></a></li></ol></div>
             
 
           </div>
