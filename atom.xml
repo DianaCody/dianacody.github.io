@@ -199,9 +199,9 @@
     
       <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
     
-      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
-    
       <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
+    
+      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
     
       <category term="N-Gram" scheme="http://www.dianacody.com/tags/N-Gram/"/>
     
@@ -220,10 +220,13 @@
     <link href="http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/"/>
     <id>http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/</id>
     <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2018-11-30T09:29:18.000Z</updated>
+    <updated>2018-12-03T08:38:20.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="一、主要内容"><a href="#一、主要内容" class="headerlink" title="一、主要内容"></a>一、主要内容</h5><p>计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格。</p>
-<h5 id="二、参考文献"><a href="#二、参考文献" class="headerlink" title="二、参考文献"></a>二、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和用户画像相对应的是，商品其实也有自己的一套独有特征。通过计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格、购买力等级，便可以建立这样的体系：商品基础画像。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品之间也有一定联系，在各个类目下，对商品分别按照品牌词、产品词、扩展属性等不同维度进行关联、主题模型聚类、层次抽象，可以建立另外的商品维度体系，也属于商品画像的范畴。最典型的应用就是可以聚合成不同场景的商品，以保证个性化推荐。</p>
+<h5 id="三、商品基础画像"><a href="#三、商品基础画像" class="headerlink" title="三、商品基础画像"></a>三、商品基础画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品性别</strong>：一部分商品通常有性别之分，如手提包可以分为男士手提包和女士手提包，能反映出性别偏好。还有一部分商品没有性别区分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品年龄</strong>：一部分商品有年龄适用范围，如鞋子分为婴儿鞋、青少年鞋、成人鞋、老人鞋等，反映出年龄偏好，还有一部分商品没有年龄区分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品类目</strong>：按照大类划分的级别。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>产品词和品牌词</strong>：商品的基本属性，也包含规格参数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>价格和购买力等级</strong>：商品是否是大众消费产品还是高端消费产品，消费等级属于什么层次。</p>
+<h5 id="四、扩展的商品画像"><a href="#四、扩展的商品画像" class="headerlink" title="四、扩展的商品画像"></a>四、扩展的商品画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>关联商品</strong>：商品之间的相似度和相关度可以根据用户日常行为得出，经常组合在一起的商品必定有相关度，相关程度越高，这个商品的相关商品的属性就可以作为该商品的附属特征。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>聚合商品集</strong>：用频繁项集或者主题模型聚类，相同类目下的商品互为推荐集。这个在基于场景推荐的应用中已经有详细叙述。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>层次抽象</strong>：商品之间的层次隶属关系。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
