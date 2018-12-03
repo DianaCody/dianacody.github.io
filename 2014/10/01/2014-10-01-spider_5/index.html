@@ -95,7 +95,7 @@
 <meta property="og:url" content="http://www.dianacody.com/2014/10/01/2014-10-01-spider_5/index.html">
 <meta property="og:site_name" content="DianaCody">
 <meta property="og:description" content="爬虫的目的就是大规模地、长时间地获取数据，大规模集中对服务器访问，时间一长就有可能被拒绝。大规模集中访问对服务器的影响较大，爬虫可以短时间增大服务器负载。">
-<meta property="og:updated_time" content="2018-04-30T10:44:38.000Z">
+<meta property="og:updated_time" content="2018-12-03T04:01:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="防止爬虫被墙的方法总结">
 <meta name="twitter:description" content="爬虫的目的就是大规模地、长时间地获取数据，大规模集中对服务器访问，时间一长就有可能被拒绝。大规模集中访问对服务器的影响较大，爬虫可以短时间增大服务器负载。">
@@ -401,36 +401,15 @@
       
 
       
-        <h5 id="一、设置下载等待时间-下载频率"><a href="#一、设置下载等待时间-下载频率" class="headerlink" title="一、设置下载等待时间/下载频率"></a>一、设置下载等待时间/下载频率</h5><p>大规模集中访问对服务器的影响较大，爬虫可以短时间增大服务器负载。这里需要注意的是：设定下载等待时间的范围控制，等待时间过长，不能满足短时间大规模抓取的要求，等待时间过短则很有可能被拒绝访问。</p>
-<p>(1). 在之前“从url获取HTML”的方法里，对于httpGet的配置设置了socket超时和连接connect超时，其实这里的时长不是绝对的，主要取决于目标网站对爬虫的控制。</p>
-<p>(2). 另外，在scrapy爬虫框架里，专有参数可以设置下载等待时间download_delay，这个参数可以设置在setting.py里，也可以设置在spider里。</p>
-<h5 id="二、设置cookies"><a href="#二、设置cookies" class="headerlink" title="二、设置cookies"></a>二、设置cookies</h5><p>cookie其实是储存在用户终端的一些被加密的数据，有些网站通过cookies来识别用户身份，如果某个访问总是高频率地发请求，很可能会被网站注意到，被嫌疑为爬虫，这时网站就可以通过cookie找到这个访问的用户而拒绝其访问。</p>
-<p>可以自定义设置cookie策略（防止cookie rejected问题：拒绝写入cookie）或者禁止cookies。</p>
-<ul>
-<li>(1) 自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）*</li>
-</ul>
-<p>在系列一那篇文章里就有自定义cookie策略设置，但更多的借鉴是官方文档的例子，设置方法其实都大同小异，因为HttpClient-4.3.1组件版本跟以前旧版本的不同，写法也有不同，另见官方文档：<a href="http://hc.apache.org/httpcomponents-client-4.3.x/tutorial/html/statemgmt.html#d5e553" target="_blank" rel="external">http://hc.apache.org/httpcomponents-client-4.3.x/tutorial/html/statemgmt.html#d5e553</a></p>
-<ul>
-<li>(2) 禁止cookies*</li>
-</ul>
-<p>通过禁止cookie，这是客户端主动阻止服务器写入。禁止cookie可以防止可能使用cookies识别爬虫的网站来ban掉我们。</p>
-<p>在scrapy爬虫中可以设置COOKIES_ENABLES= FALSE，即不启用cookies middleware，不向web server发送cookies。</p>
-<h5 id="三、修改User-Agent"><a href="#三、修改User-Agent" class="headerlink" title="三、修改User-Agent"></a>三、修改User-Agent</h5><p>最常见的就是伪装浏览器，修改User-Agent（用户代理）。</p>
-<p>User-Agent是指包含浏览器信息、操作系统信息等的一个字符串，也称之为一种特殊的网络协议。服务器通过它判断当前访问对象是浏览器、邮件客户端还是网络爬虫。在request.headers里可以查看user-agent，关于怎么分析数据包、查看其User-Agent等信息，这个在前面的文章里提到过。</p>
-<p>具体方法可以把User-Agent的值改为浏览器的方式，甚至可以设置一个User-Agent池（list，数组，字典都可以），存放多个“浏览器”，每次爬取的时候随机取一个来设置request的User-Agent，这样User-Agent会一直在变化，防止被墙。</p>
-<h5 id="四、修改IP"><a href="#四、修改IP" class="headerlink" title="四、修改IP"></a>四、修改IP</h5><p>其实微博识别的是IP，不是账号。也就是说，当需要连续抓取很多数据的时候，模拟登录没有意义。只要是同一个IP，不管怎么换账号也没有用，主要的是换IP。</p>
-<p>web server应对爬虫的策略之一就是直接将IP或者整个IP段都封掉禁止访问，当IP被禁封后，转换到其他IP继续访问即可。方法：代理IP、本地IP数据库（使用IP池）。</p>
-<ul>
-<li>(1) 从代理IP网站获取大量IP*</li>
-</ul>
-<p>如果总是请求代理IP站点也未免有些麻烦，况且某些代理IP站点有时还可能被禁封，当然再换一个代理IP站点也可以，如果你不嫌麻烦的话。</p>
-<ul>
-<li>(2) 使用IP地址库*</li>
-</ul>
-<p>网上也有很多现成可用的IP地址库，可以存放到本地，如果本地有IP数据库就方便很多，至少不用每次都去请求代理IP站点了（当然可以一次性把站点内所有代理IP先爬下来存储好，形成本地IP数据库），总之获取IP的方法有很多，不一定非要是通过代理IP站点。</p>
-<h5 id="五、分布式爬取"><a href="#五、分布式爬取" class="headerlink" title="五、分布式爬取"></a>五、分布式爬取</h5><p>分布式爬取的也有很多Github repo。原理主要是维护一个所有集群机器能够有效分享的分布式队列。</p>
-<p>使用分布式爬取还有另外一个目的：大规模抓取，单台机器的负荷很大，况且速度很慢，多台机器可以设置一个master管理多台slave去同时爬取。</p>
-<p>另外关于网页判重问题，可以用Bloom Filter。</p>
+        <h5 id="一、设置下载等待时间-下载频率"><a href="#一、设置下载等待时间-下载频率" class="headerlink" title="一、设置下载等待时间/下载频率"></a>一、设置下载等待时间/下载频率</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;大规模集中访问对服务器的影响较大，爬虫可以短时间增大服务器负载。这里需要注意的是：设定下载等待时间的范围控制，等待时间过长，不能满足短时间大规模抓取的要求，等待时间过短则很有可能被拒绝访问。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)在之前“从url获取HTML”的方法里，对于httpGet的配置设置了socket超时和连接connect超时，其实这里的时长不是绝对的，主要取决于目标网站对爬虫的控制。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)另外，在scrapy爬虫框架里，专有参数可以设置下载等待时间download_delay，这个参数可以设置在setting.py里，也可以设置在spider里。</p>
+<h5 id="二、设置cookies"><a href="#二、设置cookies" class="headerlink" title="二、设置cookies"></a>二、设置cookies</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cookie其实是储存在用户终端的一些被加密的数据，有些网站通过cookies来识别用户身份，如果某个访问总是高频率地发请求，很可能会被网站注意到，被嫌疑为爬虫，这时网站就可以通过cookie找到这个访问的用户而拒绝其访问。可以自定义设置cookie策略（防止cookie rejected问题：拒绝写入cookie）或者禁止cookies。</p>
+<h6 id="2-1-自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）"><a href="#2-1-自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）" class="headerlink" title="2.1 自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）"></a>2.1 自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在系列一那篇文章里就有自定义cookie策略设置，但更多的借鉴是官方文档的例子，设置方法其实都大同小异，因为HttpClient-4.3.1组件版本跟以前旧版本的不同，写法也有不同，另见官方文档：<a href="http://hc.apache.org/httpcomponents-client-4.3.x/tutorial/html/statemgmt.html#d5e553" target="_blank" rel="external">http://hc.apache.org/httpcomponents-client-4.3.x/tutorial/html/statemgmt.html#d5e553</a></p>
+<h6 id="2-2-禁止cookies"><a href="#2-2-禁止cookies" class="headerlink" title="2.2 禁止cookies"></a>2.2 禁止cookies</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过禁止cookie，这是客户端主动阻止服务器写入。禁止cookie可以防止可能使用cookies识别爬虫的网站来ban掉我们。在scrapy爬虫中可以设置COOKIES_ENABLES= FALSE，即不启用cookies middleware，不向web server发送cookies。</p>
+<h5 id="三、修改User-Agent"><a href="#三、修改User-Agent" class="headerlink" title="三、修改User-Agent"></a>三、修改User-Agent</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最常见的就是伪装浏览器，修改User-Agent（用户代理）。User-Agent是指包含浏览器信息、操作系统信息等的一个字符串，也称之为一种特殊的网络协议。服务器通过它判断当前访问对象是浏览器、邮件客户端还是网络爬虫。在request.headers里可以查看user-agent，关于怎么分析数据包、查看其User-Agent等信息，这个在前面的文章里提到过。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体方法可以把User-Agent的值改为浏览器的方式，甚至可以设置一个User-Agent池（list，数组，字典都可以），存放多个“浏览器”，每次爬取的时候随机取一个来设置request的User-Agent，这样User-Agent会一直在变化，防止被墙。</p>
+<h5 id="四、修改IP"><a href="#四、修改IP" class="headerlink" title="四、修改IP"></a>四、修改IP</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实微博识别的是IP，不是账号。也就是说，当需要连续抓取很多数据的时候，模拟登录没有意义。只要是同一个IP，不管怎么换账号也没有用，主要的是换IP。Web server应对爬虫的策略之一就是直接将IP或者整个IP段都封掉禁止访问，当IP被禁封后，转换到其他IP继续访问即可。方法：代理IP、本地IP数据库（使用IP池）。</p>
+<h6 id="4-1-从代理IP网站获取大量IP"><a href="#4-1-从代理IP网站获取大量IP" class="headerlink" title="4.1 从代理IP网站获取大量IP"></a>4.1 从代理IP网站获取大量IP</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果总是请求代理IP站点也未免有些麻烦，况且某些代理IP站点有时还可能被禁封，当然再换一个代理IP站点也可以，如果你不嫌麻烦的话。</p>
+<h6 id="4-2-使用IP地址库"><a href="#4-2-使用IP地址库" class="headerlink" title="4.2 使用IP地址库"></a>4.2 使用IP地址库</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;网上也有很多现成可用的IP地址库，可以存放到本地，如果本地有IP数据库就方便很多，至少不用每次都去请求代理IP站点了（当然可以一次性把站点内所有代理IP先爬下来存储好，形成本地IP数据库），总之获取IP的方法有很多，不一定非要是通过代理IP站点。</p>
+<h5 id="五、分布式爬取"><a href="#五、分布式爬取" class="headerlink" title="五、分布式爬取"></a>五、分布式爬取</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分布式爬取的也有很多Github repo。原理主要是维护一个所有集群机器能够有效分享的分布式队列。使用分布式爬取还有另外一个目的：大规模抓取，单台机器的负荷很大，况且速度很慢，多台机器可以设置一个master管理多台slave去同时爬取。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;另外关于网页判重问题，可以用Bloom Filter。</p>
 
       
     </div>
@@ -668,7 +647,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、设置下载等待时间-下载频率"><span class="nav-number">1.</span> <span class="nav-text">一、设置下载等待时间/下载频率</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、设置cookies"><span class="nav-number">2.</span> <span class="nav-text">二、设置cookies</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、修改User-Agent"><span class="nav-number">3.</span> <span class="nav-text">三、修改User-Agent</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、修改IP"><span class="nav-number">4.</span> <span class="nav-text">四、修改IP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、分布式爬取"><span class="nav-number">5.</span> <span class="nav-text">五、分布式爬取</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、设置下载等待时间-下载频率"><span class="nav-number">1.</span> <span class="nav-text">一、设置下载等待时间/下载频率</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、设置cookies"><span class="nav-number">2.</span> <span class="nav-text">二、设置cookies</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 自定义设置cookies策略（防止cookierejected问题，拒绝写入cookie）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-禁止cookies"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 禁止cookies</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、修改User-Agent"><span class="nav-number">3.</span> <span class="nav-text">三、修改User-Agent</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、修改IP"><span class="nav-number">4.</span> <span class="nav-text">四、修改IP</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-从代理IP网站获取大量IP"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 从代理IP网站获取大量IP</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-使用IP地址库"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 使用IP地址库</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、分布式爬取"><span class="nav-number">5.</span> <span class="nav-text">五、分布式爬取</span></a></li></ol></div>
             
 
           </div>

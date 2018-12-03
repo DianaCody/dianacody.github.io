@@ -95,7 +95,7 @@
 <meta property="og:url" content="http://www.dianacody.com/2014/11/16/2014-11-16-HMM2/index.html">
 <meta property="og:site_name" content="DianaCody">
 <meta property="og:description" content="基于简单的中文分词匹配法做了扩展，中文分词算法提供了一个C版本的mmseg供研究使用。">
-<meta property="og:updated_time" content="2018-04-30T10:48:10.000Z">
+<meta property="og:updated_time" content="2018-12-03T04:14:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="最大匹配算法扩展">
 <meta name="twitter:description" content="基于简单的中文分词匹配法做了扩展，中文分词算法提供了一个C版本的mmseg供研究使用。">
@@ -401,74 +401,59 @@
       
 
       
-        <p>基于简单的中文分词匹配法做了扩展，其中比较有名的就是台湾蔡志浩老师1996年写的“MMSEG: A Word Identification System for Mandarin Chinese Text Based on Two Variants of the Maximum Matching Algorithm”，在这篇文章的页面中，不仅介绍了相关的中文分词算法，并且提供了一个C版本的mmseg供研究使用，目前根据该文及其代码移植的mmseg程序版本包括C++版、Java版、Python版及Ruby版，影响甚广。</p>
-<p>此文是英文版本，建议有条件的读者直接读原文。不过国内也有该文的简介文章：《MMSeg分词算法简述》，原文似乎出自www.solol.org。</p>
-<p>MMSEG中文分词系统的可以由一句话总结：The system consisted of a lexicon, two matching algorithms, and four ambiguity resolution rules（该系统包括一个词典，两种匹配算法，以及四种歧义消解规则）：</p>
-<p><strong> 1、词典（The Lexicon）</strong>：</p>
-<p>分两种形式，对于单个汉字的汉语词，除了汉字本身外，还包括其统计频率（这个频率属于先验知识，可以来自于已经人工分好词的训练语料库），而对于二字长及以上的汉语词，只要词条本身就可以了。</p>
-<p><strong> 2、匹配算法（Matching Algorithm）</strong>：</p>
-<p>a) 简单匹配:对于字符串中的汉字Cn，用词典匹配以Cn开头的子串并查找所有可能的匹配；</p>
-<p>b) 复杂匹配:对于字符串中的汉字Cn，查找所有可能以Cn开头的三词chunks，无论第一个汉语词是否有歧义。</p>
-<p><strong> 3、歧义消解规则（Ambiguity Resolution Rules）</strong>：</p>
-<p><strong><em> 规则一：最大匹配(Maximum matching)</em></strong></p>
-<p>a) 简单最大匹配算法,也就是我们常说的最大匹配法，不过作者采取的是正向匹配，并且按长度从小到大搜索词典：假设C1,C2,….代表一个字符串中的汉字，首先搜索词典，看 <em>C1</em>是否为一个单字组成的词语，然后搜索 <em>C1C2</em>来看是否为两个汉字组成的词语，以此类推，直至找到字典中最长的匹配。</p>
-<p>b) 复杂最大匹配算法,由Chen 和Liu（1992）提出，其核心的假设是：The most plausible segmentation is the three-word chunk with maximum length. 请注意three-word chunk，可以将其翻译为“三词语块”，这也是MMSEG中比较核心的一个概念，这个最大匹配规则考虑问题比较全面，在对句子中的某个词进行切分时，如果有歧义拿不定主意，就再向后展望两个汉语词，并且找出所有可能的“三词语块”。例如，对于如下的“三词语块”，请注意括号中是注明的语块长度（以汉语单字为基本单位）：</p>
-<ol>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于简单的中文分词匹配法做了扩展，其中比较有名的就是台湾蔡志浩老师1996年写的“MMSEG: A Word Identification System for Mandarin Chinese Text Based on Two Variants of the Maximum Matching Algorithm”，在这篇文章的页面中，不仅介绍了相关的中文分词算法，并且提供了一个C版本的mmseg供研究使用，目前根据该文及其代码移植的mmseg程序版本包括C++版、Java版、Python版及Ruby版，影响甚广。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此文是英文版本，建议有条件的读者直接读原文。不过国内也有该文的简介文章：《MMSeg分词算法简述》，原文似乎出自www.solol.org。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MMSEG中文分词系统的可以由一句话总结：The system consisted of a lexicon, two matching algorithms, and four ambiguity resolution rules（该系统包括一个词典，两种匹配算法，以及四种歧义消解规则）：</p>
+<h5 id="1-词典（The-Lexicon）"><a href="#1-词典（The-Lexicon）" class="headerlink" title="1.词典（The Lexicon）"></a>1.词典（The Lexicon）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分两种形式，对于单个汉字的汉语词，除了汉字本身外，还包括其统计频率（这个频率属于先验知识，可以来自于已经人工分好词的训练语料库），而对于二字长及以上的汉语词，只要词条本身就可以了。</p>
+<h5 id="2-匹配算法（Matching-Algorithm）"><a href="#2-匹配算法（Matching-Algorithm）" class="headerlink" title="2.匹配算法（Matching Algorithm）"></a>2.匹配算法（Matching Algorithm）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) 简单匹配:对于字符串中的汉字Cn，用词典匹配以Cn开头的子串并查找所有可能的匹配；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) 复杂匹配:对于字符串中的汉字Cn，查找所有可能以Cn开头的三词chunks，无论第一个汉语词是否有歧义。</p>
+<h5 id="3-歧义消解规则（Ambiguity-Resolution-Rules）"><a href="#3-歧义消解规则（Ambiguity-Resolution-Rules）" class="headerlink" title="3.歧义消解规则（Ambiguity Resolution Rules）"></a>3.歧义消解规则（Ambiguity Resolution Rules）</h5><h6 id="规则一：最大匹配-Maximum-matching"><a href="#规则一：最大匹配-Maximum-matching" class="headerlink" title="规则一：最大匹配(Maximum matching)"></a>规则一：最大匹配(Maximum matching)</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) 简单最大匹配算法,也就是我们常说的最大匹配法，不过作者采取的是正向匹配，并且按长度从小到大搜索词典：假设C1,C2,….代表一个字符串中的汉字，首先搜索词典，看 <em>C1</em>是否为一个单字组成的词语，然后搜索 <em>C1C2</em>来看是否为两个汉字组成的词语，以此类推，直至找到字典中最长的匹配。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) 复杂最大匹配算法,由Chen 和Liu（1992）提出，其核心的假设是：The most plausible segmentation is the three-word chunk with maximum length. 请注意three-word chunk，可以将其翻译为“三词语块”，这也是MMSEG中比较核心的一个概念，这个最大匹配规则考虑问题比较全面，在对句子中的某个词进行切分时，如果有歧义拿不定主意，就再向后展望两个汉语词，并且找出所有可能的“三词语块”。例如，对于如下的“三词语块”，请注意括号中是注明的语块长度（以汉语单字为基本单位）：</p>
+<ul>
 <li><em>C1</em> <em>C2</em> <em>C3C4</em>（4）</li>
 <li><em>C1C2</em> <em>C3C4</em> <em>C5</em>（5）</li>
 <li><em>C1C2</em> <em>C3C4</em> <em>C5C6</em>（6）</li>
-</ol>
-<p>最大长度的“三词语块”是第3个，所以其第一汉语词<em>C1C2</em>将被作为正确的分词形式。以此类推，接下来我们从C3开始，找出所有可能的“三词语块”，重复上述规则，直到句子的最后一个词被划分。直观一点，对于以“眼”开头的如下5个“三词语块”,利用该规则，则“眼看”是正确的词语划分：</p>
-<ol>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最大长度的“三词语块”是第3个，所以其第一汉语词<em>C1C2</em>将被作为正确的分词形式。以此类推，接下来我们从C3开始，找出所有可能的“三词语块”，重复上述规则，直到句子的最后一个词被划分。直观一点，对于以“眼”开头的如下5个“三词语块”,利用该规则，则“眼看”是正确的词语划分：</p>
+<ul>
 <li>眼看 就要 来了（6）</li>
 <li>眼看 就要 来（5）</li>
 <li>眼看 就 要(4)</li>
 <li>眼 看 就要(4)</li>
 <li>眼 看 就(3)</li>
-</ol>
-<p><strong><em> 规则二：最大平均词长（Largest average word length）</em></strong></p>
-<p>在句子的末尾，很可能得到的“三词语块”只有一个或两个词（其他位置补空），例如，对于如下两个“三词语块”，他们拥有同样的长度：</p>
-<ol>
+</ul>
+<h6 id="规则二：最大平均词长（Largest-average-word-length）"><a href="#规则二：最大平均词长（Largest-average-word-length）" class="headerlink" title="规则二：最大平均词长（Largest average word length）"></a>规则二：最大平均词长（Largest average word length）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在句子的末尾，很可能得到的“三词语块”只有一个或两个词（其他位置补空），例如，对于如下两个“三词语块”，他们拥有同样的长度：</p>
+<ul>
 <li><em>C1</em> <em>C2</em> <em>C3</em>（平均词长=1）</li>
 <li><em>C1C2C3</em>（平均词长=3）</li>
-</ol>
-<p>这时规则1就无法解决其歧义消解问题，因此引入规则2：最大平均词长，也就是从这些语块中找出平均词长最大的语块，并选取其第一词语作为正确的词语切分形式。这个规则的前提假设是：It is more likely to encounter multi-character words than one-character words（在句子中遇到多字-词语的情况比单字-词语更有可能）. </p>
-<p>因此，上述两个“三词语块”中第二个<em>C1C2C3</em>就是最佳候选。直观一点，对于如下位于句尾三种形式的“三词语块”：</p>
-<ol>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这时规则1就无法解决其歧义消解问题，因此引入规则2：最大平均词长，也就是从这些语块中找出平均词长最大的语块，并选取其第一词语作为正确的词语切分形式。这个规则的前提假设是：It is more likely to encounter multi-character words than one-character words（在句子中遇到多字-词语的情况比单字-词语更有可能）.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此，上述两个“三词语块”中第二个<em>C1C2C3</em>就是最佳候选。直观一点，对于如下位于句尾三种形式的“三词语块”：</p>
+<ul>
 <li>国际化（平均词长=3）</li>
 <li>国际 化（平均词长=1.5）</li>
 <li>国 际 化（平均词长=1）</li>
-</ol>
-<p>在规则1无法求解的情况下，根据规则2，则“国际化”为最佳候选语块，因此该语块的第一个词“国际化”就是最佳的分词形式。</p>
-<p><strong><em> 规则三：最小词长方差（Smallest variance of word lengths）</em></strong></p>
-<p>还有一些歧义是规则一和规则二无法解决的，例如，如下的两个“三词语块”拥有同样的长度和同样的平均词长：</p>
-<ol>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在规则1无法求解的情况下，根据规则2，则“国际化”为最佳候选语块，因此该语块的第一个词“国际化”就是最佳的分词形式。</p>
+<h6 id="规则三：最小词长方差（Smallest-variance-of-word-lengths）"><a href="#规则三：最小词长方差（Smallest-variance-of-word-lengths）" class="headerlink" title="规则三：最小词长方差（Smallest variance of word lengths）"></a>规则三：最小词长方差（Smallest variance of word lengths）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;还有一些歧义是规则一和规则二无法解决的，例如，如下的两个“三词语块”拥有同样的长度和同样的平均词长：</p>
+<ul>
 <li><em>C1C2</em> <em>C3C4</em> <em>C5C6</em></li>
 <li><em>C1C2C3</em> <em>C4</em> <em>C5C6</em></li>
-</ol>
-<p>因此引入规则三：最小词长方差，也就是找出词长方差最小的语块，并选取其第一个词语作为正确的词语切分形式。在概率论和统计学中，一个随机变量的方差（Variance）描述的是它的离散程度，也就是该变量离其期望值的距离。因此该规则的前提假设是：Word lengths are usually evenly distributed（句子中的词语长度经常是均匀分布的）。直观来说，对于如下两个“三词语块”：</p>
-<ol>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因此引入规则三：最小词长方差，也就是找出词长方差最小的语块，并选取其第一个词语作为正确的词语切分形式。在概率论和统计学中，一个随机变量的方差（Variance）描述的是它的离散程度，也就是该变量离其期望值的距离。因此该规则的前提假设是：Word lengths are usually evenly distributed（句子中的词语长度经常是均匀分布的）。直观来说，对于如下两个“三词语块”：</p>
+<ul>
 <li>研究 生命 起源</li>
 <li>研究生 命 起源</li>
-</ol>
-<p>其长度为6，平均词长为2，规则一和规则二无能无力，利用规则三：</p>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其长度为6，平均词长为2，规则一和规则二无能无力，利用规则三：</p>
 <ul>
 <li>语块1的方差 = ((2-2)^2+(2-2)^2+(2-2)^2)/3 = 0</li>
 <li>语块2的方差 = ((3-2)^2+(1-2)^2+(2-2)^2)/3 = 2/3</li>
 </ul>
-<p>则语块1为最佳候选，因此该语块的第一个词“研究”为最佳的分词形式。</p>
-<p><strong><em> 规则四：最大单字词语语素自由度之和（Largest sum of degree of morphemic freedom of one-character words）</em></strong>：</p>
-<p>如下所示，例子中的两个“三词语块”拥有同样的长度、平均词长及方差，因此上述三个规则都无法解决其歧义消解问题：</p>
-<ol>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;则语块1为最佳候选，因此该语块的第一个词“研究”为最佳的分词形式。</p>
+<h6 id="规则四：最大单字词语语素自由度之和（Largest-sum-of-degree-of-morphemic-freedom-of-one-character-words）"><a href="#规则四：最大单字词语语素自由度之和（Largest-sum-of-degree-of-morphemic-freedom-of-one-character-words）" class="headerlink" title="规则四：最大单字词语语素自由度之和（Largest sum of degree of morphemic freedom of one-character words）"></a>规则四：最大单字词语语素自由度之和（Largest sum of degree of morphemic freedom of one-character words）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如下所示，例子中的两个“三词语块”拥有同样的长度、平均词长及方差，因此上述三个规则都无法解决其歧义消解问题：</p>
+<ul>
 <li><em>C1</em> <em>C2</em> <em>C3C4</em></li>
 <li><em>C1</em> <em>C2C3</em> <em>C4</em></li>
-</ol>
-<p>这两个语块都包括了两个单字（one-character）词语和一个两字（two-character）词语，规则四主要关注其中的单字词语。直观来看，有些汉字很少作为词语出现，而另一些汉字则常常作为词语出现，从统计角度来看，在语料库中出现频率高的汉字就很可能是一个单字词语，反之可能性就小。计算单词词语语素自由度之和的公式是对“三词语块”中的单字词语频率取对数并求和（The formula used to calculate the sum of degree of morphemic freedom is to sum log(frequency) of all one-character word(s) in a chunk.）规则四则选取其中和最大的语块，并将该语块的第一词语作为最佳的词语切分形式。</p>
-<p>关于MMSEG中文分词系统的框架就介绍到此，需要指出的是：</p>
-<ul>
-<li>“It has to be noted that MMSEG was not designed to be a “professional level” system whose goal is 100% correct identification. Rather, MMSEG should be viewed as a general platform on which new ambiguity resolution algorithms can be tested.”*</li>
 </ul>
-<p>所以，不要认为有了MMSEG就可以解决中文分词的问题，更应该将MMSEG视为一个基本的平台，在该平台的基础上，可以尝试添加新的歧义消解算法以解决中文分词中的难点问题。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这两个语块都包括了两个单字（one-character）词语和一个两字（two-character）词语，规则四主要关注其中的单字词语。直观来看，有些汉字很少作为词语出现，而另一些汉字则常常作为词语出现，从统计角度来看，在语料库中出现频率高的汉字就很可能是一个单字词语，反之可能性就小。计算单词词语语素自由度之和的公式是对“三词语块”中的单字词语频率取对数并求和（The formula used to calculate the sum of degree of morphemic freedom is to sum log(frequency) of all one-character word(s) in a chunk.）规则四则选取其中和最大的语块，并将该语块的第一词语作为最佳的词语切分形式。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于MMSEG中文分词系统的框架就介绍到此，需要指出的是：</p>
+<p>“It has to be noted that MMSEG was not designed to be a “professional level” system whose goal is 100% correct identification. Rather, MMSEG should be viewed as a general platform on which new ambiguity resolution algorithms can be tested.”</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以，不要认为有了MMSEG就可以解决中文分词的问题，更应该将MMSEG视为一个基本的平台，在该平台的基础上，可以尝试添加新的歧义消解算法以解决中文分词中的难点问题。</p>
 
       
     </div>
@@ -572,8 +557,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/psb.jpg"
@@ -685,6 +679,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-词典（The-Lexicon）"><span class="nav-number">1.</span> <span class="nav-text">1.词典（The Lexicon）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-匹配算法（Matching-Algorithm）"><span class="nav-number">2.</span> <span class="nav-text">2.匹配算法（Matching Algorithm）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-歧义消解规则（Ambiguity-Resolution-Rules）"><span class="nav-number">3.</span> <span class="nav-text">3.歧义消解规则（Ambiguity Resolution Rules）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#规则一：最大匹配-Maximum-matching"><span class="nav-number">3.1.</span> <span class="nav-text">规则一：最大匹配(Maximum matching)</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#规则二：最大平均词长（Largest-average-word-length）"><span class="nav-number">3.2.</span> <span class="nav-text">规则二：最大平均词长（Largest average word length）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#规则三：最小词长方差（Smallest-variance-of-word-lengths）"><span class="nav-number">3.3.</span> <span class="nav-text">规则三：最小词长方差（Smallest variance of word lengths）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#规则四：最大单字词语语素自由度之和（Largest-sum-of-degree-of-morphemic-freedom-of-one-character-words）"><span class="nav-number">3.4.</span> <span class="nav-text">规则四：最大单字词语语素自由度之和（Largest sum of degree of morphemic freedom of one-character words）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
