@@ -95,7 +95,7 @@
 <meta property="og:url" content="http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/index.html">
 <meta property="og:site_name" content="DianaCody">
 <meta property="og:description" content="个性化用户推荐系统。离线推荐算法，离线特征工程。">
-<meta property="og:updated_time" content="2018-11-30T09:27:51.000Z">
+<meta property="og:updated_time" content="2018-12-03T01:59:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Personalized User Recommender System （Offline）">
 <meta name="twitter:description" content="个性化用户推荐系统。离线推荐算法，离线特征工程。">
@@ -401,23 +401,176 @@
       
 
       
-        <p>主要内容如下：</p>
-<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、数据收集"><a href="#二、数据收集" class="headerlink" title="二、数据收集"></a>二、数据收集</h5><p>收集用户多天/月数据集(featureLog)；</p>
-<h5 id="三、数据预处理"><a href="#三、数据预处理" class="headerlink" title="三、数据预处理"></a>三、数据预处理</h5><p>数据清洗格式化、依据各推荐位埋点情况进行各比例的点击、订单数据采样、数据转换</p>
-<h5 id="四、模型训练"><a href="#四、模型训练" class="headerlink" title="四、模型训练"></a>四、模型训练</h5><p>Xgboost/TensorFlow训练模型，人工构造+自动提取特征；</p>
-<h5 id="五、模型评估"><a href="#五、模型评估" class="headerlink" title="五、模型评估"></a>五、模型评估</h5><ul>
-<li>特征重要性(featureImportance)</li>
-<li>预测命中率(click@4/20, order@4/20)</li>
-<li>模型上线评估(CTR/CVR)</li>
-</ul>
-<h5 id="六、模型迭代"><a href="#六、模型迭代" class="headerlink" title="六、模型迭代"></a>六、模型迭代</h5><p>迭代调整模型：</p>
-<ul>
-<li>增加训练集数量</li>
-<li>调整抽样比例</li>
-<li>训练的正负样本权重设置</li>
-</ul>
-<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征学习是在原始数据中自动识别和使用特征。现代深度学习方法在特征学习领域中有很多成功的案例，比如自编码器和受限玻尔兹曼机，它们以无监督或半监督的方式实现自动地学习的特征表示，以压缩形式。其结果用于支撑例如语音识别、图像分类、物体识别和其他领域的先进成果。抽象的特征表达可以自动获取，但是仅通过这个是无法理解和利用这些学习得到的结果，只有黑盒的方式才使用这些特征。同时，如何创造和那些效果很好的特征相似或相异的特征，变得比较困难。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常情况下，特征工程都要经过以下几个步骤：收集数据、数据预处理、数据建模、特征设计、特征选择、评估模型、模型迭代。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个性化系统中的模型训练主要是针对用户之前的行为，比如搜索、浏览、点击、加购物车、下单，选择合适特征，训练模型，预测用户未来的行为。</p>
+<h5 id="三、数据收集"><a href="#三、数据收集" class="headerlink" title="三、数据收集"></a>三、数据收集</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过参数服务器parameter server收集用户特征日志feature logs，包括用户行为位置、时间、次数、频率、偏好等基本特征的记录，时间窗口一般为多天、多月数据，从7天到30天不等，这个要依据不同实验位置的模型需求而定。</p>
+<h5 id="四、数据预处理"><a href="#四、数据预处理" class="headerlink" title="四、数据预处理"></a>四、数据预处理</h5><h6 id="4-1-数据清洗格式化"><a href="#4-1-数据清洗格式化" class="headerlink" title="4.1 数据清洗格式化"></a>4.1 数据清洗格式化</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据清洗是为了去除数据中的噪音，比如一些异常数据、误记录数据、漏报数据等。数据格式化是为了将数据整理成模型训练框架需要的输入格式，同时也便于观测。</p>
+<h6 id="4-2-数据采样"><a href="#4-2-数据采样" class="headerlink" title="4.2 数据采样"></a>4.2 数据采样</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依据各推荐位埋点情况进行各比例的点击、订单数据采样，不同试验位置的模型，采样比例也不同。一般地，将点击、点击后订单、直接订单作为正样本，标记为action≠0，而这其中又可以细分为action=1,2,3等等再做区分，而未点击、未浏览的作为负样本，标记为action=0。同时正样本需要不同的采样策略，比如点击样本，一部分可以作为正样本，而一部分可以作为负样本，取决于训练时将采用什么样的策略。样本就是一个标记加一堆特征，一个样本要么被标记为order，要么被标记为click。</p>
+<h6 id="4-3-数据转换"><a href="#4-3-数据转换" class="headerlink" title="4.3 数据转换"></a>4.3 数据转换</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上文已述。</p>
+<h5 id="五、模型训练"><a href="#五、模型训练" class="headerlink" title="五、模型训练"></a>五、模型训练</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用人工特征和自动训练提取特征相结合的方法。</p>
+<h6 id="5-1-人工特征"><a href="#5-1-人工特征" class="headerlink" title="5.1 人工特征"></a>5.1 人工特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用作初始化特征，特别针对某些行为不多的欠活跃用户。</p>
+<table>
+<thead>
+<tr>
+<th>sku</th>
+<th>cid3</th>
+<th>brand</th>
+<th>productWord</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sku-7day-browse-total</td>
+<td>cid3-7day-browse-total</td>
+<td>brand-7day-browse-total</td>
+<td>pwd-7day-browse-total</td>
+</tr>
+<tr>
+<td>sku-7day-browse-avg</td>
+<td>cid3-7day-browse-avg</td>
+<td>brand-7day-browse-avg</td>
+<td>pwd-7day-browse-avg</td>
+</tr>
+<tr>
+<td>sku-7day-browse-ratio-all-station</td>
+<td>cid3-7day-browse-ratio-all_station</td>
+<td>brand-7day-browse-ratio-all-station</td>
+<td>pwd-7day-browse-ratio-all-station</td>
+</tr>
+<tr>
+<td>sku-7day-browse-ratio-category</td>
+<td>cid3-7day-browse-ratio-category</td>
+<td>brand-7day-browse-ratio-category</td>
+<td>pwd-7day-browse-ratio-category</td>
+</tr>
+<tr>
+<td>sku-7day-browse-users-total</td>
+<td>cid3-7day-browse-users-total</td>
+<td>brand-7day-browse-users-total</td>
+<td>pwd-7day-browse-users-total</td>
+</tr>
+<tr>
+<td>sku-7day-browse-users-avg</td>
+<td>cid3-7day-browse-users-avg</td>
+<td>brand-7day-browse-users-avg</td>
+<td>pwd-7day-browse-users-avg</td>
+</tr>
+<tr>
+<td>sku-7day-browse-users-ratio-all-station</td>
+<td>cid3-7day-browse-users-ratio-all-station</td>
+<td>brand-7day-browse-users-ratio-all-station</td>
+<td>pwd-7day-browse-users-ratio-all-station</td>
+</tr>
+<tr>
+<td>sku-7day-browse-users-ratio-category</td>
+<td>cid3-7day-browse-users-ratio-category</td>
+<td>brand-7day-browse-users-ratio-category</td>
+<td>pwd-7day-browse-users-ratio-category</td>
+</tr>
+<tr>
+<td>sku-7day-sale-total</td>
+<td>cid3-7day-sale-total</td>
+<td>brand-7day-sale-total</td>
+<td>pwd-7day-sale-total</td>
+</tr>
+<tr>
+<td>sku-7day-sale-avg</td>
+<td>cid3-7day-sale-avg</td>
+<td>brand-7day-sale-avg</td>
+<td>pwd-7day-sale-avg</td>
+</tr>
+<tr>
+<td>sku-7day-sale-ratio-all-station</td>
+<td>cid3-7day-sale-ratio-all-station</td>
+<td>brand-7day-sale-ratio-all-station</td>
+<td>pwd-7day-sale-ratio-all-station</td>
+</tr>
+<tr>
+<td>sku-7day-sale-ratio-category</td>
+<td>cid3-7day-sale-ratio-category</td>
+<td>brand-7day-sale-ratio-category</td>
+<td>pwd-7day-sale-ratio-category</td>
+</tr>
+<tr>
+<td>sku-7day-order-total</td>
+<td>cid3-7day-order-total</td>
+<td>brand-7day-order-total</td>
+<td>pwd-7day-order-total</td>
+</tr>
+<tr>
+<td>sku-7day-order-avg</td>
+<td>cid3-7day-order-avg</td>
+<td>brand-7day-order-avg</td>
+<td>pwd-7day-order-avg</td>
+</tr>
+<tr>
+<td>sku-7day-order-ratio-all-station</td>
+<td>cid3-7day-order-ratio-all-station</td>
+<td>brand-7day-order-ratio-all-station</td>
+<td>pwd-7day-order-ratio-all-station</td>
+</tr>
+<tr>
+<td>sku-7day-order-ratio-category</td>
+<td>cid3-7day-order-ratio-category</td>
+<td>brand-7day-order-ratio-category</td>
+<td>pwd-7day-order-ratio-category</td>
+</tr>
+<tr>
+<td>sku-7day-conversion-rate-total</td>
+<td>cid3-7day-conversion-rate-total</td>
+<td>brand-7day-conversion-rate-total</td>
+<td>pwd-7day-conversion-rate-total</td>
+</tr>
+<tr>
+<td>sku-7day-conversion-rate-avg</td>
+<td>cid3-7day-conversion-rate-avg</td>
+<td>brand-7day-conversion-rate-avg</td>
+<td>pwd-7day-conversion-rate-avg</td>
+</tr>
+</tbody>
+</table>
+<h6 id="5-2-自动提取特征"><a href="#5-2-自动提取特征" class="headerlink" title="5.2 自动提取特征"></a>5.2 自动提取特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于活跃度较高的用户样本，特征也比较多，直接采用训练框架Xgboost/TensorFlow训练模型，自动提取特征。</p>
+<h5 id="六、模型评估"><a href="#六、模型评估" class="headerlink" title="六、模型评估"></a>六、模型评估</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征重要性(featureImportance);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预测命中率(click@4/20, order@4/20);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型上线评估(CTR/CVR)。<br>下面给出示例表示不同模型的对比：</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>Experiments</th>
+<th>trainSet</th>
+<th>testSet</th>
+<th>weight</th>
+<th>click/order@N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>model_v1</td>
+<td>101</td>
+<td>7 days</td>
+<td>2 days</td>
+<td>50:5:1</td>
+<td>0.23695</td>
+</tr>
+<tr>
+<td>model_v2</td>
+<td>102</td>
+<td>30 days</td>
+<td>2 days</td>
+<td>50:5:1</td>
+<td>0.26951</td>
+</tr>
+<tr>
+<td>model_v3</td>
+<td>103</td>
+<td>30 days</td>
+<td>2 days</td>
+<td>50:10:1</td>
+<td>0.25782</td>
+</tr>
+</tbody>
+</table>
+<h5 id="七、模型迭代"><a href="#七、模型迭代" class="headerlink" title="七、模型迭代"></a>七、模型迭代</h5><p>迭代调整模型，不同试验位置的模型调整策略也不一样。同时从上面的示例相互之间的比较可以看出：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.增加训练集数量，离线指标有提升；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.调整抽样比例，相对来说抽样严格点比价好，可以减小噪声；前提是训练数据样本足够大；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.权重设置：训练的正负样本权重设置，权重比例应调整为大致和样本中各个action占比正相关，并非绝对地增大/减小 ord/clk权重，符合样本比例即可。</p>
+<h5 id="八、参考文献"><a href="#八、参考文献" class="headerlink" title="八、参考文献"></a>八、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
       
     </div>
@@ -661,7 +814,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、数据收集"><span class="nav-number">2.</span> <span class="nav-text">二、数据收集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、数据预处理"><span class="nav-number">3.</span> <span class="nav-text">三、数据预处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、模型训练"><span class="nav-number">4.</span> <span class="nav-text">四、模型训练</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、模型评估"><span class="nav-number">5.</span> <span class="nav-text">五、模型评估</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、模型迭代"><span class="nav-number">6.</span> <span class="nav-text">六、模型迭代</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#七、参考文献"><span class="nav-number">7.</span> <span class="nav-text">七、参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、简介"><span class="nav-number">2.</span> <span class="nav-text">二、简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、数据收集"><span class="nav-number">3.</span> <span class="nav-text">三、数据收集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、数据预处理"><span class="nav-number">4.</span> <span class="nav-text">四、数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-数据清洗格式化"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 数据清洗格式化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-数据采样"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 数据采样</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-数据转换"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 数据转换</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、模型训练"><span class="nav-number">5.</span> <span class="nav-text">五、模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#5-1-人工特征"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 人工特征</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-自动提取特征"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 自动提取特征</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、模型评估"><span class="nav-number">6.</span> <span class="nav-text">六、模型评估</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#七、模型迭代"><span class="nav-number">7.</span> <span class="nav-text">七、模型迭代</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#八、参考文献"><span class="nav-number">8.</span> <span class="nav-text">八、参考文献</span></a></li></ol></div>
             
 
           </div>
