@@ -199,9 +199,9 @@
     
       <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
     
-      <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
-    
       <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
+    
+      <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
     
       <category term="N-Gram" scheme="http://www.dianacody.com/tags/N-Gram/"/>
     
@@ -220,18 +220,18 @@
     <link href="http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/"/>
     <id>http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/</id>
     <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2018-12-03T08:38:20.000Z</updated>
+    <updated>2018-12-03T12:09:26.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和用户画像相对应的是，商品其实也有自己的一套独有特征。通过计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格、购买力等级，便可以建立这样的体系：商品基础画像。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品之间也有一定联系，在各个类目下，对商品分别按照品牌词、产品词、扩展属性等不同维度进行关联、主题模型聚类、层次抽象，可以建立另外的商品维度体系，也属于商品画像的范畴。最典型的应用就是可以聚合成不同场景的商品，以保证个性化推荐。</p>
-<h5 id="三、商品基础画像"><a href="#三、商品基础画像" class="headerlink" title="三、商品基础画像"></a>三、商品基础画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品性别</strong>：一部分商品通常有性别之分，如手提包可以分为男士手提包和女士手提包，能反映出性别偏好。还有一部分商品没有性别区分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品年龄</strong>：一部分商品有年龄适用范围，如鞋子分为婴儿鞋、青少年鞋、成人鞋、老人鞋等，反映出年龄偏好，还有一部分商品没有年龄区分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品类目</strong>：按照大类划分的级别。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>产品词和品牌词</strong>：商品的基本属性，也包含规格参数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>价格和购买力等级</strong>：商品是否是大众消费产品还是高端消费产品，消费等级属于什么层次。</p>
-<h5 id="四、扩展的商品画像"><a href="#四、扩展的商品画像" class="headerlink" title="四、扩展的商品画像"></a>四、扩展的商品画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>关联商品</strong>：商品之间的相似度和相关度可以根据用户日常行为得出，经常组合在一起的商品必定有相关度，相关程度越高，这个商品的相关商品的属性就可以作为该商品的附属特征。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>聚合商品集</strong>：用频繁项集或者主题模型聚类，相同类目下的商品互为推荐集。这个在基于场景推荐的应用中已经有详细叙述。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>层次抽象</strong>：商品之间的层次隶属关系。</p>
-<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
+<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The same as user profile, the commodities actually have their own set of separate features. By calculating multidimensional features of commodity, it can establish a hierarchy system, basic commodity profile. Such multidimensional features include gender, age, category levels, product word, brand word, hot sale, price, level of purchasing power, etc.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are also connections among commodities. Under each categories, the relevance of commodities, the topic model clustering and hierarchical abstraction can be done by different dimensions of brand word, product word and extended attribute. It is another hierarchy system, but also belongs to the field of commodity profile. The most typical application of it is that the relevant commodities can be aggregated as different clusters named topics or scenes, that is, personalized recommendation.</p>
+<h5 id="III-Basic-commodity-profile"><a href="#III-Basic-commodity-profile" class="headerlink" title="III. Basic commodity profile"></a>III. Basic commodity profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Commodity gender</strong>: some commodities are generally sexual distinguishable, for example, some specific handbags are for men and some are for women, which can reflect gender preferences. Of course, there are still some commodities without gender distinction.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Commodity age</strong>: some commodities have age range, for example, the shoes include baby shoes, teenager shoes, adult shoes, elderly shoes, etc., which can reflect age preference. But some commodities are without age distinction.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Commodity category</strong>: the categories divided according to macro levels.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Product word and Brand word</strong>: They are basic attributes of commodity, including specification parameters.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Price and Purchasing power level</strong>: A mass consumer product or a high-level consumer product, and the level of consumption.</p>
+<h5 id="IV-Extended-commodity-profile"><a href="#IV-Extended-commodity-profile" class="headerlink" title="IV. Extended commodity profile"></a>IV. Extended commodity profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Relevant commodity</strong>: the similarity and correlation of commodities can be obtained from user’s daily behaviors. These commodities often combined together must have correlation degree with each other. The higher the correlation degree is, the more likely that the attributes of the related commodities can be used as subsidiary features of the dominant commodity.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Aggregated commodity sets</strong>: Clustering by FP-growth or topic models, and candidates are recommended for each other in the same topic set. This is described in detail in “The application of scene recommendation”.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Hierarchical abstraction</strong>: Hierarchical subordination among commodities.</p>
+<h5 id="V-Reference"><a href="#V-Reference" class="headerlink" title="V. Reference"></a>V. Reference</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      商品画像，多维度商品特征。
+      The multidimensional features of commodity.
     
     </summary>
     
@@ -313,18 +313,18 @@
     <link href="http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/"/>
     <id>http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/</id>
     <published>2017-03-29T16:00:00.000Z</published>
-    <updated>2018-12-02T07:05:24.000Z</updated>
+    <updated>2018-12-03T12:13:19.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：(此项目暂不开放源码)</p>
-<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户的行为模式各不相同，但大多都遵循固定的模式，反映了用户的个性化特征，即用户画像。计算不同维度的用户特征，能有效利用这些数据为用户进行个性化推荐。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户画像分为长期用户画像和实时用户画像。<br><img src="/resources/user-profile.jpg" alt="figure-user-profile"></p>
-<h5 id="三、长期用户画像"><a href="#三、长期用户画像" class="headerlink" title="三、长期用户画像"></a>三、长期用户画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长期用户画像，至少都来源于几个月及以上的数据，即多维度用户特征，存储为离线数据表。包括性别、年龄、地理位置、商品类目兴趣、产品词偏好、品牌词偏好、扩展属性、购买力、店铺偏好、折扣偏好、孩子性别年龄。通过对用户日志整理，完成对原始SDK埋点日志的提取，获取完整的session数据，对用户画像数据粒度进行升级。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户的深度行为：停留时长、看评论；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户的主动反馈：搜索、写评论、投诉；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户的跨平台行为：不同设备登录的账号其实对应同一个用户，通过统一这些账号的行为，建立起一个立体的用户画像。</p>
-<h5 id="四、实时用户画像"><a href="#四、实时用户画像" class="headerlink" title="四、实时用户画像"></a>四、实时用户画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实时用户画像，包括实时反馈、近期行为，粒度在秒级，例如30 second, 1 hour, 6 hour, 1 day, 3 days, 1week。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户实时行为流可以作为实时特征来计算，采用storm实时计算。</p>
-<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
+<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The patterns of user are different from each other, but almost of them have general regular patterns, which reflect personalized features of users, that is, user profile. By calculating user’s features in different dimensions, it can do personalized recommendation for users with these data effectively.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The user profile includes long-term user profile and real-time user profile.<br><img src="/resources/user-profile.jpg" alt="figure-user-profile"></p>
+<h5 id="III-Long-term-user-profile"><a href="#III-Long-term-user-profile" class="headerlink" title="III. Long-term user profile"></a>III. Long-term user profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The long-term user profile, whose data derive from user logs during at least several months, that is multidimensional user features, and it can be stored into offline databases. It includes gender, age, area, interest of commodity categories, preference of product word, preference of brand word, extended attribute, purchasing power, preference of shop, preference of discount, gender and age of their children, and so on. The user logs are processed, and some crucial information can be extracted from original SDK event tracking logs, in that way, the session logs are gotten completely. All the steps above are to upgrade data granularity of user profile.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>User’s deep behavior</strong>: dwell time, browse comments.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>User’s initiative feedback</strong>: search, write comments, complaints.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>User’s cross-platform behavior</strong>: the accounts of different devices correspond to the same user. By uniforming behaviors of them, we can establish a vivid user profile.</p>
+<h5 id="IV-Real-time-user-profile"><a href="#IV-Real-time-user-profile" class="headerlink" title="IV. Real-time user profile"></a>IV. Real-time user profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The real-time user profile includes real-time feedback, current behaviors, whose granularity is in seconds level, e.g.30 seconds, 1 hour, 6 hours, 1day, 3 days, 1 week.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The flow of user’s real-time behavior can be calculated as real-time features, and Storm is used for the calculation.</p>
+<h5 id="V-Reference"><a href="#V-Reference" class="headerlink" title="V. Reference"></a>V. Reference</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      用户画像，多维度用户特征。
+      The multidimensional features of users.
     
     </summary>
     
