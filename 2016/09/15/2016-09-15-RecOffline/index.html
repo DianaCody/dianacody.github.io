@@ -89,16 +89,16 @@
 
 
 
-<meta name="description" content="The offline feature engineering and recommendation algorithms of personalized user recommender system.">
+<meta name="description" content="离线特征工程和个性化推荐系统的离线推荐算法逻辑。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Personalized User Recommender System （Offline）">
+<meta property="og:title" content="个性化推荐系统（离线）">
 <meta property="og:url" content="http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/index.html">
 <meta property="og:site_name" content="DianaCody">
-<meta property="og:description" content="The offline feature engineering and recommendation algorithms of personalized user recommender system.">
-<meta property="og:updated_time" content="2018-12-05T10:44:00.000Z">
+<meta property="og:description" content="离线特征工程和个性化推荐系统的离线推荐算法逻辑。">
+<meta property="og:updated_time" content="2019-02-26T12:56:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Personalized User Recommender System （Offline）">
-<meta name="twitter:description" content="The offline feature engineering and recommendation algorithms of personalized user recommender system.">
+<meta name="twitter:title" content="个性化推荐系统（离线）">
+<meta name="twitter:description" content="离线特征工程和个性化推荐系统的离线推荐算法逻辑。">
 
 
 
@@ -132,7 +132,7 @@
 
 
 
-  <title> Personalized User Recommender System （Offline） | DianaCody </title>
+  <title> 个性化推荐系统（离线） | DianaCody </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -324,7 +324,7 @@
             
             
               
-                Personalized User Recommender System （Offline）
+                个性化推荐系统（离线）
               
             
           </h1>
@@ -386,7 +386,7 @@
 
           
               <div class="post-description">
-                  The offline feature engineering and recommendation algorithms of personalized user recommender system.
+                  离线特征工程和个性化推荐系统的离线推荐算法逻辑。
               </div>
           
 
@@ -401,14 +401,14 @@
       
 
       
-        <h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The feature learning is to recognize and use features automatically. There are many successful cases with modern deep learning in the field of feature learning, which learn the description of features automatically in the unsupervised or semi-supervised way and in compressed form. The results are used to support advanced achievements in such fields as speech recognition, image classification, object recognition and others. The abstract feature expression can be acquired automatically, but only according to this, the feature results of learning cannot be understood and utilized, i.e. they can only be used in a way of black box. At the same time, how to create features similar to those with good results becomes more difficult.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generally, the feature engineering goes through the following steps: data collection, data preprocessing, data modeling, feature design, feature selection, model evaluation, model iteration.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The model training in personalized system is mainly aimed at user’s past behavior, such as searching, browsing, click, adding cart and order. The appropriate features are selected to train model and predict user’s future behavior.</p>
-<h5 id="III-Data-Collection"><a href="#III-Data-Collection" class="headerlink" title="III. Data Collection"></a>III. Data Collection</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The user feature logs are collected by parameter server, including some records of basic features such as user behavior location, time, frequency, preference, etc. The time windows are usually multi-day and multi-month, ranging from 7 to 30 days, depending on the model requirements of different experimental recommendation positions.</p>
-<h5 id="IV-Data-Preprocessing"><a href="#IV-Data-Preprocessing" class="headerlink" title="IV. Data Preprocessing"></a>IV. Data Preprocessing</h5><h6 id="4-1-Data-Washing-and-Formatting"><a href="#4-1-Data-Washing-and-Formatting" class="headerlink" title="4.1 Data Washing and Formatting"></a>4.1 Data Washing and Formatting</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The data washing is to remove the noise in the data, such as some abnormal data, misreported data, missing data and so on. The data formatting is to organize the data into the input format needed by the model training framework and to facilitate observation.</p>
-<h6 id="4-2-Data-Sampling"><a href="#4-2-Data-Sampling" class="headerlink" title="4.2 Data Sampling"></a>4.2 Data Sampling</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;According to the event tracking, the click and order data of each recommendation position are sampled proportionally. The sampling proportion varies according to the model of the different experimental recommendation position. Generally speaking, the click, post-click order and direct order are labeled as positive samples, which are labeled as action = 0, and are subdivided into action = 1, 2, 3 and so on, while the non-click and non-browse are labeled as negative samples, which are labeled as action = 0. Meanwhile, the positive samples need different sampling strategies, for example, a part of the click samples can be used as positive samples, and another part can be used as negative samples, which depends on what strategy used in training. The sample is a tag with a series of features, and it is either labeled order or click.</p>
-<h6 id="4-3-Data-Conversion"><a href="#4-3-Data-Conversion" class="headerlink" title="4.3 Data Conversion"></a>4.3 Data Conversion</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As mentioned above.</p>
-<h5 id="V-Model-Training"><a href="#V-Model-Training" class="headerlink" title="V. Model Training"></a>V. Model Training</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The artificial feature construction and automatic training of feature extraction are both implemented.</p>
-<h6 id="5-1-Artificial-Feature-Construction"><a href="#5-1-Artificial-Feature-Construction" class="headerlink" title="5.1 Artificial Feature Construction"></a>5.1 Artificial Feature Construction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The features are mainly used as initialization features, especially for some less active users. For example, the statistics are made in time window of one week or one month, filtering user’s browsing, click, adding cart, order as features. As shown below, each dimension is cross-multiplied to get about tens of basic features.</p>
+        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征学习是在原始数据中自动识别和使用特征。现代深度学习方法在特征学习领域中有很多成功的案例，比如自编码器和受限玻尔兹曼机，它们以无监督或半监督的方式实现自动地学习的特征表示，以压缩形式。其结果用于支撑例如语音识别、图像分类、物体识别和其他领域的先进成果。抽象的特征表达可以自动获取，但是仅通过这个是无法理解和利用这些学习得到的结果，只有黑盒的方式才使用这些特征。同时，如何创造和那些效果很好的特征相似或相异的特征，变得比较困难。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常情况下，特征工程都要经过以下几个步骤：收集数据、数据预处理、数据建模、特征设计、特征选择、评估模型、模型迭代。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个性化系统中的模型训练主要是针对用户之前的行为，比如搜索、浏览、点击、加购物车、下单，选择合适特征，训练模型，预测用户未来的行为。</p>
+<h5 id="三、数据收集"><a href="#三、数据收集" class="headerlink" title="三、数据收集"></a>三、数据收集</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过参数服务器parameter server收集用户特征日志feature logs，包括用户行为位置、时间、次数、频率、偏好等基本特征的记录，时间窗口一般为多天、多月，从7天到30天不等，这个要依据不同实验位置的模型需求而定。</p>
+<h5 id="四、数据预处理"><a href="#四、数据预处理" class="headerlink" title="四、数据预处理"></a>四、数据预处理</h5><h6 id="4-1-数据清洗格式化"><a href="#4-1-数据清洗格式化" class="headerlink" title="4.1 数据清洗格式化"></a>4.1 数据清洗格式化</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据清洗是为了去除数据中的噪音，比如一些异常数据、误记录数据、漏报数据等。数据格式化是为了将数据整理成模型训练框架需要的输入格式，同时也便于观测。</p>
+<h6 id="4-2-数据采样"><a href="#4-2-数据采样" class="headerlink" title="4.2 数据采样"></a>4.2 数据采样</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依据各推荐位埋点情况进行各比例的点击、订单数据采样，不同试验位置的模型，采样比例也不同。一般地，将点击、点击后订单、直接订单作为正样本，标记为action≠0，而这其中又可以细分为action=1,2,3等等，而未点击、未浏览的作为负样本，标记为action=0。同时正样本需要不同的采样策略，比如点击样本，一部分可以作为正样本，而一部分可以作为负样本，取决于训练时将采用什么样的策略。样本就是一个标记加一堆特征，一个样本要么被标记为order，要么被标记为click。</p>
+<h6 id="4-3-数据转换"><a href="#4-3-数据转换" class="headerlink" title="4.3 数据转换"></a>4.3 数据转换</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上文已述。</p>
+<h5 id="五、模型训练"><a href="#五、模型训练" class="headerlink" title="五、模型训练"></a>五、模型训练</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用人工特征和自动训练提取特征相结合的方法。</p>
+<h6 id="5-1-人工特征"><a href="#5-1-人工特征" class="headerlink" title="5.1 人工特征"></a>5.1 人工特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用作初始化特征，特别针对某些行为不多的欠活跃用户。比如统计时间窗口为一周或一个月用户的浏览、点击、加购物车、订单情况作为特征。如下所示，每个维度相乘得到大约几十维基本特征。</p>
 <table>
 <thead>
 <tr>
@@ -529,8 +529,8 @@
 </tr>
 </tbody>
 </table>
-<h6 id="5-2-Automatic-Training-of-Feature-Extraction"><a href="#5-2-Automatic-Training-of-Feature-Extraction" class="headerlink" title="5.2 Automatic Training of Feature Extraction"></a>5.2 Automatic Training of Feature Extraction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the samples of highly active users, there are many features. The models are trained by Xgboost and TensorFlow directly to extract features automatically.</p>
-<h5 id="VI-Model-Evaluation"><a href="#VI-Model-Evaluation" class="headerlink" title="VI. Model Evaluation"></a>VI. Model Evaluation</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Feature Importance;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hit rate of prediction (click@4/20, order@4/20);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Online evaluating indicators (CTR/CVR);<br>An example is given below to illustrate the comparison of different models:</p>
+<h6 id="5-2-自动提取特征"><a href="#5-2-自动提取特征" class="headerlink" title="5.2 自动提取特征"></a>5.2 自动提取特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于活跃度较高的用户样本，特征也比较多，直接采用训练框架Xgboost/TensorFlow训练模型，自动提取特征。</p>
+<h5 id="六、模型评估"><a href="#六、模型评估" class="headerlink" title="六、模型评估"></a>六、模型评估</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征重要性(featureImportance)；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预测命中率(click@4/20, order@4/20)；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型上线评估(CTR/CVR)；<br>下面给出示例表示不同模型的对比：</p>
 <table>
 <thead>
 <tr>
@@ -569,8 +569,8 @@
 </tr>
 </tbody>
 </table>
-<h5 id="VII-Model-Iteration"><a href="#VII-Model-Iteration" class="headerlink" title="VII. Model Iteration"></a>VII. Model Iteration</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To adjust model iteratively, the model adjustment strategies of different experiment positions are also different. From the comparison among these above examples, it can be found that:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) The offline indicators can be improved by increasing the number of training sets.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) By adjusting the sampling proportion, the noise can be reduced, and it is better to sampling rigorously. The premise is that the training data sample is large enough.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) Weight settings, it is setting of training positive and negative samples. The weight should be adjusted to overall positive correlation with each action proportion in the samples, rather than simply increase or decrease the weight of click and order, and it should be in accordance with the sample proportion.</p>
-<h5 id="VIII-References"><a href="#VIII-References" class="headerlink" title="VIII. References"></a>VIII. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+<h5 id="七、模型迭代"><a href="#七、模型迭代" class="headerlink" title="七、模型迭代"></a>七、模型迭代</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;迭代调整模型，不同试验位置的模型调整策略也不一样。同时从上面的示例相互之间的比较可以看出：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 增加训练集数量，离线指标有提升；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 调整抽样比例，相对来说，抽样严格点比较好，可以减小噪声。前提是训练数据样本足够大；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) 权重设置：训练的正负样本权重设置，权重比例应调整为大致和样本中各个action占比正相关，并非绝对地增大/减小 ord/clk权重，符合样本比例即可。</p>
+<h5 id="八、参考文献"><a href="#八、参考文献" class="headerlink" title="八、参考文献"></a>八、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
       
     </div>
@@ -621,8 +621,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/29/2016-07-29-RecOnline/" rel="next" title="Personalized User Recommender System （Online）">
-                <i class="fa fa-chevron-left"></i> Personalized User Recommender System （Online）
+              <a href="/2016/07/29/2016-07-29-RecOnline/" rel="next" title="个性化推荐系统（在线）">
+                <i class="fa fa-chevron-left"></i> 个性化推荐系统（在线）
               </a>
             
           </div>
@@ -631,8 +631,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/12/25/2016-12-25-AccompanyPlan/" rel="prev" title="Accompany Plan">
-                Accompany Plan <i class="fa fa-chevron-right"></i>
+              <a href="/2016/12/25/2016-12-25-AccompanyPlan/" rel="prev" title="陪伴计划">
+                陪伴计划 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -814,7 +814,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#I-Project-Source-Code"><span class="nav-number">1.</span> <span class="nav-text">I. Project Source Code</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#II-Introduction"><span class="nav-number">2.</span> <span class="nav-text">II. Introduction</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#III-Data-Collection"><span class="nav-number">3.</span> <span class="nav-text">III. Data Collection</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IV-Data-Preprocessing"><span class="nav-number">4.</span> <span class="nav-text">IV. Data Preprocessing</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-Data-Washing-and-Formatting"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 Data Washing and Formatting</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-Data-Sampling"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 Data Sampling</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-Data-Conversion"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 Data Conversion</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#V-Model-Training"><span class="nav-number">5.</span> <span class="nav-text">V. Model Training</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#5-1-Artificial-Feature-Construction"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 Artificial Feature Construction</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-Automatic-Training-of-Feature-Extraction"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 Automatic Training of Feature Extraction</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#VI-Model-Evaluation"><span class="nav-number">6.</span> <span class="nav-text">VI. Model Evaluation</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#VII-Model-Iteration"><span class="nav-number">7.</span> <span class="nav-text">VII. Model Iteration</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#VIII-References"><span class="nav-number">8.</span> <span class="nav-text">VIII. References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、简介"><span class="nav-number">2.</span> <span class="nav-text">二、简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、数据收集"><span class="nav-number">3.</span> <span class="nav-text">三、数据收集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、数据预处理"><span class="nav-number">4.</span> <span class="nav-text">四、数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-数据清洗格式化"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 数据清洗格式化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-数据采样"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 数据采样</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-数据转换"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 数据转换</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、模型训练"><span class="nav-number">5.</span> <span class="nav-text">五、模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#5-1-人工特征"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 人工特征</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-自动提取特征"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 自动提取特征</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、模型评估"><span class="nav-number">6.</span> <span class="nav-text">六、模型评估</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#七、模型迭代"><span class="nav-number">7.</span> <span class="nav-text">七、模型迭代</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#八、参考文献"><span class="nav-number">8.</span> <span class="nav-text">八、参考文献</span></a></li></ol></div>
             
 
           </div>
@@ -837,7 +837,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

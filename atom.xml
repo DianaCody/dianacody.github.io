@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2018-12-04T13:24:20.000Z</updated>
+  <updated>2019-02-26T11:27:18.000Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -16,30 +16,30 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Recommendation Datum Query System</title>
+    <title>推荐数据查询系统（RDQS）</title>
     <link href="http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/"/>
     <id>http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/</id>
     <published>2018-01-04T16:00:00.000Z</published>
-    <updated>2018-12-04T13:24:20.000Z</updated>
+    <updated>2019-02-26T11:27:18.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The offline profile data mainly include user profile, commodity profile, recallable source data information and user’s account information, etc. However, these data are stored in different database services, such as HBase, Redis, Hive tables, Memory Cache, and middleware data services encapsulated based on these underlying databases. Therefore, it is so inconvenient to query and integrate different data, even observe and debug data, in that case, the visual interface is required for offline profile data. So based on the Spring’s MVC structure, the java web system named “Recommendation Datum Query System (RDQS)” has been developed.</p>
-<h5 id="III-Architecture-Design"><a href="#III-Architecture-Design" class="headerlink" title="III. Architecture Design"></a>III. Architecture Design</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The data logical hierarchical framework is designed as follows:<br><img src="/resources/rdqs-architecture.jpg" alt="figure-rdqs-architecture"><br>(1) <strong>Database Layer</strong>: It accesses to databases and data services, and preliminarily processes these data fetched from databases.<br>(2) <strong>Data Logical Layer</strong>: It is a data structure independent of the database, and it integrates data according to the business logic.<br>(3) <strong>Front-end Interface Layer</strong>: It focuses on the product user experience design (UED), and optimization of visual and operational experience effects.</p>
-<h5 id="IV-Back-end"><a href="#IV-Back-end" class="headerlink" title="IV. Back-end"></a>IV. Back-end</h5><h6 id="4-1-Database-Layer"><a href="#4-1-Database-Layer" class="headerlink" title="4.1 Database Layer"></a>4.1 Database Layer</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First, data truncation. In order to prevent from returning results timeout because of get numerous data at one time, so generally, it is necessary to truncate the retrieved data to less than 200. In the meanwhile, the users need not view more data on the interface.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secondly, concurrent data fetching. When the user choose to query several profile data at one time, the amount of data requested is large, it can usually as much as millions. Such data need to be loaded within 0.1 seconds, so that there is no obvious delay in human visual observation. Thus the parallel optimization is needed for fetching data logic.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Third, data preloading. By preloading the data previously read and frequently accessed to the cache, rather than getting data from databases each time, it can accelerate the query.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fourth, data rolling loading. For declining the delay of data access, the back-end paging method is used to request to load data step by step. It actually only requests the data of the first page when the user browsing the first page, while the user moving to the second, it requests the back-end database again to retrieve the data of the second page.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fifth, data formatting. This is mainly to make it convenient for front-end display.</p>
-<h6 id="4-2-Data-Logical-Layer"><a href="#4-2-Data-Logical-Layer" class="headerlink" title="4.2 Data Logical Layer"></a>4.2 Data Logical Layer</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First, encapsulation of underlying data. According to the business logic, the data can be divided into four parts as user profile, commodity profile, recallable source data and user account information, and the retrieval index is developed for these parts. The user need to choose which catalog they required for their query, then they will get certain data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Second, query of separate platform account such as user-id, uuid and sku-id. The mapping table of cross-platform accounts is added, and updated regularly. The data is read directly.</p>
-<h6 id="4-3-Data-Display-Layer"><a href="#4-3-Data-Display-Layer" class="headerlink" title="4.3 Data Display Layer"></a>4.3 Data Display Layer</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The interface for front-end to back-end interaction is provided, and the front-end and the back-end can send HTTP requests to each other for data interaction.</p>
-<h5 id="V-Front-end"><a href="#V-Front-end" class="headerlink" title="V. Front-end"></a>V. Front-end</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is based on JavaScript (jQuery) and Bootstrap. Because the system is not a large-scale system, and the front-end module has not been separated as a front-end subsystem at present. In fact, some sophisticated front-end framework such as AngularJS and React cannot meet the requirements currently, so it is sufficient to build some components with JavaScript directly.</p>
-<h6 id="5-1-Interference-Reconfiguration"><a href="#5-1-Interference-Reconfiguration" class="headerlink" title="5.1 Interference Reconfiguration"></a>5.1 Interference Reconfiguration</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The interface reconfiguration is to better adapt to back-end data.</p>
-<h6 id="5-2-Front-end-Componentization-Front-end-Engineering"><a href="#5-2-Front-end-Componentization-Front-end-Engineering" class="headerlink" title="5.2 Front-end Componentization (Front-end Engineering)"></a>5.2 Front-end Componentization (Front-end Engineering)</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Front-end engineering is a complex subject, from the simplest point of view, it is front-end componentization. A page is made up of separated parts, and these parts are independent with each other, which can be abstracted for subsequent reuse. According to function modules, the development files structure and division of team work are arranged easily, and there are more advantages to do following maintenance. It is better than according to the file catalogue. The topics about front-end engineering are detailed in my other series of blogs.</p>
-<h6 id="5-3-Search-Function"><a href="#5-3-Search-Function" class="headerlink" title="5.3 Search Function"></a>5.3 Search Function</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It supports user to select different accounts to query data interactively. The user can choose from the dropdown menu to query with user-id, uuid and sku-id. It also supports keyboard up and down selection, the same applies to mouse click selection, then the requests are sent to background to return data. When inputting query content, it can pop up the drop-down menu automatically, and there are several suggestions matching for input content. By pressing the keyboard up and down keys, one can select in the following input prompts, and the selected items will automatically fill the text into the search input box. And the item can also be selected by mouse click.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The interactive selection scheme is shown in the following figure:<br><img src="/resources/rdqs-search.jpg" alt="figure-rdqs-search"></p>
-<h6 id="5-4-Multilevel-Catalog-Display"><a href="#5-4-Multilevel-Catalog-Display" class="headerlink" title="5.4 Multilevel Catalog Display"></a>5.4 Multilevel Catalog Display</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The hierarchical multilevel directory display is a three-level menu. When a catalog is selected, the data only for this catalog can be retrieved. It is similar to the general information retrieval system, so it is no necessary to elaborate on it.</p>
-<h5 id="VI-Other"><a href="#VI-Other" class="headerlink" title="VI. Other"></a>VI. Other</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It has been expanded to a unified data service platform, docking all offline data.</p>
-<h5 id="VII-References"><a href="#VII-References" class="headerlink" title="VII. References"></a>VII. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;离线画像数据主要包括用户画像、商品画像、召回源数据信息、用户账户信息等几大类。然而这些数据存储在不同的数据库服务中，比如HBase、Redis、Hive表、MemoryCache，以及基于这些底层数据库封装好的中间层数据服务中。因此查询整合不同的数据并观测调试数据变得相当麻烦，即离线画像数据需要可视化界面接口。于是基于Spring的mvc结构，开发出了这套java-web的推荐数据查询系统RDQS。</p>
+<h5 id="三、架构设计"><a href="#三、架构设计" class="headerlink" title="三、架构设计"></a>三、架构设计</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据逻辑分层框架设计，如下图所示：<br><img src="/resources/rdqs-architecture.jpg" alt="figure-rdqs-architecture"><br>(1) <strong>数据库层</strong>：访问数据库及数据服务，将取回的数据进行初步处理。<br>(2) <strong>数据逻辑层</strong>：独立于数据库的数据结构，按照业务逻辑整合数据。<br>(3) <strong>前端界面层</strong>：产品用户体验设计(UED)，优化视觉及操作体验效果。</p>
+<h5 id="四、后端"><a href="#四、后端" class="headerlink" title="四、后端"></a>四、后端</h5><h6 id="4-1-数据库层"><a href="#4-1-数据库层" class="headerlink" title="4.1 数据库层"></a>4.1 数据库层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一、数据截断。为了防止一次性读取过多数据，返回超时，所以一般地需要将取回的数据截断为200条以内，同时用户在界面上也无需查看更多的数据；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    第二、并发取数。当用户选择同时查询多个画像数据，请求数据量较大，通常可以达到几万条数据，需要在0.1s内（人视觉观测不出现明显延迟）将数据全部加载完成，所以在取数逻辑上需要做并行优化；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三、数据预加载。预先加载用户之前读取过的数据、经常访问的数据到缓存，而非每次到数据库读取，可以加快查询速度；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第四、数据滚动加载。为了减小数据访问延迟，采用后端分页的方式，滚动请求加载数据.用户在第一页停留时，实际只请求第一页的数据，当用户点击第二页时，再次请求后端数据库取回第二页的数据；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第五、数据格式整理。主要是为了方便前端逻辑展示；</p>
+<h6 id="4-2-数据逻辑层"><a href="#4-2-数据逻辑层" class="headerlink" title="4.2 数据逻辑层"></a>4.2 数据逻辑层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一，底层数据的封装。主要按业务逻辑划分为用户画像、商品画像、召回源数据、用户账户信息四大类数据，按照这四类做成检索目录，用户查询需要选择目录，增加索引模块，分目录索引查询；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二，支持不同平台账号查询userId/uuid/skuId。此处增加userId-uuid的映射表，定时更新，直接读取表中数据；</p>
+<h6 id="4-3-数据展示层"><a href="#4-3-数据展示层" class="headerlink" title="4.3 数据展示层"></a>4.3 数据展示层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供前后端交互接口，前后端相互发送http请求进行数据交互。</p>
+<h5 id="五、前端"><a href="#五、前端" class="headerlink" title="五、前端"></a>五、前端</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于javascript (jQuery)/Bootstrap。由于此系统未达到大型系统规模，所以目前尚未分离前端架构作为前端系统。事实上一些成熟的前端框架例如AngularJS、React等都不特别符合当前需求，所以直接采用javascript做些组件足矣。</p>
+<h6 id="5-1-前端重构接口"><a href="#5-1-前端重构接口" class="headerlink" title="5.1 前端重构接口"></a>5.1 前端重构接口</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接口的重构是为了更好地适应后台数据。</p>
+<h6 id="5-2-前端组件化（前端工程）"><a href="#5-2-前端组件化（前端工程）" class="headerlink" title="5.2 前端组件化（前端工程）"></a>5.2 前端组件化（前端工程）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 前端工程是一个复杂的课题，从最简单的层面上讲，即是前端组件化。一个页面由不同的部分构成，那么这些部分就是各个独立互不干扰的组件，可以抽象出来以作后续复用。依照功能模块为主导，划分开发结构、甚至团队人员分工，这样利于后续维护，而不是依照文件目录划分开发结构。有关前端工程课题，在我的另外系列博客里面有详述。</p>
+<h6 id="5-3-搜索功能"><a href="#5-3-搜索功能" class="headerlink" title="5.3 搜索功能"></a>5.3 搜索功能</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 支持用户交互式选择不同账号查询数据，用户可以从下拉菜单中选择是用userId、uuid、skuId查询。支持键盘上下选择与鼠标点击选择，请求后台返回数据，输入内容后，自动弹出下拉层，里面有若干匹配输入内容的建议项，按下键盘的上下键可以在下面的输入提示项中进行选择，选中的项自动将文字填补到搜索输入框中（如图），也可以用鼠标点击来选中项。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交互式选择方案如下图所示：<br><img src="/resources/rdqs-search.jpg" alt="figure-rdqs-search"></p>
+<h6 id="5-4-多级目录展示"><a href="#5-4-多级目录展示" class="headerlink" title="5.4 多级目录展示"></a>5.4 多级目录展示</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多级目录分层展示，分为三级菜单。选中之后只能查询当前目录对应的数据。此处与一般信息检索系统目录结构类似，不再赘述。</p>
+<h5 id="六、其他"><a href="#六、其他" class="headerlink" title="六、其他"></a>六、其他</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后期扩大为统一数据服务平台，对接所有离线数据。</p>
+<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The data visualization tool, based on java-web.
+      数据可视化系统，基于java-web。
     
     </summary>
     
@@ -61,37 +61,37 @@
   </entry>
   
   <entry>
-    <title>Scene Recommendation</title>
+    <title>场景推荐</title>
     <link href="http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/"/>
     <id>http://www.dianacody.com/2017/06/26/2017-06-26-SceneRecommendation/</id>
     <published>2017-06-25T16:00:00.000Z</published>
-    <updated>2018-12-05T02:45:05.000Z</updated>
+    <updated>2019-02-26T12:03:06.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generally speaking, the commodity classification is built according to categories, and it can be divided into three categories of different levels at most. However, such a classification is difficult to meet the purchase needs of users in specific situations. For example, commodities such as travel backpack, sports shoes, sports clothes, walking sticks, selfie stick do not belong to a category, but they may belong to a specific scene “outdoor hiking”, in that case, the selfie stick can be recommended to the user to satisfy the purpose of scene recommendation. Such scenarios summarized artificially usually exist generally and practically, and it has commercial value. Similarly, other scenario themes can be abstracted. In order to enrich the recall data system, the improved LDA topic model is used to implement scene recommendation.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The final goal is to cluster commodities across different categories to topic scene. Based on user’s click and order behaviors, the commodities are divided into many pairs or n-tuples as “scene”, and data are recommended for each other in the same scene. The data is processed by pig and python.<br>It is specified that:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)The scene is a single, fine-grained, explicit theme;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)The commodities of a scene are not all in a three-scale category, otherwise the scene is the same as the three-scale category;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)There is sufficient vector distance between scenes;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4)The scene theme’s coverage is over 99% so that the buckets of data tuples are prevented from skewing seriously.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In the early stage, the number of scene themes designed artificially is 2000. Later, the number is 10000 by automatic data mining.</p>
-<h5 id="III-FP-Growth-Scheme-Based-on-Frequent-Itemset"><a href="#III-FP-Growth-Scheme-Based-on-Frequent-Itemset" class="headerlink" title="III. FP-Growth Scheme Based on Frequent Itemset"></a>III. FP-Growth Scheme Based on Frequent Itemset</h5><h6 id="3-1-Data-Acquisition"><a href="#3-1-Data-Acquisition" class="headerlink" title="3.1 Data Acquisition"></a>3.1 Data Acquisition</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The most recent data of click and order are from user session. The latest data of user is extracted such as search, click, add cart and order, and combine these data into tuples of two to four, just as (click, order), (order, order), (search-word + cart, order). Then, the higher ranking combinations extracted by each method are regarded as the combinations with higher confidence. By collecting data for 30 days, the top N combinations with high frequency can be used as candidate set. The candidate sets of 3-4 months are used, and then the data of each month are intersected to get some sets.</p>
-<h6 id="3-2-Data-Evaluation"><a href="#3-2-Data-Evaluation" class="headerlink" title="3.2 Data Evaluation"></a>3.2 Data Evaluation</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 1</strong>: Randomly select 10% of the combinations from each method, and artificially evaluate the proportion of scenarios in the combinations.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 2</strong>: Choose one month order and some click sequences of proportional sampling as evaluation data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These combinations are used to predict the evaluation data and to observe how much data can be matched, i.e. the recall rate of each method.</p>
-<h6 id="3-3-Recall-Data-Clustering-and-Marking"><a href="#3-3-Recall-Data-Clustering-and-Marking" class="headerlink" title="3.3 Recall Data Clustering and Marking"></a>3.3 Recall Data Clustering and Marking</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The similarity of these rule methods can be calculated for clustering. For example, the overlap degree of each element such as product-word, cid3, cid2, cid1 in the combination can be calculated, and these elements are then labeled artificially.</p>
-<h6 id="3-4-Conclusion"><a href="#3-4-Conclusion" class="headerlink" title="3.4 Conclusion"></a>3.4 Conclusion</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By analyzing the data, it can be found that if ordered by frequency, the product word combinations with frequencies more than 10 are concentrated in the daily use commodity categories of higher sales, such as “wet paper towel” and “shampoo”. After clustering, only about 400 combinations are found, and the distribution of them cannot cover most commodity categories. Thus another scheme can be considered to mine scene data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At present, the automatic mining method based on frequency will result to the clusters concentrate to high-frequency purchased commodities. To ensure the coverage of topic scenarios, some scenes are defined artificially, and then the automatically mined data have been added to these scenarios to enrich these scenarios.</p>
-<h5 id="IV-Topic-Model-Scheme-Based-on-LDA"><a href="#IV-Topic-Model-Scheme-Based-on-LDA" class="headerlink" title="IV. Topic Model Scheme Based on LDA"></a>IV. Topic Model Scheme Based on LDA</h5><h6 id="4-1-Topic-Classification-System"><a href="#4-1-Topic-Classification-System" class="headerlink" title="4.1 Topic Classification System"></a>4.1 Topic Classification System</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From the previous data mining method based on frequent itemsets, it is found that the scenes of automatic mining are heavily clustered, and some distances of scenes are too close to each other. In fact, the user behavior is too little, too centralized, and there is lack of cold start data based on scene, resulting in serious skewing of data buckets.<br><img src="/resources/scene-histogram.jpg" alt="figure-scene-histogram"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So it is necessary to design a scene classification system from the top level view to reshape the scene data mined automatically. The current three-level classification system is not  suitable for the current data completely. By establishing the classification system, on the one hand, the distribution of scenarios in the whole station commodities can be known, and the perception of scenarios can be built, on the other hand, it can ensure that the scenarios established would have a higher coverage for all the commodities in the future. The current classification system is mainly according to the second category, named “domain category-topic”. There are mainly 12 categories and about 200 scene topics.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At present, two methods are combined:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 1</strong>: Establishing the framework of scene classification system artificially, and filling in it with product words manually.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Method 2</strong>: Mining data automatically, finding the commodities user purchased, it can assign the data to the framework buckets defined artificially.</p>
-<h6 id="4-2-Automatic-Data-Mining"><a href="#4-2-Automatic-Data-Mining" class="headerlink" title="4.2 Automatic Data Mining"></a>4.2 Automatic Data Mining</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The top N combinations are picked as the candidate from these combinations extracted by each method. For example, the topic scene model “daily cleaning” can be extracted from the combination of bath lotion, shampoo, toothbrush and toothpaste.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;But there are the following problems:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First, there are many repetitions of the scenes of four product word, and it needs to be merged. But at present, they cannot form a new topic scene after merging.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Second, scenes based on sku-level have too few skus and need generalization as well.</p>
-<h6 id="4-3-Structural-Flowchart"><a href="#4-3-Structural-Flowchart" class="headerlink" title="4.3 Structural Flowchart"></a>4.3 Structural Flowchart</h6><p><img src="/resources/scene-process.jpg" alt="figure-scene-process"><br><strong> Stage 1: 2000 scenes are required. </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Candidate combinations are put into existing first-level categories, and these data are artificially mapped to topics to define scenarios. And the commodities are gotten from the scene. At present, a scenario list is built manually, the next is to find the certain corresponding product words of the scene, and then mapped to sku.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Process: scene -&gt; product word -&gt; commodity sku.<br><strong> Stage 2: 10000 scenes are required. </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The cost of manpower is too high with the method at first stage. To consider another method, the solution is that it can cluster product word and commodity sku first.<br><strong> ① Calculate the distance between words </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A) Calculate by word-embedding method;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B) Calculate with mutual information and Chi-square statistics;<br><strong> ② K-means++ Clustering </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A) Guarantee that there are 5-7 product words in a cluster;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B) In the case of clustering, recall the SKU purchased by three days.<br><strong>【Scene Automatic Mining】</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is considerable to cluster the four-tuple product words and SKU that satisfy thresholds.<br><strong> ① K-means </strong><br>The distance between words is calculated by word-embedding and cosine similarity.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advantages: Some results have been finished, and the effect of product word is good, which is worth trying, but the effect of sku is not good.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disadvantages: It is not reasonable in theory, for there are similar scenes of product word.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solutions: Review the results of product word artificially, and then mapped to sku.<br><strong> ② LDA </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advantages: Regard the scene as a topic, and then set the number of topics to get product word or sku.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disadvantages: If four-tuple is considered as a sequence, however, LDA is not suitable for short text.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solutions: A longer sequence such as a 7-day click sequence can be considered as a document, which ensures that a document has many duplicate items without the interference of stop words.<br><strong> ③ Brown-cluster </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advantages: It belongs to hierarchical clustering and can control the heap size of clustering after clustering.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disadvantages: It is more effective for sequences and cannot guarantee for tuple data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solutions: A longer sequence is used to ensure that there are 5-7 product words in most clusters by controlling some thresholds. In the case of clustering, the commodity skus purchased within one month are recalled, and the sliding time window is 3-7 days. Finally, the skus of top 300 are selected as the recall data for each cluster.</p>
-<h6 id="4-4-Parameter-Adjustment-amp-Evaluation"><a href="#4-4-Parameter-Adjustment-amp-Evaluation" class="headerlink" title="4.4 Parameter Adjustment &amp; Evaluation"></a>4.4 Parameter Adjustment &amp; Evaluation</h6><p><strong>(1) The scene sets are regarded as the evaluated objects.</strong> According to the scale of the whole scene set, the coverage of classification system, the minimum distance between scenes, and the average number of topic scene, the following evaluation indicators are defined.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) The total number of scenes and the number of classified scenes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) The coverage rate of scene category, overall topic and category.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) The average number of topic scenes and the average number of a classified topic scenes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) In the whole scene set, the minimum distance between scenes and the minimum distance between classified scenes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e) The average number of product words and skus in scenes and the average number of product words and skus in categories.<br><strong>(2) A single scene is regarded as the evaluation object.</strong> According to the accuracy of scene, traffic of scene, sales volume and price range, the following evaluation indicators are defined.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) The accuracy of scene.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) The proportion of product traffic involved in the scene within a month.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) The proportion of sales involved in the scene within a month.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) Overall price range of products in the scene.</p>
-<h6 id="4-5-Online-Interfaces"><a href="#4-5-Online-Interfaces" class="headerlink" title="4.5 Online Interfaces"></a>4.5 Online Interfaces</h6><p><strong>(1) Offline Data</strong>：stored into 3 HBase tables</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一般地，商品分类体系都是按照类目进行划分的，最多分为三个不同级别层次类目。但是，如此分类难以满足特殊情形下用户购买需求。比如“旅行背包、运动鞋、运动衣、徒步手杖、自拍杆”这些商品不属于一个商品类目体系，但可能属于一个特殊场景“户外徒步”，在这种情况下，可以给用户推荐“自拍杆”，以达到场景推荐的目的。像这种人工总结的场景是一般地、实际地存在，并且有可以转化的价值。类似地，还可以提炼出其他场景主题。为了丰富召回数据体系，我们采用改进LDA主题模型来实现场景推荐。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最终的目的是，跨不同商品分类进行场景主题聚合。基于用户近期点击和购买行为，将多类商品各自组成pair对/n元组作为场景，同一场景下数据集互为推荐集，pig+python处理数据。<br>规定：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)场景为单一细粒度的明确主题；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)数据组不全在一个三级分类cid3里(否则与三级类重复)，粒度小于二级类；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)场景之间有足够向量距离；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4)覆盖率达99%以上，且防止数据元组分桶倾斜严重<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前期初始化人工定义场景主题数2k；后期数据挖掘自动化模型，迭代生成场景主题数10k。</p>
+<h5 id="三、基于频繁项集FP-Growth方案"><a href="#三、基于频繁项集FP-Growth方案" class="headerlink" title="三、基于频繁项集FP-Growth方案"></a>三、基于频繁项集FP-Growth方案</h5><h6 id="3-1-数据获取"><a href="#3-1-数据获取" class="headerlink" title="3.1 数据获取"></a>3.1 数据获取</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户最近的click数据和order数据来自于session。抽取用户最近数据，比如点击、搜索、加购物车、订单，将这些数据组合为2~4元组，比如(click, order), (order, order), (search-word + cart, order)。然后，将每种方法抽取出来的排序较高的组合作为置信度较高的组合。收集30天数据，然后把出现频率较高的topN作为候选集。用3-4个月的候选集，然后对每个月数据取交集，得到一些集合。</p>
+<h6 id="3-2-数据评测"><a href="#3-2-数据评测" class="headerlink" title="3.2 数据评测"></a>3.2 数据评测</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【方法一】从每种方法取出的组合中，随机挑选出10%的组合，人工评测组合存在场景的比例。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【方法二】选一个月订单和sample一定比例的click序列作为评测数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用这些组合来预测评测的数据，观测能匹配到多少数据，即每种方法的召回率。</p>
+<h6 id="3-3-召回聚类、打标"><a href="#3-3-召回聚类、打标" class="headerlink" title="3.3 召回聚类、打标"></a>3.3 召回聚类、打标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对这些规则方法计算相似度，以进行聚类，比如可以通过计算组合中每个元素pw\cid3\cid2\cid1重叠度，然后人工打标。</p>
+<h6 id="3-4-结论"><a href="#3-4-结论" class="headerlink" title="3.4 结论"></a>3.4 结论</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过分析数据可以发现，按频数排序的话，选频数大于10的产品词组合，发现组合都集中在销量较高的日百商品类别，如”湿巾”、”洗发水”等，经过聚类后发现只有400多个组合，而且分布不能覆盖大部分商品类别。为此考虑另外一种方案来挖掘场景数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目前基于频率的自动挖掘的方法会导致数据集中在高频购买的商品中，为了保证场景的覆盖率，我们人工定义出了一些场景，然后再把自动挖掘的数据添加到这些场景中，丰富这些场景。</p>
+<h5 id="四、基于LDA主题模型方案"><a href="#四、基于LDA主题模型方案" class="headerlink" title="四、基于LDA主题模型方案"></a>四、基于LDA主题模型方案</h5><h6 id="4-1-主题分类体系"><a href="#4-1-主题分类体系" class="headerlink" title="4.1 主题分类体系"></a>4.1 主题分类体系</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从之前基于频繁项集方式自动挖掘的数据发现，自动挖掘的场景扎堆严重，且一些场景之间“距离”过近。实际上是用户行为太少、太集中，没有“基于场景的冷启动数据”而导致的数据分桶倾斜严重。<br><img src="/resources/scene-histogram.jpg" alt="figure-scene-histogram"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所以需要通过从顶层设计一个场景分类体系来统领自动挖掘出的场景数据。目前的三级品类分类体系不能完全适合现在的数据。通过建立分类体系，一方面可以掌握场景在整个全站商品中的分布，对场景有一个直观认识；另一方面，可以保证以后挖掘的场景对所有商品覆盖率更高。目前的分类体系考虑二级分类，即“主类目-topic”。有12个主类目，大概有200多个场景主题(topic)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目前采用两种方法相结合：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【方法一】人工建立场景分类体系框架，人工填入产品词；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【方法二】数据自动挖掘，找用户购买的商品id，对应分到人工定义好的框架的桶里；</p>
+<h6 id="4-2-自动数据挖掘"><a href="#4-2-自动数据挖掘" class="headerlink" title="4.2 自动数据挖掘"></a>4.2 自动数据挖掘</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将每种方法抽取出来的组合选取topN作为可信度较高的组合作为候选组合。例如“沐浴露、洗发水、牙刷、牙膏”可以提炼出场景主题模型为“日常清洁”。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是存在下面几个问题：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 4个产品词的场景，重复的较多，需要合并，目前合并之后又不能构成一个场景；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) sku级别的场景的sku数量太少，同样需要泛化；</p>
+<h6 id="4-3-结构流程图"><a href="#4-3-结构流程图" class="headerlink" title="4.3 结构流程图"></a>4.3 结构流程图</h6><p><img src="/resources/scene-process.jpg" alt="figure-scene-process"><br><strong> 第一阶段：达到2000个场景。 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将候选组合放到现有的一级类中，人工把这些数据映射到topic上，定义出场景。根据场景得到sku。目前人工整理了一个场景列表，把场景对应的产品词找到，再映射到sku。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;流程：场景scene-&gt;产品词pwd-&gt;商品sku；<br><strong> 第二阶段：达到10000个场景。 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用第一阶段的方法，人力成本太高，考虑另一种方法。解决办法：可以考虑先对”产品词pwd”、”商品sku” 进行聚类。<br><strong> ① 计算词与词之间的距离 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) 用word-embedding的方式计算<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) 用互信息和卡方统计量计算<br><strong> ② 聚类：k-means++ </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) 保证一个类里有5-7个产品词;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) 在得到聚类的情况下，去召回3天购买的sku。<br><strong>【自动挖掘场景】</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以考虑先对满足threshold1的四元组产品词\sku进行聚类：<br><strong> ① K-means </strong><br>计算词与词之间的距离，用word-embedding和cos-similarity的方式计算。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优点：已完成一些结果，pw的效果还可以，值得尝试；sku的效果不行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缺点：理论上不太合理，找到的pw会存在相似的情况。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决办法：人工review产品词结果，然后映射成sku。<br><strong> ② LDA </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优点：把场景看成一个topic，设置好topic数目即可得到pwd或sku。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题：如果把4元组看成一个序列，LDA不太适合短文本；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决方法：可以用更长序列，如用户7天点击序列看成一个doc，这样保证一个doc有多个重复的item，而且没有停用词的干扰；<br><strong> ③ Brown-cluster </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优点：属于层次聚类，完成聚类后也可以把控聚类的堆大小；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问题：对序列比较有效，对元组的数据不敢保证。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决方法：用更长序列，通过控制一些阈值来保证足够多（N）的类里有5-7个产品词；在得到聚类的情况下，去召回一个月的，窗口为3/7天购买的sku，每个类选取top300的sku作为召回数据。</p>
+<h6 id="4-4-调参-amp-评测"><a href="#4-4-调参-amp-评测" class="headerlink" title="4.4 调参 &amp; 评测"></a>4.4 调参 &amp; 评测</h6><p><strong>(1) 以场景集(Scene Set)作为评价对象。</strong> 按整个场景集的大小、覆盖分类体系的情况、场景之间最小“距离”、topic下平均场景数，定义如下评测指标：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 总场景数、分品类场景数；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 场景品类覆盖率、topic整体覆盖率、分品类topic覆盖率；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) topic下平均场景数、分品类topic下平均场景数；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) 整个场景集中，场景间最小“距离”、分品类场景间最小“距离”；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e) 场景平均产品词/SKU数、分品类场景平均产品词/SKU数；<br><strong>(2) 以单个场景作为评价对象。</strong> 按场景准确度、场景流量、销量、价格段，定义如下评测指标。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 场景准确度；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 场景一个月内产品涉及流量占比；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) 场景一个月内产品涉及销量占比；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) 场景产品整体价格段；</p>
+<h6 id="4-5-线上接口"><a href="#4-5-线上接口" class="headerlink" title="4.5 线上接口"></a>4.5 线上接口</h6><p><strong>(1) 离线数据 </strong>：存储为3个HBase表</p>
 <table>
 <thead>
 <tr>
-<th>TableName</th>
-<th>Field1</th>
-<th>Field2</th>
-<th>Field3</th>
-<th>Field4</th>
-<th>Field5</th>
+<th>表名称</th>
+<th>字段1</th>
+<th>字段2</th>
+<th>字段3</th>
+<th>字段4</th>
+<th>字段5</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>SceneTable</td>
+<td>场景表</td>
 <td>scene_id</td>
 <td>scene_name</td>
 <td>scene_sku</td>
@@ -99,7 +99,7 @@
 <td>scene_info</td>
 </tr>
 <tr>
-<td>ListTable</td>
+<td>清单表</td>
 <td>scene_id</td>
 <td>list_id</td>
 <td>list_sku</td>
@@ -107,7 +107,7 @@
 <td>/</td>
 </tr>
 <tr>
-<td>ArticleTable</td>
+<td>文章表</td>
 <td>scene_id</td>
 <td>article_id</td>
 <td>article_text</td>
@@ -116,78 +116,78 @@
 </tr>
 </tbody>
 </table>
-<p><strong>(2) Online Interfaces</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(a) Input parameters of request</strong>: recommendation position id, user id, type=0. <strong>Returned results</strong>: 10 scene id, scene name, scene picture, scene description.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(b) Input parameters of request</strong>: recommendation position id, user id, type=1. <strong>Returned results</strong>: scene id, scene name, scene picture.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(c) Input parameters of request</strong>: recommendation position id, user id, scene id. <strong>Returned results</strong>: sku, list id, list sku, article id, article text.</p>
-<h6 id="4-6-Ranking-Scheme-of-Recall-Results"><a href="#4-6-Ranking-Scheme-of-Recall-Results" class="headerlink" title="4.6 Ranking Scheme of Recall Results"></a>4.6 Ranking Scheme of Recall Results</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ranking involves two parts: the ranking between scene modules and the ranking of sku in a scene. The ranking of sku in a scene can refer to traditional schemes of recommendation position ranking. In the meanwhile, the ranking can be considered from two perspectives, one is matching similarity of users and scene, the other is scene triggering.</p>
-<h6 id="4-6-1-Matching-Similarity-of-Users-and-Scenes"><a href="#4-6-1-Matching-Similarity-of-Users-and-Scenes" class="headerlink" title="4.6.1 Matching Similarity of Users and Scenes"></a>4.6.1 Matching Similarity of Users and Scenes</h6><p><strong> (a) Unilateral feature of scene </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Such features are these, within one week, the proportion of scene browsing, the proportion of users who browsing scenes, the proportion of sku sales volume in the scene, the proportion of users who ordered, and the repurchase cycle of scene.<br><strong> (b) Bilateral features of User-Scene </strong></p>
+<p><strong>(2) 线上接口 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(a) 请求入参</strong>：推荐位、pin，type=0，<strong>返回结果</strong>：10个场景id、场景名、场景图片、场景说明；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(b) 请求入参</strong>：推荐位、pin、type=1，<strong>返回结果</strong>：场景id、场景名、场景图片；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(c) 请求入参</strong>：推荐位、pin、场景id，<strong>返回结果</strong>：sku、清单id、清单sku、文章id、文章文本；</p>
+<h6 id="4-6-召回结果的排序方案"><a href="#4-6-召回结果的排序方案" class="headerlink" title="4.6 召回结果的排序方案"></a>4.6 召回结果的排序方案</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序涉及两个部分的排序：场景模块间排序，场景内sku的排序。场景内sku排序可以参考传统推荐位排序方案。同时，可以从两个角度来考虑排序，一是从匹配用户与场景相似度的角度，二是从场景触发的角度来考虑。</p>
+<h6 id="4-6-1-匹配用户与场景相似度"><a href="#4-6-1-匹配用户与场景相似度" class="headerlink" title="4.6.1 匹配用户与场景相似度"></a>4.6.1 匹配用户与场景相似度</h6><p><strong> (a) 场景单边特征 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一周内，场景浏览占比、场景浏览用户数占比、场景下sku销量占比、下单用户数占比、场景复购周期。<br><strong> (b) 用户-场景双边特征 </strong></p>
 <table>
 <thead>
 <tr>
-<th>Action</th>
-<th>Window</th>
-<th>Granularity/Attribute</th>
-<th>Statistic</th>
+<th>行为</th>
+<th>窗口</th>
+<th>粒度/属性</th>
+<th>统计量</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>browse</td>
-<td>latest click: 1 time, 6 times, 10 times, 3 minutes, 10 minutes, 1 hour, 1 day, 2 days, 3 days</td>
+<td>最近点击:1次、6次、10次，3分钟、10分钟，1小时，1天、2天、3天</td>
 <td>scene</td>
 <td>number, ratio</td>
 </tr>
 <tr>
 <td>order</td>
-<td>1 day, 2 days, 1 week, 2 weeks, 1 month, 2 months, 3 months</td>
+<td>1天、2天，1周、2周，1月、2月、3月</td>
 <td>scene</td>
 <td>number, ratio</td>
 </tr>
 <tr>
 <td>add-cart</td>
-<td>1 day, 2 days, 1 week</td>
+<td>1天、2天、1周</td>
 <td>scene</td>
 <td>number, ratio</td>
 </tr>
 </tbody>
 </table>
-<p><strong> (c) Multilateral features of user-scenario-product words </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Considering the problem of cold start. When the users do not have scene data, according to the coincidence degree of user’s recent behavior and scene product word, these scenes with top 5 coincidence degree can be gotten, whose IDs and scores can also be gained. </p>
+<p><strong> (c) 用户-场景-产品词多边特征 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考虑冷启的问题，用户没有场景数据的时候，利用用户最近行为和场景的产品词的重合度，得到重合度为top5的场景ID和得分。</p>
 <table>
 <thead>
 <tr>
-<th>Action</th>
-<th>Window</th>
-<th>Granularity/Attribute</th>
-<th>Statistic</th>
+<th>行为</th>
+<th>窗口</th>
+<th>粒度/属性</th>
+<th>统计量</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>browse</td>
-<td>latest click: 50 times</td>
-<td>Coincidence degree of scene</td>
+<td>最近点击：50次</td>
+<td>场景置信度</td>
 <td>score</td>
 </tr>
 <tr>
 <td>order</td>
-<td>3 day, 2 weeks, 1 month, 2 months, 3 months</td>
-<td>Coincidence degree of scene</td>
+<td>3天，2周，1月、2月、3月</td>
+<td>场景置信度</td>
 <td>score</td>
 </tr>
 <tr>
 <td>add-cart</td>
-<td>1 day, 1 week</td>
-<td>Coincidence degree of scene</td>
+<td>1天，1周</td>
+<td>场景置信度</td>
 <td>score</td>
 </tr>
 </tbody>
 </table>
-<h6 id="4-6-2-Scene-Triggering"><a href="#4-6-2-Scene-Triggering" class="headerlink" title="4.6.2 Scene Triggering"></a>4.6.2 Scene Triggering</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The weight of product words in the scene can be considered.</p>
-<h5 id="V-Work-Results"><a href="#V-Work-Results" class="headerlink" title="V. Work Results"></a>V. Work Results</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A patent paper entitled “Scene recommendation based on topic models” has been published.</p>
-<h5 id="VI-References"><a href="#VI-References" class="headerlink" title="VI. References"></a>VI. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+<h6 id="4-6-2-场景触发"><a href="#4-6-2-场景触发" class="headerlink" title="4.6.2 场景触发"></a>4.6.2 场景触发</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;场景触发可以考虑对场景内产品词的weight。</p>
+<h5 id="五、工作成果"><a href="#五、工作成果" class="headerlink" title="五、工作成果"></a>五、工作成果</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;专利论文《基于主题模型的场景推荐》。</p>
+<h5 id="六、参考文献"><a href="#六、参考文献" class="headerlink" title="六、参考文献"></a>六、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The improved LDA topic model, aggregating across different commodity classifications to topic scenes.
+      改进的LDA主题模型，跨不同商品分类进行场景主题聚合。
     
     </summary>
     
@@ -215,22 +215,22 @@
   </entry>
   
   <entry>
-    <title>Commodity Profile</title>
+    <title>商品画像</title>
     <link href="http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/"/>
     <id>http://www.dianacody.com/2017/06/18/2017-06-18-ItemProfile/</id>
     <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2018-12-04T13:24:34.000Z</updated>
+    <updated>2019-02-26T12:09:33.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The same as user profile, the commodities actually have their own set of separate features. By calculating multidimensional features of commodity, it can establish a hierarchy system, basic commodity profile. Such multidimensional features include gender, age, category levels, product word, brand word, hot sale, price, level of purchasing power, etc.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are also connections among commodities. Under each categories, the relevance of commodities, the topic model clustering and hierarchical abstraction can be done by different dimensions of brand word, product word and extended attribute. It is another hierarchy system, but also belongs to the field of commodity profile. The most typical application of it is that the relevant commodities can be aggregated as different clusters named topics or scenes, that is, personalized recommendation.</p>
-<h5 id="III-Basic-Commodity-Profile"><a href="#III-Basic-Commodity-Profile" class="headerlink" title="III. Basic Commodity Profile"></a>III. Basic Commodity Profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Commodity gender</strong>: some commodities are generally sexual distinguishable, for example, some specific handbags are for men and some are for women, which can reflect gender preferences. Of course, there are still some commodities without gender distinction.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Commodity age</strong>: some commodities have age range, for example, the shoes include baby shoes, teenager shoes, adult shoes, elderly shoes, etc., which can reflect age preference. But some commodities are without age distinction.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Commodity category</strong>: the categories divided according to macro levels.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Product word and Brand word</strong>: They are basic attributes of commodity, including specification parameters.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Price and Purchasing power level</strong>: A mass consumer product or a high-level consumer product, and the level of consumption.</p>
-<h5 id="IV-Extended-Commodity-Profile"><a href="#IV-Extended-Commodity-Profile" class="headerlink" title="IV. Extended Commodity Profile"></a>IV. Extended Commodity Profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Relevant commodity</strong>: the similarity and correlation of commodities can be obtained from user’s daily behaviors. These commodities often combined together must have correlation degree with each other. The higher the correlation degree is, the more likely that the attributes of the related commodities can be used as subsidiary features of the dominant commodity.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Aggregated commodity sets</strong>: Clustering by FP-growth or topic models, and candidates are recommended for each other in the same topic set. This is described in detail in “The application of scene recommendation”.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Hierarchical abstraction</strong>: Hierarchical subordination among commodities.</p>
-<h5 id="V-References"><a href="#V-References" class="headerlink" title="V. References"></a>V. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和用户画像相对应的是，商品其实也有自己的一套独有特征。通过计算多维度商品特征：包括性别、年龄、类目级别、产品词、品牌词、热销、价格、购买力等级，便可以建立这样的体系：商品基础画像。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品之间也有一定联系，在各个类目下，对商品分别按照品牌词、产品词、扩展属性等不同维度进行关联、主题模型聚类、层次化抽象，可以建立另外的商品维度体系，也属于商品画像的范畴。最典型的应用就是可以聚合成不同场景的商品，以保证个性化推荐。</p>
+<h5 id="三、商品基础画像"><a href="#三、商品基础画像" class="headerlink" title="三、商品基础画像"></a>三、商品基础画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品性别</strong>：一部分商品通常有性别之分，如手提包可以分为男士手提包和女士手提包，能反映出性别偏好。还有一部分商品没有性别区分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品年龄</strong>：一部分商品有年龄适用范围，如鞋子分为婴儿鞋、青少年鞋、成人鞋、老人鞋等，反映出年龄偏好，还有一部分商品没有年龄区分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品类目</strong>：按照大类划分的级别。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>产品词和品牌词</strong>：商品的基本属性，也包含规格参数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>价格和购买力等级</strong>：商品是否是大众消费产品还是高端消费产品，消费等级属于什么层次。</p>
+<h5 id="四、扩展的商品画像"><a href="#四、扩展的商品画像" class="headerlink" title="四、扩展的商品画像"></a>四、扩展的商品画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>关联商品</strong>：商品之间的相似度和相关度可以根据用户日常行为得到，经常组合在一起的商品必定有相关度，相关程度越高，这个商品的相关商品的属性就可以作为该商品的附属特征。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>聚合商品集</strong>：用频繁项集或者主题模型聚类，相同类目下的商品互为推荐集。这个在基于场景推荐的应用中已经有详细叙述。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>层次抽象</strong>：商品之间的层次隶属关系。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The multidimensional features of commodity.
+      商品的多维度特征。
     
     </summary>
     
@@ -248,49 +248,49 @@
   </entry>
   
   <entry>
-    <title>Tracing Analysis of User Purchasing</title>
+    <title>用户购物模式跟踪分析</title>
     <link href="http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/"/>
     <id>http://www.dianacody.com/2017/05/29/2017-05-29-PurchaseTrace/</id>
     <published>2017-05-28T16:00:00.000Z</published>
-    <updated>2018-12-05T04:47:04.000Z</updated>
+    <updated>2019-02-26T12:26:06.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The patterns of user behavior are researched by statistics of tracing analysis of user purchasing. The session based logs are analyzed by hour, day, week, month and quarter to discover patterns of user’s purchasing preference. The ratio of user is summarized to get distribution of population.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Typical patterns of user behavior are labeled, for building user profile.</p>
-<h6 id="2-1-Preference-Attributes-of-Commodity-Three-Level-Category"><a href="#2-1-Preference-Attributes-of-Commodity-Three-Level-Category" class="headerlink" title="2.1 Preference Attributes of Commodity Three-Level Category"></a>2.1 Preference Attributes of Commodity Three-Level Category</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The confidence degree reflects the user’s potential preference. A user browsed a lot of commodities, for example, he filtered for more than 100 times, so there is a confidence degree about 99% which indicate the specific preference. However, only according to the 100 times filters, it cannot ensure 99.9%, maybe only 99.5% confidence degree can indicate the preference. Much more attentions should be paid to search word, preference and filter word, ranking of commodity lists, and clicks or browses in the searching result lists, because there are common attributes within the product detail page lists. Or a counterexample, the user stayed on the list for a very short time, only filtering for effective information, regardless noise. <em>(Note: The dwell-time is a statistical instantaneous time. The time in a session mainly used to judge the mistaken click and filtering, not to judge the long-term of user behaviors, that is, the compound dwell-time within many sessions is meaningless.)</em><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In the aspect of user profile, the product keyword and the key attribute word are extracted, including automatic mining of common attributes on user’s repurchase cycle, product word, browsing, click and product attributes.</p>
-<h6 id="2-2-Paths-of-User’s-Added-Cart-and-Order"><a href="#2-2-Paths-of-User’s-Added-Cart-and-Order" class="headerlink" title="2.2 Paths of User’s Added-Cart and Order"></a>2.2 Paths of User’s Added-Cart and Order</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;According to the single user, observe which entrance the user come in. Finally, the macro-survey is made as statistics of all user results, observation of the total population proportion.</p>
-<h6 id="2-3-Paths-of-User’s-Click-and-Follow"><a href="#2-3-Paths-of-User’s-Click-and-Follow" class="headerlink" title="2.3 Paths of User’s Click and Follow"></a>2.3 Paths of User’s Click and Follow</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This part of the user profile is user behavior, not related to order.</p>
-<h5 id="III-Schemes"><a href="#III-Schemes" class="headerlink" title="III. Schemes"></a>III. Schemes</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The session is used as a unit to record the user’s access behavior completely, and the full path of user’s access is outlined completely, and according to these, the data is analyzed.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Steps:<br>(1) By reading the output data edited by Session Pruner, all the sessions of user and their purchasing paths could be found by the statistics of logs for a long period of time, such as more than half a year, and whether there are certain patterns and rules can be summarized.<br>(2) Two ways<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) Define and mark the typical patterns existing in some users, and mark and portray them accordingly.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) The similar as above, with the deep statistical analysis of each user’s session data by the time axis, some repeated patterns can be found, and should be defined and marked.<br>(3) According to these inherent patterns, the recommendation results and algorithms are optimized.</p>
-<h5 id="IV-Data-Analysis"><a href="#IV-Data-Analysis" class="headerlink" title="IV. Data Analysis"></a>IV. Data Analysis</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time: 1 day, 3 days, 7 days. The number of skus within dwell time, average time and total time was counted.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Features: It is multiplied by time window as 1day, 3days, 7days.</p>
-<h6 id="4-1-Experimental-Data"><a href="#4-1-Experimental-Data" class="headerlink" title="4.1 Experimental Data"></a>4.1 Experimental Data</h6><table>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;统计发现用户点击路径偏好，人群分布；基于session日志数据，统计用户小时/天/周/月/季度的点击+购物车+订单路径，入口标记；汇总人群占比。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取用户购买途径固有模式和习惯分析，标记典型模式，用户打标和画像，其他固有行为模式挖掘及利用。</p>
+<h6 id="2-1-商品类目cid3偏好属性"><a href="#2-1-商品类目cid3偏好属性" class="headerlink" title="2.1 商品类目cid3偏好属性"></a>2.1 商品类目cid3偏好属性</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置信度反映该用户的“隐形”偏好。一个用户浏览了许多商品，比如筛选了100多次，则有99%的置信度是这个偏好，但是该用户筛选了100次，但也不能保证是99.9%，也只可能有99.5%的可能性/置信度，是说明有这个偏好。① 搜索词 、② 筛选偏好词（搜索过滤词）、③ 排序、 ④搜索结果列表页里，点击、浏览（商品详情页面浏览的列表展示，一般有共同属性）；或者反例，反例sku上停留时间特别短，注意过滤只看有效信息，噪音不看。<em>（注意：dwell-time是统计瞬时时间，一个session内的时间，主要用来判断误点击，过滤；不是用来判断长期时间的，即联合多个session的dwell-time基本没什么意义）。</em><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户画像方面，增加产品中心词提取、产品关键属性词提取算法，包括自动挖掘用户的复购，浏览，加购的产品词和产品属性的共性数据。 </p>
+<h6 id="2-2-购物-下单（cart-order）路径"><a href="#2-2-购物-下单（cart-order）路径" class="headerlink" title="2.2 购物+下单（cart+order）路径"></a>2.2 购物+下单（cart+order）路径</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从哪个入口进来的，按单个用户计数；最终统计所有用户结果汇总，观测总的人群占比（宏观的调研）。</p>
+<h6 id="2-3-点击-关注（click-follow）路径"><a href="#2-3-点击-关注（click-follow）路径" class="headerlink" title="2.3 点击+关注（click+follow）路径"></a>2.3 点击+关注（click+follow）路径</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这部分用户画像是用户behavior行为，和购物不相关。</p>
+<h5 id="三、方案"><a href="#三、方案" class="headerlink" title="三、方案"></a>三、方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 以session为单位，完整（或挑选关注部分完整）记录用户访问行为以完整勾勒出访问全路径，据此数据进行分析。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;步骤:<br>(1) 通过读取Session Pruner剪辑后的输出结果数据，统计每个用户相当长一段时期（例如半年以上），全部有购物的session及其购买途径，寻找是否存在一定模式和规律。<br>(2) 两种方式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) 对于部分用户中存在的典型模式，进行定义、标记，并按此给这部分用户打标、画像。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) 类似地，通过对每个用户时间纵向session数据的深度统计分析，寻找其中某些可能反复出现的模式，对其定义、标记；<br>(3) 根据这些固有模式，优化推荐结果和算法。</p>
+<h5 id="四、数据分析"><a href="#四、数据分析" class="headerlink" title="四、数据分析"></a>四、数据分析</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间段：（1day, 3days, 7days）；dwell_time、avg_time、sum_time，看sku的数量。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征：乘以“时间窗口”（1day,3days,7days）</p>
+<h6 id="4-1-实验数据"><a href="#4-1-实验数据" class="headerlink" title="4.1 实验数据"></a>4.1 实验数据</h6><table>
 <thead>
 <tr>
-<th>Data Source</th>
-<th>Time Range</th>
-<th>Data Size</th>
+<th>数据来源</th>
+<th>时间跨度</th>
+<th>数据大小</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Data of browsing and added-cart</td>
+<td>用户浏览加购物车数据</td>
 <td>1 month</td>
 <td>1.1 GB</td>
 </tr>
 <tr>
-<td>Data of order</td>
+<td>用户购买行为数据</td>
 <td>3 month</td>
 <td>3.0 GB</td>
 </tr>
 </tbody>
 </table>
-<h6 id="4-2-Methods-and-Results"><a href="#4-2-Methods-and-Results" class="headerlink" title="4.2 Methods and Results"></a>4.2 Methods and Results</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) The skus searched and purchased are aggregated into four-tuples, and the frequency of the four-tuples is counted. The tuples are clustered based on Jaccard similarity.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) These four tuples in method 1 are used as corpus to train word to vector model, and then are clustered by K-means method.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) The product words purchased by the same user for six months are collected as corpus to train word to vector model, and then are clustered by K-means method.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) Due to the strong dependence of K-means method on the selection of initial nodes, so the algorithms are executed for many times to merge different parts of data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) Based on one set of data result clustered by k-means algorithm, the cosine similarity between all product word vectors and each cluster is calculated for the secondary partition.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(6) The large-scale category are tried to be clustered secondarily with K-means algorithm. However, the effect is not satisfactory, and it still cannot be subdivided.</p>
-<h6 id="4-3-Results-Analysis"><a href="#4-3-Results-Analysis" class="headerlink" title="4.3 Results Analysis"></a>4.3 Results Analysis</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) There are some clusters containing too many, mixed and disordered product words, and cannot be aggregated into a specific pattern. Furthermore, the data is sparse.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) There are some product words in a cluster with high similarity to each other.</p>
-<h5 id="V-Improvement-Scheme"><a href="#V-Improvement-Scheme" class="headerlink" title="V. Improvement Scheme"></a>V. Improvement Scheme</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) Reduce the time span of order data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) The data sampling should follow the rule of user patterns.</p>
-<h5 id="VI-References"><a href="#VI-References" class="headerlink" title="VI. References"></a>VI. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+<h6 id="4-2-方法与结果"><a href="#4-2-方法与结果" class="headerlink" title="4.2 方法与结果"></a>4.2 方法与结果</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 将用户搜索加购产生的sku组成四元组，并统计四元组频数。根据”jaccard相似度”进行聚类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 将(1)方法中的四元组作为语料，训练”word2vec模型”，利用”kmeans方法”进行聚类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) 收集同一用户六个月的购买商品的”产品词”作为语料，训练”word2vec模型”，利用”kmeans算法”聚类。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) 由于kmeans方法对于初始节点的选择依赖性过强，执行多次算法产生多份数据进行合并。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) 尝试以一份kmeans产生的聚类结果为基础，计算所有产品词词向量与每一个聚类的余弦相似度进行二次划分。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(6) 尝试将较大规模的类利用kmeans方法，二次聚类。但是效果不理想，仍然不能将大类细分。</p>
+<h6 id="4-3-结果分析"><a href="#4-3-结果分析" class="headerlink" title="4.3 结果分析"></a>4.3 结果分析</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 存在着一些cluster包含的产品词数量太多太杂，无法聚合为固定模式，数据比较稀疏。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 存在着一些cluster内的产品词相似度过高。</p>
+<h5 id="五、改进方案"><a href="#五、改进方案" class="headerlink" title="五、改进方案"></a>五、改进方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 缩小order数据的时间跨度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 数据采样应该更多遵循用户模式规律。</p>
+<h5 id="六、参考文献"><a href="#六、参考文献" class="headerlink" title="六、参考文献"></a>六、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      Research user behavior patterns, according to user logs.
+      依据用户日志研究用户购物行为模式。
     
     </summary>
     
@@ -308,22 +308,22 @@
   </entry>
   
   <entry>
-    <title>User Profile</title>
+    <title>用户画像</title>
     <link href="http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/"/>
     <id>http://www.dianacody.com/2017/03/30/2017-03-30-UserProfile/</id>
     <published>2017-03-29T16:00:00.000Z</published>
-    <updated>2018-12-04T13:24:45.000Z</updated>
+    <updated>2019-02-26T12:34:10.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The patterns of user are different from each other, but almost of them have general regular patterns, which reflect personalized features of users, that is, user profile. By calculating user’s features in different dimensions, it can do personalized recommendation for users with these data effectively.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The user profile includes long-term user profile and real-time user profile.<br><img src="/resources/user-profile.jpg" alt="figure-user-profile"></p>
-<h5 id="III-Long-term-User-Profile"><a href="#III-Long-term-User-Profile" class="headerlink" title="III. Long-term User Profile"></a>III. Long-term User Profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The long-term user profile, whose data derive from user logs during at least several months, that is multidimensional user features, and it can be stored into offline databases. It includes gender, age, area, interest of commodity categories, preference of product word, preference of brand word, extended attribute, purchasing power, preference of shop, preference of discount, gender and age of their children, and so on. The user logs are processed, and some crucial information can be extracted from original SDK event tracking logs, in that way, the session logs are gotten completely. All the steps above are to upgrade data granularity of user profile.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>User’s deep behavior</strong>: dwell time, browse comments.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>User’s initiative feedback</strong>: search, write comments, complaints.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>User’s cross-platform behavior</strong>: the accounts of different devices correspond to the same user. By uniforming behaviors of them, we can establish a vivid user profile.</p>
-<h5 id="IV-Real-time-User-Profile"><a href="#IV-Real-time-User-Profile" class="headerlink" title="IV. Real-time User Profile"></a>IV. Real-time User Profile</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The real-time user profile includes real-time feedback, current behaviors, whose granularity is in seconds level, e.g.30 seconds, 1 hour, 6 hours, 1day, 3 days, 1 week.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The flow of user’s real-time behavior can be calculated as real-time features, and Storm is used for the calculation.</p>
-<h5 id="V-References"><a href="#V-References" class="headerlink" title="V. References"></a>V. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户的行为模式各不相同，但大多都遵循固定的模式，反映了用户的个性化特征，即用户画像。计算不同维度的用户特征，能有效利用这些数据为用户进行个性化推荐。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户画像分为长期用户画像和实时用户画像。<br><img src="/resources/user-profile.jpg" alt="figure-user-profile"></p>
+<h5 id="三、长期用户画像"><a href="#三、长期用户画像" class="headerlink" title="三、长期用户画像"></a>三、长期用户画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长期用户画像，其数据至少都来源于几个月及以上的用户日志，即多维度用户特征，存储为离线数据表。包括性别、年龄、地理位置、商品类目兴趣、产品词偏好、品牌词偏好、扩展属性、购买力、店铺偏好、折扣偏好、孩子性别年龄。通过对用户日志整理，完成对原始SDK埋点日志的提取，获取完整的session数据，对用户画像数据粒度进行升级。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>用户的深度行为</strong>：停留时长、看评论；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>用户的主动反馈</strong>：搜索、写评论、投诉；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>用户的跨平台行为</strong>：不同设备登录的账号其实对应同一个用户，通过统一这些账号的行为，建立起一个立体的用户画像。</p>
+<h5 id="四、实时用户画像"><a href="#四、实时用户画像" class="headerlink" title="四、实时用户画像"></a>四、实时用户画像</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实时用户画像，包括实时反馈、近期行为，粒度在秒级，例如30 second, 1 hour, 6 hour, 1 day, 3 days, 1week。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户实时行为流可以作为实时特征来计算，采用storm实时计算。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The multidimensional features of users.
+      用户多维度特征。
     
     </summary>
     
@@ -426,27 +426,27 @@
   </entry>
   
   <entry>
-    <title>Accompany Plan</title>
+    <title>陪伴计划</title>
     <link href="http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/"/>
     <id>http://www.dianacody.com/2016/12/25/2016-12-25-AccompanyPlan/</id>
     <published>2016-12-24T16:00:00.000Z</published>
-    <updated>2018-12-05T06:06:58.000Z</updated>
+    <updated>2019-02-26T12:42:52.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is a new user entrance. If the user does not have a registered profile, then the interfaces of user prediction are called and the predicted users are displayed in the front-end. In that case, the user can quickly transform the predicted children data into children profile. In this way, the conversion rate of children’s profile can be improved, and the accuracy of children’s model prediction can be improved by combining online filling and off-line BI, and the range of recallable data sources can be expanded.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data Flow: User’s children profile -&gt; Mining new users -&gt; Recall predicted children by accompany plan -&gt; Update user profile -&gt;… (Loop)<br><img src="/resources/accompany-flow.jpg" alt="figure-accompany-flow"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data logic: Users who fill in high-quality potential children profile are regarded as seed users for new user prediction. By data analysis, it is found that as the growth of children, the commodities purchased by users are with obvious sequence characteristics. And the behavioral features can be extracted from the mother’s preference of commodities, categories, brand, product attributes in different time stages. It is obvious that the characteristics of commodities purchased by mother at their children’s different ages are different, so more potential users can be predicted by these characteristics.</p>
-<h5 id="III-Main-Contents"><a href="#III-Main-Contents" class="headerlink" title="III. Main Contents"></a>III. Main Contents</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is a mini recommendation system, and the upgrade development is based on the original system, including online interface and offline model.</p>
-<h6 id="3-1-Upgrade-of-Online-Interface"><a href="#3-1-Upgrade-of-Online-Interface" class="headerlink" title="3.1 Upgrade of Online Interface"></a>3.1 Upgrade of Online Interface</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It includes predicting user’s age, ranking interface of children model, and displaying of different filter according to user’s specific pattern.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Label recommendation: After the first-level labels are ranked, the second-level label are ranked logically. (The second-level label is the sub-label of the first-level label displayed). And then whether the user has a subscription tag or not is recognized. If so, display the subscription tag in chronological order and the rest in default order.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data flow: Commodity category -&gt; User account -&gt; Quality score of related category -&gt; Summary of labels.</p>
-<h6 id="3-2-Upgrade-of-Offline-User-Feature-Dimension"><a href="#3-2-Upgrade-of-Offline-User-Feature-Dimension" class="headerlink" title="3.2 Upgrade of Offline User Feature Dimension"></a>3.2 Upgrade of Offline User Feature Dimension</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The 200 third-level categories were added, and the algorithm rules were formulated according to the different extended attributes of user’s age, gender and season, and the quality scores of candidate sets were calculated as the reason for recalling and recommending commodities.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The results are with the following dimensions: three-level classification, age (school age) label, gender label, attribute label, commodity id, ranking quality score of candidate set, as shown in the table below.</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新增的一个用户入口，若用户没有注册档案，则调用预测用户接口，将预测用户展现在前端，用户可以快速将预测的孩子数据转化为孩子档案。用此方法，提升孩子档案转化率，并且可以通过线上填写和线下BI结合来提升孩子模型预测精准度、扩大数据源召回范围。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据流向：用户孩子档案 -&gt; 挖掘新用户 –&gt; 通过陪伴计划将预测的孩子作为召回 –&gt; 更新用户档案 -&gt; ……（循环）<br><img src="/resources/accompany-flow.jpg" alt="figure-accompany-flow"><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据逻辑：将用户填写的高质量潜在孩子档案作为种子用户，进行新用户预测。通过数据分析发现，用户随着孩子年龄增长，购买的商品有明显的序列特征。并可以通过挖掘母婴用户在时间轴的不同阶段对商品、品类、品牌、产品属性的不同喜好的行为特征。并且通过数据可以看出，母婴用户在不同年龄段购买的商品特征非常明显，可以考虑结合该特征预测更多潜在用户。</p>
+<h5 id="三、主要内容"><a href="#三、主要内容" class="headerlink" title="三、主要内容"></a>三、主要内容</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个小型的推荐系统，在原有基础上进行升级开发，包括线上接口升级、离线模型升级。</p>
+<h6 id="3-1-线上接口升级"><a href="#3-1-线上接口升级" class="headerlink" title="3.1 线上接口升级"></a>3.1 线上接口升级</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包括预测用户年龄、孩子模型排序接口，并按照用户特定模式进行不同过滤排序逻辑展示。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标签推荐：一级标签排序之后，再以二级标签逻辑排序（二级标签为点击一级标签之后展示的子级别标签）。判断用户是否有订阅标签，若是则优先按时间排序展示订阅标签，其余按照用户默认顺序排列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据流向：商品类目 -&gt; 用户账号 –&gt; 相关类目质量分 -&gt; 通过标签汇总。</p>
+<h6 id="3-2-离线用户特征维度升级"><a href="#3-2-离线用户特征维度升级" class="headerlink" title="3.2 离线用户特征维度升级"></a>3.2 离线用户特征维度升级</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;增加200个三级品类cid3，按照用户年龄性别季节不同扩展属性制定算法规则，计算候选集质量分，作为召回推荐商品依据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;形成每个商品会有以下维度，所在三级类、年龄（学龄）标签，性别标签、属性（tag）标签，sku id，排序质量分，如下表所示：</p>
 <table>
 <thead>
 <tr>
-<th>category</th>
-<th>age</th>
-<th>gender</th>
-<th>season</th>
-<th>attribute</th>
+<th>三级类目</th>
+<th>年龄</th>
+<th>性别</th>
+<th>季节</th>
+<th>扩展类型（学龄）</th>
 <th>sku-id</th>
-<th>rank quality score</th>
+<th>排序质量分</th>
 </tr>
 </thead>
 <tbody>
@@ -461,14 +461,14 @@
 </tr>
 </tbody>
 </table>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on the three-level categories of commodities, the discrimination degree of the goods in age, gender and season is determined to filter the data, and the sku quality score and the ranking of labels or three-level categories are determined.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data recall: According to the parameters from the front-end of the children’s age, gender and season, the corresponding products can be found and displayed in groups with the different label attributes they bind.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Online filtering: There is mainly some inventory filtering.</p>
-<h5 id="IV-Enhanced-Value"><a href="#IV-Enhanced-Value" class="headerlink" title="IV. Enhanced Value"></a>IV. Enhanced Value</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Scenarioalization of User Labels</strong>: The recall data sets of categories were expanded.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Precisionalization of commodity recommendation</strong>: refine all categories in age, gender and season, and the accuracy of commodity recommendation was improved.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Renovation of user profile</strong>: The user behaviors were transformed into user profile, so that more users are participated in the iteration of children model prediction.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By the end of the project, the application has owned one million active users, and the PV/UV value has been promoted.</p>
-<h5 id="V-References"><a href="#V-References" class="headerlink" title="V. References"></a>V. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于cid3确定品类年龄、季节、性别区分度进行数据过滤，以及sku的质量分和计算标签（或cid3）的排序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据召回：根据前端请求参数中的小孩年龄、性别、季节，找到对应年龄、性别、季节下的sku，对这些sku按其绑定的不同标签属性进行分组展示。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线过滤：主要是一些库存过滤。</p>
+<h5 id="四、提升价值"><a href="#四、提升价值" class="headerlink" title="四、提升价值"></a>四、提升价值</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>用户标签场景化</strong>：扩大召回源品类数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>商品推荐精准化</strong>：精细化各品类在年龄性别季节，提升商品推荐准确度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>用户画像档案拉新</strong>：将预测行为转化为档案数据，让更多用户参与迭代预测孩子模型。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;截止项目完成，App该入口已达成100w活跃建档用户数，PV/UV价值提升。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The mini recommendation system.
+      一个小型推荐系统。
     
     </summary>
     
@@ -488,20 +488,20 @@
   </entry>
   
   <entry>
-    <title>Personalized User Recommender System （Offline）</title>
+    <title>个性化推荐系统（离线）</title>
     <link href="http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/"/>
     <id>http://www.dianacody.com/2016/09/15/2016-09-15-RecOffline/</id>
     <published>2016-09-14T16:00:00.000Z</published>
-    <updated>2018-12-05T10:44:00.000Z</updated>
+    <updated>2019-02-26T12:56:40.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The feature learning is to recognize and use features automatically. There are many successful cases with modern deep learning in the field of feature learning, which learn the description of features automatically in the unsupervised or semi-supervised way and in compressed form. The results are used to support advanced achievements in such fields as speech recognition, image classification, object recognition and others. The abstract feature expression can be acquired automatically, but only according to this, the feature results of learning cannot be understood and utilized, i.e. they can only be used in a way of black box. At the same time, how to create features similar to those with good results becomes more difficult.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generally, the feature engineering goes through the following steps: data collection, data preprocessing, data modeling, feature design, feature selection, model evaluation, model iteration.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The model training in personalized system is mainly aimed at user’s past behavior, such as searching, browsing, click, adding cart and order. The appropriate features are selected to train model and predict user’s future behavior.</p>
-<h5 id="III-Data-Collection"><a href="#III-Data-Collection" class="headerlink" title="III. Data Collection"></a>III. Data Collection</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The user feature logs are collected by parameter server, including some records of basic features such as user behavior location, time, frequency, preference, etc. The time windows are usually multi-day and multi-month, ranging from 7 to 30 days, depending on the model requirements of different experimental recommendation positions.</p>
-<h5 id="IV-Data-Preprocessing"><a href="#IV-Data-Preprocessing" class="headerlink" title="IV. Data Preprocessing"></a>IV. Data Preprocessing</h5><h6 id="4-1-Data-Washing-and-Formatting"><a href="#4-1-Data-Washing-and-Formatting" class="headerlink" title="4.1 Data Washing and Formatting"></a>4.1 Data Washing and Formatting</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The data washing is to remove the noise in the data, such as some abnormal data, misreported data, missing data and so on. The data formatting is to organize the data into the input format needed by the model training framework and to facilitate observation.</p>
-<h6 id="4-2-Data-Sampling"><a href="#4-2-Data-Sampling" class="headerlink" title="4.2 Data Sampling"></a>4.2 Data Sampling</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;According to the event tracking, the click and order data of each recommendation position are sampled proportionally. The sampling proportion varies according to the model of the different experimental recommendation position. Generally speaking, the click, post-click order and direct order are labeled as positive samples, which are labeled as action = 0, and are subdivided into action = 1, 2, 3 and so on, while the non-click and non-browse are labeled as negative samples, which are labeled as action = 0. Meanwhile, the positive samples need different sampling strategies, for example, a part of the click samples can be used as positive samples, and another part can be used as negative samples, which depends on what strategy used in training. The sample is a tag with a series of features, and it is either labeled order or click.</p>
-<h6 id="4-3-Data-Conversion"><a href="#4-3-Data-Conversion" class="headerlink" title="4.3 Data Conversion"></a>4.3 Data Conversion</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As mentioned above.</p>
-<h5 id="V-Model-Training"><a href="#V-Model-Training" class="headerlink" title="V. Model Training"></a>V. Model Training</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The artificial feature construction and automatic training of feature extraction are both implemented.</p>
-<h6 id="5-1-Artificial-Feature-Construction"><a href="#5-1-Artificial-Feature-Construction" class="headerlink" title="5.1 Artificial Feature Construction"></a>5.1 Artificial Feature Construction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The features are mainly used as initialization features, especially for some less active users. For example, the statistics are made in time window of one week or one month, filtering user’s browsing, click, adding cart, order as features. As shown below, each dimension is cross-multiplied to get about tens of basic features.</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征学习是在原始数据中自动识别和使用特征。现代深度学习方法在特征学习领域中有很多成功的案例，比如自编码器和受限玻尔兹曼机，它们以无监督或半监督的方式实现自动地学习的特征表示，以压缩形式。其结果用于支撑例如语音识别、图像分类、物体识别和其他领域的先进成果。抽象的特征表达可以自动获取，但是仅通过这个是无法理解和利用这些学习得到的结果，只有黑盒的方式才使用这些特征。同时，如何创造和那些效果很好的特征相似或相异的特征，变得比较困难。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常情况下，特征工程都要经过以下几个步骤：收集数据、数据预处理、数据建模、特征设计、特征选择、评估模型、模型迭代。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个性化系统中的模型训练主要是针对用户之前的行为，比如搜索、浏览、点击、加购物车、下单，选择合适特征，训练模型，预测用户未来的行为。</p>
+<h5 id="三、数据收集"><a href="#三、数据收集" class="headerlink" title="三、数据收集"></a>三、数据收集</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过参数服务器parameter server收集用户特征日志feature logs，包括用户行为位置、时间、次数、频率、偏好等基本特征的记录，时间窗口一般为多天、多月，从7天到30天不等，这个要依据不同实验位置的模型需求而定。</p>
+<h5 id="四、数据预处理"><a href="#四、数据预处理" class="headerlink" title="四、数据预处理"></a>四、数据预处理</h5><h6 id="4-1-数据清洗格式化"><a href="#4-1-数据清洗格式化" class="headerlink" title="4.1 数据清洗格式化"></a>4.1 数据清洗格式化</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据清洗是为了去除数据中的噪音，比如一些异常数据、误记录数据、漏报数据等。数据格式化是为了将数据整理成模型训练框架需要的输入格式，同时也便于观测。</p>
+<h6 id="4-2-数据采样"><a href="#4-2-数据采样" class="headerlink" title="4.2 数据采样"></a>4.2 数据采样</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依据各推荐位埋点情况进行各比例的点击、订单数据采样，不同试验位置的模型，采样比例也不同。一般地，将点击、点击后订单、直接订单作为正样本，标记为action≠0，而这其中又可以细分为action=1,2,3等等，而未点击、未浏览的作为负样本，标记为action=0。同时正样本需要不同的采样策略，比如点击样本，一部分可以作为正样本，而一部分可以作为负样本，取决于训练时将采用什么样的策略。样本就是一个标记加一堆特征，一个样本要么被标记为order，要么被标记为click。</p>
+<h6 id="4-3-数据转换"><a href="#4-3-数据转换" class="headerlink" title="4.3 数据转换"></a>4.3 数据转换</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上文已述。</p>
+<h5 id="五、模型训练"><a href="#五、模型训练" class="headerlink" title="五、模型训练"></a>五、模型训练</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用人工特征和自动训练提取特征相结合的方法。</p>
+<h6 id="5-1-人工特征"><a href="#5-1-人工特征" class="headerlink" title="5.1 人工特征"></a>5.1 人工特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用作初始化特征，特别针对某些行为不多的欠活跃用户。比如统计时间窗口为一周或一个月用户的浏览、点击、加购物车、订单情况作为特征。如下所示，每个维度相乘得到大约几十维基本特征。</p>
 <table>
 <thead>
 <tr>
@@ -622,8 +622,8 @@
 </tr>
 </tbody>
 </table>
-<h6 id="5-2-Automatic-Training-of-Feature-Extraction"><a href="#5-2-Automatic-Training-of-Feature-Extraction" class="headerlink" title="5.2 Automatic Training of Feature Extraction"></a>5.2 Automatic Training of Feature Extraction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the samples of highly active users, there are many features. The models are trained by Xgboost and TensorFlow directly to extract features automatically.</p>
-<h5 id="VI-Model-Evaluation"><a href="#VI-Model-Evaluation" class="headerlink" title="VI. Model Evaluation"></a>VI. Model Evaluation</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Feature Importance;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hit rate of prediction (click@4/20, order@4/20);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Online evaluating indicators (CTR/CVR);<br>An example is given below to illustrate the comparison of different models:</p>
+<h6 id="5-2-自动提取特征"><a href="#5-2-自动提取特征" class="headerlink" title="5.2 自动提取特征"></a>5.2 自动提取特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于活跃度较高的用户样本，特征也比较多，直接采用训练框架Xgboost/TensorFlow训练模型，自动提取特征。</p>
+<h5 id="六、模型评估"><a href="#六、模型评估" class="headerlink" title="六、模型评估"></a>六、模型评估</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;特征重要性(featureImportance)；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预测命中率(click@4/20, order@4/20)；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型上线评估(CTR/CVR)；<br>下面给出示例表示不同模型的对比：</p>
 <table>
 <thead>
 <tr>
@@ -662,13 +662,13 @@
 </tr>
 </tbody>
 </table>
-<h5 id="VII-Model-Iteration"><a href="#VII-Model-Iteration" class="headerlink" title="VII. Model Iteration"></a>VII. Model Iteration</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To adjust model iteratively, the model adjustment strategies of different experiment positions are also different. From the comparison among these above examples, it can be found that:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) The offline indicators can be improved by increasing the number of training sets.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) By adjusting the sampling proportion, the noise can be reduced, and it is better to sampling rigorously. The premise is that the training data sample is large enough.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) Weight settings, it is setting of training positive and negative samples. The weight should be adjusted to overall positive correlation with each action proportion in the samples, rather than simply increase or decrease the weight of click and order, and it should be in accordance with the sample proportion.</p>
-<h5 id="VIII-References"><a href="#VIII-References" class="headerlink" title="VIII. References"></a>VIII. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+<h5 id="七、模型迭代"><a href="#七、模型迭代" class="headerlink" title="七、模型迭代"></a>七、模型迭代</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;迭代调整模型，不同试验位置的模型调整策略也不一样。同时从上面的示例相互之间的比较可以看出：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 增加训练集数量，离线指标有提升；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 调整抽样比例，相对来说，抽样严格点比较好，可以减小噪声。前提是训练数据样本足够大；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) 权重设置：训练的正负样本权重设置，权重比例应调整为大致和样本中各个action占比正相关，并非绝对地增大/减小 ord/clk权重，符合样本比例即可。</p>
+<h5 id="八、参考文献"><a href="#八、参考文献" class="headerlink" title="八、参考文献"></a>八、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The offline feature engineering and recommendation algorithms of personalized user recommender system.
+      离线特征工程和个性化推荐系统的离线推荐算法逻辑。
     
     </summary>
     
@@ -688,28 +688,28 @@
   </entry>
   
   <entry>
-    <title>Personalized User Recommender System （Online）</title>
+    <title>个性化推荐系统（在线）</title>
     <link href="http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/"/>
     <id>http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/</id>
     <published>2016-07-28T16:00:00.000Z</published>
-    <updated>2018-12-05T07:27:44.000Z</updated>
+    <updated>2019-02-26T12:59:35.000Z</updated>
     
-    <content type="html"><![CDATA[<h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Personalized user behavior and cold starting data models are got to build different scoring strategies online, and the same as offline. With these strategies, specific data are selected from the offline recallable data source, and are filtered and ranked as results for the online recommendation. AB-Testing experiments are observed online.</p>
-<h5 id="III-Schemes"><a href="#III-Schemes" class="headerlink" title="III. Schemes"></a>III. Schemes</h5><p>The process structure is as follows.<br><img src="/resources/rec-online.jpg" alt="figure-rec-online"></p>
-<h6 id="3-1-Parameters-Parsing"><a href="#3-1-Parameters-Parsing" class="headerlink" title="3.1 Parameters Parsing"></a>3.1 Parameters Parsing</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It includes the parsing parameters in configuration files, such as user account, user configuration, and experimental configuration.</p>
-<h6 id="3-2-User-Model-Extraction"><a href="#3-2-User-Model-Extraction" class="headerlink" title="3.2 User Model Extraction"></a>3.2 User Model Extraction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The models are obtained from various user behavior model services, such as real-time behavior model, long-term models as user profile, and some models trained by offline features.</p>
-<h6 id="3-3-Data-Recall"><a href="#3-3-Data-Recall" class="headerlink" title="3.3 Data Recall"></a>3.3 Data Recall</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The following steps are independent of each other and do not interfere with each other, so they can run in parallel.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on collaborative filtering, the nearest result sets of similar users and similar commodities are gained, and then data is filtered by rules to get the candidate set lists.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on cold start data, candidate sets are read from user profile and commodity profile, and then data is filtered by rules to get candidate set lists.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on the recall results of the specific algorithm (omitted here), the data is read from the database and filtered by rules to get candidate set lists.</p>
-<h6 id="3-4-Data-Fusion-and-Ranking"><a href="#3-4-Data-Fusion-and-Ranking" class="headerlink" title="3.4 Data Fusion and Ranking"></a>3.4 Data Fusion and Ranking</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The multi-model fusion is done, and the score weights are calculated, then the data are ranked according to the scores of different sets.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The quality score can also be gained by offline machine learning, and machine learning can also be used for online feature calculation.</p>
-<h6 id="3-5-Data-Filtering"><a href="#3-5-Data-Filtering" class="headerlink" title="3.5 Data Filtering"></a>3.5 Data Filtering</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ranked sets are filtered according to specific rules.</p>
-<h6 id="3-6-Data-Alternation"><a href="#3-6-Data-Alternation" class="headerlink" title="3.6 Data Alternation"></a>3.6 Data Alternation</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;According to different bucket-dividing strategies, the alternation of category, brand word and product word is carried out to ensure the diversity of the results.</p>
-<h6 id="3-7-Results-Display"><a href="#3-7-Results-Display" class="headerlink" title="3.7 Results Display"></a>3.7 Results Display</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The results are gained and displayed.</p>
-<h5 id="IV-References"><a href="#IV-References" class="headerlink" title="IV. References"></a>IV. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+    <content type="html"><![CDATA[<h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取个性化用户行为、冷启动数据模型，依据不同算法打分策略（线上+离线打分），从离线召回源选择合适数据，过滤排序召回集，作为线上推荐结果，上线AB-Test，观测实验数据bucket。</p>
+<h5 id="三、线上逻辑方案"><a href="#三、线上逻辑方案" class="headerlink" title="三、线上逻辑方案"></a>三、线上逻辑方案</h5><p>流程结构大致如下所示：<br><img src="/resources/rec-online.jpg" alt="figure-rec-online"></p>
+<h6 id="3-1-参数配置解析"><a href="#3-1-参数配置解析" class="headerlink" title="3.1 参数配置解析"></a>3.1 参数配置解析</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包括配置文件参数解析，例如用户账号、用户配置文件、实验配置参数解析。</p>
+<h6 id="3-2-用户模型提取"><a href="#3-2-用户模型提取" class="headerlink" title="3.2 用户模型提取"></a>3.2 用户模型提取</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从各个用户行为模型服务中获取模型，比如实时行为模型、长期模型例如用户画像等等，此外还有一些离线特征训练的模型。</p>
+<h6 id="3-3-数据召回"><a href="#3-3-数据召回" class="headerlink" title="3.3 数据召回"></a>3.3 数据召回</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以下各个步骤都是相互独立而互不干扰，因此可以并行运行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于协同过滤，获取相似用户、相似商品的最近结果集，然后进行规则过滤，得到候选集数据列表；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于冷启动数据，从用户画像和商品画像中读取候选集，然后进行规则过滤，得到候选集数据列表；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于特定算法（此处略）的召回结果，从数据库读取，然后进行规则过滤，得到候选集数据列表。</p>
+<h6 id="3-4-数据融合与排序"><a href="#3-4-数据融合与排序" class="headerlink" title="3.4 数据融合与排序"></a>3.4 数据融合与排序</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多模型融合，然后进行加权打分，然后根据不同集合的分数进行排序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加权质量分也可以通过机器学习的方式进行离线特征获取，同时机器学习可以参与在线特征计算。</p>
+<h6 id="3-5-数据过滤"><a href="#3-5-数据过滤" class="headerlink" title="3.5 数据过滤"></a>3.5 数据过滤</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依据一些规则对排序后的集合进行过滤。</p>
+<h6 id="3-6-数据穿插"><a href="#3-6-数据穿插" class="headerlink" title="3.6 数据穿插"></a>3.6 数据穿插</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依照不同分桶策略，进行类目穿插、品牌词穿插、产品词穿插等等，保证结果展示的多样性。</p>
+<h6 id="3-7-结果展示"><a href="#3-7-结果展示" class="headerlink" title="3.7 结果展示"></a>3.7 结果展示</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取结果进行展示。</p>
+<h5 id="四、参考文献"><a href="#四、参考文献" class="headerlink" title="四、参考文献"></a>四、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 ]]></content>
     
     <summary type="html">
     
-      The online recommendation algorithms of personalized user recommender system.
+      个性化推荐系统的离线推荐算法逻辑。
     
     </summary>
     

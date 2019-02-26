@@ -89,17 +89,17 @@
 
 
 
-<meta name="description" content="The online recommendation algorithms of personalized user recommender system.">
+<meta name="description" content="个性化推荐系统的离线推荐算法逻辑。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Personalized User Recommender System （Online）">
+<meta property="og:title" content="个性化推荐系统（在线）">
 <meta property="og:url" content="http://www.dianacody.com/2016/07/29/2016-07-29-RecOnline/index.html">
 <meta property="og:site_name" content="DianaCody">
-<meta property="og:description" content="The online recommendation algorithms of personalized user recommender system.">
+<meta property="og:description" content="个性化推荐系统的离线推荐算法逻辑。">
 <meta property="og:image" content="http://www.dianacody.com/resources/rec-online.jpg">
-<meta property="og:updated_time" content="2018-12-05T07:27:44.000Z">
+<meta property="og:updated_time" content="2019-02-26T12:59:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Personalized User Recommender System （Online）">
-<meta name="twitter:description" content="The online recommendation algorithms of personalized user recommender system.">
+<meta name="twitter:title" content="个性化推荐系统（在线）">
+<meta name="twitter:description" content="个性化推荐系统的离线推荐算法逻辑。">
 <meta name="twitter:image" content="http://www.dianacody.com/resources/rec-online.jpg">
 
 
@@ -134,7 +134,7 @@
 
 
 
-  <title> Personalized User Recommender System （Online） | DianaCody </title>
+  <title> 个性化推荐系统（在线） | DianaCody </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -326,7 +326,7 @@
             
             
               
-                Personalized User Recommender System （Online）
+                个性化推荐系统（在线）
               
             
           </h1>
@@ -388,7 +388,7 @@
 
           
               <div class="post-description">
-                  The online recommendation algorithms of personalized user recommender system.
+                  个性化推荐系统的离线推荐算法逻辑。
               </div>
           
 
@@ -403,17 +403,17 @@
       
 
       
-        <h5 id="I-Project-Source-Code"><a href="#I-Project-Source-Code" class="headerlink" title="I. Project Source Code"></a>I. Project Source Code</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Project source code URL: (This project is not open source at present.)</p>
-<h5 id="II-Introduction"><a href="#II-Introduction" class="headerlink" title="II. Introduction"></a>II. Introduction</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Personalized user behavior and cold starting data models are got to build different scoring strategies online, and the same as offline. With these strategies, specific data are selected from the offline recallable data source, and are filtered and ranked as results for the online recommendation. AB-Testing experiments are observed online.</p>
-<h5 id="III-Schemes"><a href="#III-Schemes" class="headerlink" title="III. Schemes"></a>III. Schemes</h5><p>The process structure is as follows.<br><img src="/resources/rec-online.jpg" alt="figure-rec-online"></p>
-<h6 id="3-1-Parameters-Parsing"><a href="#3-1-Parameters-Parsing" class="headerlink" title="3.1 Parameters Parsing"></a>3.1 Parameters Parsing</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It includes the parsing parameters in configuration files, such as user account, user configuration, and experimental configuration.</p>
-<h6 id="3-2-User-Model-Extraction"><a href="#3-2-User-Model-Extraction" class="headerlink" title="3.2 User Model Extraction"></a>3.2 User Model Extraction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The models are obtained from various user behavior model services, such as real-time behavior model, long-term models as user profile, and some models trained by offline features.</p>
-<h6 id="3-3-Data-Recall"><a href="#3-3-Data-Recall" class="headerlink" title="3.3 Data Recall"></a>3.3 Data Recall</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The following steps are independent of each other and do not interfere with each other, so they can run in parallel.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on collaborative filtering, the nearest result sets of similar users and similar commodities are gained, and then data is filtered by rules to get the candidate set lists.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on cold start data, candidate sets are read from user profile and commodity profile, and then data is filtered by rules to get candidate set lists.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on the recall results of the specific algorithm (omitted here), the data is read from the database and filtered by rules to get candidate set lists.</p>
-<h6 id="3-4-Data-Fusion-and-Ranking"><a href="#3-4-Data-Fusion-and-Ranking" class="headerlink" title="3.4 Data Fusion and Ranking"></a>3.4 Data Fusion and Ranking</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The multi-model fusion is done, and the score weights are calculated, then the data are ranked according to the scores of different sets.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The quality score can also be gained by offline machine learning, and machine learning can also be used for online feature calculation.</p>
-<h6 id="3-5-Data-Filtering"><a href="#3-5-Data-Filtering" class="headerlink" title="3.5 Data Filtering"></a>3.5 Data Filtering</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ranked sets are filtered according to specific rules.</p>
-<h6 id="3-6-Data-Alternation"><a href="#3-6-Data-Alternation" class="headerlink" title="3.6 Data Alternation"></a>3.6 Data Alternation</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;According to different bucket-dividing strategies, the alternation of category, brand word and product word is carried out to ensure the diversity of the results.</p>
-<h6 id="3-7-Results-Display"><a href="#3-7-Results-Display" class="headerlink" title="3.7 Results Display"></a>3.7 Results Display</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The results are gained and displayed.</p>
-<h5 id="IV-References"><a href="#IV-References" class="headerlink" title="IV. References"></a>IV. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
+        <h5 id="一、项目源码"><a href="#一、项目源码" class="headerlink" title="一、项目源码"></a>一、项目源码</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目源码地址：（此项目暂不开放源码）</p>
+<h5 id="二、简介"><a href="#二、简介" class="headerlink" title="二、简介"></a>二、简介</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取个性化用户行为、冷启动数据模型，依据不同算法打分策略（线上+离线打分），从离线召回源选择合适数据，过滤排序召回集，作为线上推荐结果，上线AB-Test，观测实验数据bucket。</p>
+<h5 id="三、线上逻辑方案"><a href="#三、线上逻辑方案" class="headerlink" title="三、线上逻辑方案"></a>三、线上逻辑方案</h5><p>流程结构大致如下所示：<br><img src="/resources/rec-online.jpg" alt="figure-rec-online"></p>
+<h6 id="3-1-参数配置解析"><a href="#3-1-参数配置解析" class="headerlink" title="3.1 参数配置解析"></a>3.1 参数配置解析</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;包括配置文件参数解析，例如用户账号、用户配置文件、实验配置参数解析。</p>
+<h6 id="3-2-用户模型提取"><a href="#3-2-用户模型提取" class="headerlink" title="3.2 用户模型提取"></a>3.2 用户模型提取</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从各个用户行为模型服务中获取模型，比如实时行为模型、长期模型例如用户画像等等，此外还有一些离线特征训练的模型。</p>
+<h6 id="3-3-数据召回"><a href="#3-3-数据召回" class="headerlink" title="3.3 数据召回"></a>3.3 数据召回</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以下各个步骤都是相互独立而互不干扰，因此可以并行运行。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于协同过滤，获取相似用户、相似商品的最近结果集，然后进行规则过滤，得到候选集数据列表；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于冷启动数据，从用户画像和商品画像中读取候选集，然后进行规则过滤，得到候选集数据列表；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于特定算法（此处略）的召回结果，从数据库读取，然后进行规则过滤，得到候选集数据列表。</p>
+<h6 id="3-4-数据融合与排序"><a href="#3-4-数据融合与排序" class="headerlink" title="3.4 数据融合与排序"></a>3.4 数据融合与排序</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多模型融合，然后进行加权打分，然后根据不同集合的分数进行排序。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加权质量分也可以通过机器学习的方式进行离线特征获取，同时机器学习可以参与在线特征计算。</p>
+<h6 id="3-5-数据过滤"><a href="#3-5-数据过滤" class="headerlink" title="3.5 数据过滤"></a>3.5 数据过滤</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依据一些规则对排序后的集合进行过滤。</p>
+<h6 id="3-6-数据穿插"><a href="#3-6-数据穿插" class="headerlink" title="3.6 数据穿插"></a>3.6 数据穿插</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;依照不同分桶策略，进行类目穿插、品牌词穿插、产品词穿插等等，保证结果展示的多样性。</p>
+<h6 id="3-7-结果展示"><a href="#3-7-结果展示" class="headerlink" title="3.7 结果展示"></a>3.7 结果展示</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;获取结果进行展示。</p>
+<h5 id="四、参考文献"><a href="#四、参考文献" class="headerlink" title="四、参考文献"></a>四、参考文献</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
       
     </div>
@@ -470,8 +470,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/15/2016-09-15-RecOffline/" rel="prev" title="Personalized User Recommender System （Offline）">
-                Personalized User Recommender System （Offline） <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/15/2016-09-15-RecOffline/" rel="prev" title="个性化推荐系统（离线）">
+                个性化推荐系统（离线） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -653,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#I-Project-Source-Code"><span class="nav-number">1.</span> <span class="nav-text">I. Project Source Code</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#II-Introduction"><span class="nav-number">2.</span> <span class="nav-text">II. Introduction</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#III-Schemes"><span class="nav-number">3.</span> <span class="nav-text">III. Schemes</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-Parameters-Parsing"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Parameters Parsing</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-User-Model-Extraction"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 User Model Extraction</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-Data-Recall"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Data Recall</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-4-Data-Fusion-and-Ranking"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 Data Fusion and Ranking</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-5-Data-Filtering"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 Data Filtering</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-6-Data-Alternation"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 Data Alternation</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-7-Results-Display"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 Results Display</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IV-References"><span class="nav-number">4.</span> <span class="nav-text">IV. References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、项目源码"><span class="nav-number">1.</span> <span class="nav-text">一、项目源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、简介"><span class="nav-number">2.</span> <span class="nav-text">二、简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、线上逻辑方案"><span class="nav-number">3.</span> <span class="nav-text">三、线上逻辑方案</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-参数配置解析"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 参数配置解析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-用户模型提取"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 用户模型提取</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-数据召回"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 数据召回</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-4-数据融合与排序"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 数据融合与排序</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-5-数据过滤"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 数据过滤</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-6-数据穿插"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 数据穿插</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-7-结果展示"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 结果展示</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、参考文献"><span class="nav-number">4.</span> <span class="nav-text">四、参考文献</span></a></li></ol></div>
             
 
           </div>
@@ -676,7 +676,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
