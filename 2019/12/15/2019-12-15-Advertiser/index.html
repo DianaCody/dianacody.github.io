@@ -1,0 +1,1093 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Computational advertising,Multiobjective optimization,Operations research,Convex optimization," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DianaCody" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="对于一般的营销广告系统来说，主要目标是吸引用户、合理出价促成用户转化。广告是否合理精准投放，直接决定了用户、广告主、平台三方能否平衡获利。广告定价的业务指标是寻求投入产出比(ROI)、实收(GMV)、转化率(CVR)这三个优化指标的平衡。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="营销广告定价平台应用实践">
+<meta property="og:url" content="http://www.dianacody.com/2019/12/15/2019-12-15-Advertiser/index.html">
+<meta property="og:site_name" content="DianaCody">
+<meta property="og:description" content="对于一般的营销广告系统来说，主要目标是吸引用户、合理出价促成用户转化。广告是否合理精准投放，直接决定了用户、广告主、平台三方能否平衡获利。广告定价的业务指标是寻求投入产出比(ROI)、实收(GMV)、转化率(CVR)这三个优化指标的平衡。">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-multiobjective-optimization.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-architecture.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-user-score.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-purchase.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-discount-sensitivity.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-user-convert.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-server.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/ad-axis.jpg">
+<meta property="og:updated_time" content="2019-12-28T11:43:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="营销广告定价平台应用实践">
+<meta name="twitter:description" content="对于一般的营销广告系统来说，主要目标是吸引用户、合理出价促成用户转化。广告是否合理精准投放，直接决定了用户、广告主、平台三方能否平衡获利。广告定价的业务指标是寻求投入产出比(ROI)、实收(GMV)、转化率(CVR)这三个优化指标的平衡。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/ad-multiobjective-optimization.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'DianaCody'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.dianacody.com/2019/12/15/2019-12-15-Advertiser/"/>
+
+
+
+
+
+  <title> 营销广告定价平台应用实践 | DianaCody </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?401273a24c3ce73d59b8b4083481a0be";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DianaCody</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">subtitle,subtitle,subtitle</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2019/12/15/2019-12-15-Advertiser/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                营销广告定价平台应用实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-15T00:00:00+08:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Computational-Advertising/" itemprop="url" rel="index">
+                    <span itemprop="name">Computational Advertising</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对于一般的营销广告系统来说，主要目标是吸引用户、合理出价促成用户转化。广告是否合理精准投放，直接决定了用户、广告主、平台三方能否平衡获利。广告定价的业务指标是寻求投入产出比(ROI)、实收(GMV)、转化率(CVR)这三个优化指标的平衡。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="I-引言"><a href="#I-引言" class="headerlink" title="I. 引言"></a>I. 引言</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一般的营销广告系统来说，主要目标是吸引用户、合理出价促成用户转化。广告是否合理精准投放，直接决定了用户、广告主、平台三方能否平衡获利。广告定价的业务指标是寻求投入产出比（ROI）、实收（GMV）、转化率（CVR）这三个优化指标的平衡，我们团队在营销广告这个领域，从工程和算法这两个方面持续进行优化，目前取得了一些效果。</p>
+<center><h4><b>工程篇</b></h4></center>
+
+<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><h6 id="1-业务目标"><a href="#1-业务目标" class="headerlink" title="1.业务目标"></a>1.业务目标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;寻求投入产出比（ROI）、实收（GMV）、转化率（CVR）这三个优化指标的平稳提升，其三者呈不完全线性相关。我们可以控制的是：广告门槛（Advertise Threshold）、广告出价成本（Advertise Amount）这两个变量。优化的实质就是满足这些目标约束条件下，找到最大化的广告门槛和最小化的出价成本。</p>
+<p><div align="center"><img src="/resources/ad-multiobjective-optimization.jpg" alt="figure-ad-multiobjective-optimization"></div></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于多目标优化问题，应将其转化为单目标优化，我们把多目标拆分为单目标，但需要注意每个目标内指标均为正相关。优化这些单个目标的同时，不能牺牲其他指标来实现，其他指标必须是基本持平、甚至提升。</p>
+<h6 id="2-系统架构"><a href="#2-系统架构" class="headerlink" title="2.系统架构"></a>2.系统架构</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整体系统架构如下，纵向来看，分为接口层、业务策略层、算法模型层、监控体系层、数据指标层，其中实时和定时调度、日志记录贯穿整个体系，以及底层的基础平台设施。</p>
+<p><div align="center"><img src="/resources/ad-architecture.jpg" alt="figure-ad-architecture"></div></p>
+<h5 id="二、实现"><a href="#二、实现" class="headerlink" title="二、实现"></a>二、实现</h5><h6 id="1-接口层"><a href="#1-接口层" class="headerlink" title="1.接口层"></a>1.接口层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于直接触达用户的方式，目前的有广告定价平台暂时为三种：智能权益投放、push通知推送、短信推送。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一种是为了保证已经在app上留存的用户的转化率，重点优化转化率CVR，分为定时和实时投放两种方式。</p>
+<ul>
+<li>定时权益投放：需要事先建立投放策略模板，按照用户不同活跃时间段定时投放。</li>
+<li>实时权益投放：根据用户当前客单价在线计算预估广告出价。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二三种是为了引流，吸引用户到广告平台上来，重点优化点击率CTR，通过对接第三方厂商的消息推送SDK接口，实现app通知推送和短消息推送。</p>
+<ul>
+<li>智能文案：这里我们事先配置好投放文案模板，根据用户历史行为、热销商品等召回不同的商品和价格，填充到文案模板中，这样可以做到个性化文案精准匹配用户。</li>
+<li>时段投放 &amp; 频率控制：主要是用户疲劳度控制，计算用户活跃度，一天中不同时段给用户进行消息推送，尽可能多地促成打开率和点击率提升。比如中午和晚上用户使用手机比较活跃的时段，同时也会结合用户历史点击率，调整发送同时的条数、内容；周末、节假日用户使用手机频率较平时上升，也会在这个时间段集中对用户进行推送。</li>
+</ul>
+<h6 id="2-业务策略层"><a href="#2-业务策略层" class="headerlink" title="2.业务策略层"></a>2.业务策略层</h6><h6 id="2-1-用户分层-amp-人群圈选"><a href="#2-1-用户分层-amp-人群圈选" class="headerlink" title="2.1.用户分层 &amp; 人群圈选"></a>2.1.用户分层 &amp; 人群圈选</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电商营销的核心是获客吸引、用户点击、用户转化、用户留存，对不同用户我们按照价值维度进行用户分层，按标签圈选人群，将广告投放给相应广告定价的目标人群。借鉴电商运营中的RFM用户价值分层体系，用户按照不同维度进行分层打分，例如历史转化率、活跃度、购买力、权益敏感度，综合评判打分决定了广告定价。</p>
+<p><div align="center"><img src="/resources/ad-user-score.jpg" alt="figure-ad-user-score"></div></p>
+<ul>
+<li>历史转化率：对于偏向高转化率等优质用户，由于用户黏性本身较高，所以广告出价应该在保证这部分用户同时尽量降低出价成本、提升GMV；相反地对于偏向低转化率用户，应该适当用策略促其转化。</li>
+<li>活跃度：对于偏向高活跃等优质用户，广告出价应该在这部分人群身上降低出价成本、提升GMV；对于中间段用户，我们细分了其活跃时段，分早间、中午、晚间分别对用户进行不同广告推送，最大化总体转化率；相反地对于低活跃度用户，应该适当用策略促其转化。</li>
+<li>购买力：高购买力用户，可以适当提升广告出价以提升GMV， 重点是对于中间部分用户，优化目标是合理预估广告出价，在最小化出价成本的同时，尽量逼近其用户历史真实成交价格，降低广告成本、促其转化。</li>
+<li>权益敏感度：对于敏感度不是很高的用户，尽量提升广告出价门槛，降低广告成本，其余则相反。但是要保证整体用户的广告成本下降，广告实收提升。</li>
+</ul>
+<h6 id="2-2-定价策略"><a href="#2-2-定价策略" class="headerlink" title="2.2.定价策略"></a>2.2.定价策略</h6><h6 id="2-2-1-基本计算方法"><a href="#2-2-1-基本计算方法" class="headerlink" title="2.2.1.基本计算方法"></a>2.2.1.基本计算方法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在定价策略方面，用户不同价值维度的分级评分，综合相加，决定了广告的基准出价。<br>定义用户总评分$(Threshold\;Coefficient)$：</p>
+<script type="math/tex; mode=display">threshold\_coefficient\_score = \sum_{i=1}^n score_i</script><p>可得归一化分数$(Normalization\;Threshold\;Coefficient\;Score)$：</p>
+<script type="math/tex; mode=display">normalization\_threshold\_coefficient\_score = \frac{score_i-\min(threshold\_coefficient\_score)}{\max(threshold\_coefficient\_score)-\min(threshold\_coefficient\_score)}</script><p>定义预估广告定价门槛$(Price\;Threshold)$如下：</p>
+<script type="math/tex; mode=display">price\_threshold = avg\_per\_order\_fee \times (1-threshold\_coefficient)</script><p>其中，avg_per_order_fee为用户平均订单金额，threshold_coefficient为门槛系数。<br>定义预估定价成本 ($ Price\;Amount $) 如下，其中feeRate为基准费率：</p>
+<script type="math/tex; mode=display">price\_amount = price\_threshold \times fee\_rate \times amount\_coefficient</script><p>该预估模型计算出的广告出价门槛、广告出价成本，存放在离线数据库中。</p>
+<h6 id="2-2-2-频率控制"><a href="#2-2-2-频率控制" class="headerlink" title="2.2.2.频率控制"></a>2.2.2.频率控制</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对广告投放频率进行控制，这个主要区分在定时和实时策略上，在定时策略中，周中和周末、上午下午和晚上时段，按照用户疲劳度控制都会有调节。</p>
+<h6 id="2-2-3-兜底策略"><a href="#2-2-3-兜底策略" class="headerlink" title="2.2.3.兜底策略"></a>2.2.3.兜底策略</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于一些新人用户，类似于推荐系统中的冷启动策略，会给出一些兜底的定价。同时，对于华北、华东、华中、华南等不同地区，我们进行了人群分析，发现不同地区的用户在购买力和折扣敏感度上的差异，会细分调整系数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如华南和华北的对比差异如下，我们看到华南大区的购买力稍高，且整体的折扣敏感度较高。所以对比华北大区，在华南大区的广告的兜底基准定价就会下调价格门槛，同时增加出价成本，促使不同分层用户进行转化。</p>
+<p><div align="center"><img src="/resources/ad-purchase.jpg" alt="figure-ad-purchase"></div></p>
+<p><div align="center"><img src="/resources/ad-discount-sensitivity.jpg" alt="figure-ad-discount-sensitivity"></div></p>
+<h6 id="2-2-4-费率限制"><a href="#2-2-4-费率限制" class="headerlink" title="2.2.4. 费率限制"></a>2.2.4. 费率限制</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了使整体ROI得到保证，我们为广告定价的费率做了范围限制，在基准费率的基础之上，实际投放给用户的广告费率会在上下浮动一定百分比，但百分比会被限制在一定阈值范围之内，防止有部分用户的薅羊毛情况，同时也需要保证新人用户的权益优惠力度。</p>
+<h6 id="2-2-5-费率调节-amp-步长调节"><a href="#2-2-5-费率调节-amp-步长调节" class="headerlink" title="2.2.5. 费率调节 &amp; 步长调节"></a>2.2.5. 费率调节 &amp; 步长调节</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于不同分层用户，我们做到了动态费率，在保证实收GMV和转化CVR的基础之上，尽可能地降低费率，从而降低补贴率，提升整体的ROI。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同时，对于每个广告的预估定价，由于步长过大导致精度不够高，在策略后期，我们将步长调整到更精细的粒度。</p>
+<h6 id="2-3-转化漏斗"><a href="#2-3-转化漏斗" class="headerlink" title="2.3.转化漏斗"></a>2.3.转化漏斗</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于广告出价方面，我们进行了线上小流量迭代多组实验，在之前的实验结论基础上，我们对用户转化漏斗进行分析。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户转化流程：</p>
+<p><div align="center"><img src="/resources/ad-user-convert.jpg" alt="figure-ad-user-convert"></div></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过分析转化漏斗发现，各个环节的人群占比直接关系到广告预估出价。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从下单转化到用券转化，在之前小流量实验中，有将近60%~70%的用户，其最终用券转化的客单价和广告预估出价差距在真实阈值 $\alpha$ 范围之内，可以认为这部分用户预估是精准的，但仍旧有相当一部分用户（约30%）尚未达到预估门槛而未发生转化、少部分约10%用户达到预估门槛但未发生转化。对于前一种用户，优化方向采取用折扣后客单价替代总的客单价，从而更准确地预估定价门槛；对于后一种用户，只能从其平时消费行为习惯分析着手，但这部分用户基本上也很难再发生转化。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从点击转化到下单转化，这个环节有大量用户流失，也就是说，在来访率一定的情况下，下单率偏低，这个跟app的产品设计、用户的购物路径习惯有关。一般地，这些跟app内一些推荐位、广告位的曝光有关，而且若采用一般的点击、加车、购买加权置顶方式，还是很容易出现马太效应，所以策略上我们做了改进，同时考虑了广告展位的穿插展示多样性，在下单率方面有一定提升。</p>
+<h6 id="3-算法模型层"><a href="#3-算法模型层" class="headerlink" title="3.算法模型层"></a>3.算法模型层</h6><h6 id="3-1-离线模型"><a href="#3-1-离线模型" class="headerlink" title="3.1.离线模型"></a>3.1.离线模型</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在离线模型中，我们采用了分层打分模型、线性逼近模型、多分类模型等。</p>
+<ul>
+<li><strong>分层打分模型</strong>：如前所述，按照用户各个不同维度价值体系进行分层打分，最终得到综合评分，直接决定广告定价门槛系数、广告定价成本系数、费率系数。从而计算出广告定价门槛、广告定价成本。</li>
+<li><strong>线性逼近模型</strong>：通过拉取用户近期90天的购买行为，按照时间序列预估用户在下一单的成交成本，对于需要不同转化的用户设定不同的广告定价门槛，达到整体GMV/客单价的提升。</li>
+<li><p><strong>多分类模型</strong>：主要指未下单、下单未用券、下单且用券来给用户分类，离线预估其CVR，然后从召回候选集列表的topN个广告中，选择门槛最大、定价成本最低的广告进行投放，以保证最大化ROI。</p>
+<h6 id="3-2-在线模型"><a href="#3-2-在线模型" class="headerlink" title="3.2.在线模型"></a>3.2.在线模型</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个主要是在线多特征动态预估，在线预估的定价反过来会定期更新离线模型。</p>
+<h6 id="3-3-在线预估框架"><a href="#3-3-在线预估框架" class="headerlink" title="3.3.在线预估框架"></a>3.3.在线预估框架</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;智能广告定价算法引擎 Ad-Server，其框架图如下：<br><div align="center"><img src="/resources/ad-server.jpg" alt="figure-ad-server"></div></p>
+</li>
+<li><p><strong>召回阶段</strong>：在多路并发召回中，会召回不同的候选广告列表，比如按照用户最大客单价进行的预估定价、按照用户历史最低折扣价进行的预估定价、按照用户真实折扣后客单进行的预估定价……除了某些单一场景，还会增加不同场景下的预估召回结果。</p>
+</li>
+<li><strong>结果汇总</strong>：把不同召回源结果汇总。</li>
+<li><strong>过滤调整</strong>：费率浮动限制、动态费率调整、步长调整等。</li>
+<li><strong>结果排序</strong>：当有多个广告定价时，优先级高的应该按照什么策略出价等。</li>
+<li><strong>结果封装</strong>：结果触达用户投放展示。</li>
+</ul>
+<h6 id="4-监控体系层"><a href="#4-监控体系层" class="headerlink" title="4.监控体系层"></a>4.监控体系层</h6><h6 id="4-1-离线数据监控"><a href="#4-1-离线数据监控" class="headerlink" title="4.1.离线数据监控"></a>4.1.离线数据监控</h6><ul>
+<li><strong>生产任务监控</strong>：任务失败、任务运行超时监控、任务占用资源量。</li>
+<li><strong>数据量监控</strong>：离线数据特征是否稳定。</li>
+<li><strong>导数任务监控</strong>：写入数据量、数据写入速度。</li>
+</ul>
+<h6 id="4-2-在线性能监控"><a href="#4-2-在线性能监控" class="headerlink" title="4.2.在线性能监控"></a>4.2.在线性能监控</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对接Monitor监控平台，这里主要观测的是系统性能指标：如TPS/QPS、响应时间RT、系统并发数、平均请求PV、TP99/TP999等。</p>
+<h6 id="4-3-业务指标监控"><a href="#4-3-业务指标监控" class="headerlink" title="4.3.业务指标监控"></a>4.3.业务指标监控</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于广告定价，还特别地对业务指标进行分钟级监控，以能做到实时响应。主要包括：</p>
+<ul>
+<li>发送率、匹配率、成功率；</li>
+<li>定价的上限率、下限率、范围比率；</li>
+<li>召回数、召回时间；</li>
+<li>来访率、使用率/转化率、实收/毛利率、客单价/笔单价、ROI/补贴率；</li>
+</ul>
+<h6 id="5-数据指标层"><a href="#5-数据指标层" class="headerlink" title="5.数据指标层"></a>5.数据指标层</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们进行了多版实验迭代，主要针对以下数据指标进行统计：</p>
+<ul>
+<li><strong>定价成本指标</strong>：主要包括营销补贴率、ROI、用券补贴率等。</li>
+<li><strong>定价收益指标</strong>：主要包括实收GMV、客单价/笔单价、毛利率等。</li>
+<li><strong>转化留存指标</strong>：券使用率、下单转化率、用券转化率等。</li>
+</ul>
+<hr>
+<center><h4><b>算法篇</b></h4></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在工程篇的开头，我们提到，广告定价平台的业务指标是寻求投入产出比（ROI）、实收（GMV）、转化率（CVR）这三个优化指标的平衡。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;寻求投入产出比（ROI）、实收（GMV）、转化率（CVR）这三个优化指标的平稳提升，其三者呈不完全线性相关。其中可以控制广告门槛（Advertise Threshold）和广告出价成本（Advertise Amount）这两个变量。优化的实质就是满足这些目标约束条件下，找到最大化的广告门槛和最小化的出价成本。</p>
+<h5 id="一、问题分析"><a href="#一、问题分析" class="headerlink" title="一、问题分析"></a>一、问题分析</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于多目标优化问题，应将其转化为单目标优化，我们把多目标拆分为单目标，但需要注意每个目标内指标均为正相关。优化这些单个目标的同时，不能牺牲其他指标来实现，其他指标必须是基本持平、甚至提升。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一般意义上讲，广告竞价排名的排序分公式计算如下，其为多目标的线性加和，而优化目标就是寻求合适的 $\alpha$、$\beta$、$\gamma$，计算单个广告位的各个展示广告的排序质量分，得到总的广告展示排序后，获得总体的ROI、GMV、CVR三者最优：</p>
+<script type="math/tex; mode=display">rank\_score = \alpha\cdot ROI + \beta\cdot GMV + \gamma\cdot CVR</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，每个因子的计算方式如下。</p>
+<script type="math/tex; mode=display">ROI = \frac{1}{subsidy\_rate} = \frac{GMV}{subsidy\_fee} = \frac{UV_{visit}\;\cdot CVR \cdot Price}{UV_{convert}\;\;\cdot \overline{subsidy}}</script><script type="math/tex; mode=display">GMV = UV_{convert}\;\;\cdot CVR \cdot Price</script><script type="math/tex; mode=display">CVR = \frac{UV_{convert}}{UV_{visit}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当中，ROI和补贴率(Subsidy Rate)为反比，即ROI为总实收(GMV)除以总补贴费(Subsidy Fee)。分子GMV等于来访UV乘以转化率(CVR)，再乘以客单价(Price)；分母总补贴费(Subsidy Fee)等于转化UV乘以人均补贴费(avg(Subsidy))。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总实收(GMV)，等于转化UV乘以转化率CVR乘以客单价(Price)；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;转化率CVR等于转化UV除以来访UV；</p>
+<h5 id="二、问题建模"><a href="#二、问题建模" class="headerlink" title="二、问题建模"></a>二、问题建模</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在计算广告领域，不是一个类似于搜索推荐的排序问题，而是一个多目标最优化、在给定空间中，找函数最优解的问题。 广告定价预估转为凸优化问题，在解空间里找到最优解，用历史数据取预估，解空间的降维。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一阶段的目标是最小化广告出价补贴费用，即最大化ROI。其数学表示为：</p>
+<script type="math/tex; mode=display">\min(subsidy\_fee) = \min(\frac{1}{ROI}) = \max(ROI)</script><script type="math/tex; mode=display">
+\begin{equation}
+        s.t. \begin{cases}
+        A \le th \le B  \\
+        C \le amt \le D \\
+        0 < E \le amt < th \le F \\
+        G \le fee\_rate \le H \\
+        \end{cases}
+\end{equation}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中费率定义如下：</p>
+<script type="math/tex; mode=display">fee\_rate = \frac{amt}{th-amt}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中th为广告出价门槛（Advertise Threshold），amt为广告出价成本（Advertise Amount），FeeRate为初始化约定费率，定义如上所示。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解空间范围定义：</p>
+<ul>
+<li>A: 最小门槛值，常量</li>
+<li>B: 最大门槛值，常量</li>
+<li>C: 最小成本值，常量</li>
+<li>D: 最大成本值，常量</li>
+<li>E/F：出价成本小于出价门槛，有常量范围限制</li>
+<li>G: 费率下限值，常量</li>
+<li>H: 费率上限值，常量</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由上定义公式可以推导出，其余两个变量GMV和CVR的约束是保持其不下降，最大化ROI。通过拆分，两者之积等于人均出价成本除以ROI，再乘以券转化率$(CVR_{useCoupon}\;\;\;)$。</p>
+<script type="math/tex; mode=display">CVR \times Price = \frac{UV_{convert}\;\;\cdot \overline{amt}}{UV_{visit}\;\cdot ROI} = \frac{\overline{amt}}{ROI}\;\cdot \frac{UV_{convert}}{UV_{visit}} = \frac{\overline{amt}}{ROI}\;\cdot CVR_{useCoupon}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们可以控制的变量仅为2个，门槛th和出价成本amt。对于此非线性规划问题，目标是在广告转化率有保证、费率符合要求的情况下求解出门槛最大的广告定价。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解空间如下图阴影部分的矩形面积，即在函数 $y=x$ 的下方部分围成的梯形。</p>
+<p><div align="center"><img src="/resources/ad-axis.jpg" alt="figure-ad-axis"></div></p>
+<ul>
+<li>选择LR模型学习训练数据，目的是提高线上求解速度和性能</li>
+<li>Label: 用户是否有广告转化</li>
+<li>特征包括用户特征和广告特征及交叉特征三部分</li>
+<li>广告特征主要包括广告门槛th、出价成本amt、费率</li>
+<li>用户特征包括平均客单价、平均总价、折扣率、折扣订单率、用户历史转化率等</li>
+<li>交叉特征包括门槛客单价比，门槛总价比，定价成本折扣比等</li>
+</ul>
+<h5 id="三、非线性规划"><a href="#三、非线性规划" class="headerlink" title="三、非线性规划"></a>三、非线性规划</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于解空间的枚举数量较小，所以采用全局搜索的方法，即能在时间复杂度为O(1)的情况下求出最优的门槛和定价成本组合。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;伪代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(th&gt;min_th &amp;&amp; amt&gt;min_amt):</div><div class="line">    <span class="keyword">if</span>(CvrCheck(th, amt) &amp;&amp; feeRateCheck(th, amt)):</div><div class="line">        find = true;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">if</span>(!CvrCheck(th, amt)):</div><div class="line">        adjustStep(th, amt);</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(feeRateCheck(th, amt)):</div><div class="line">        adjustFeeRateLimit(th, amt);</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">break</span>;</div></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过以上求解方法可以得到全局最优的广告定价，在目前的ROI和CVR优化上取得了一些效果，但是仍然还有提升空间可以进一步优化。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Computational-advertising/" rel="tag"># Computational advertising</a>
+          
+            <a href="/tags/Multiobjective-optimization/" rel="tag"># Multiobjective optimization</a>
+          
+            <a href="/tags/Operations-research/" rel="tag"># Operations research</a>
+          
+            <a href="/tags/Convex-optimization/" rel="tag"># Convex optimization</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/05/2018-01-05-RDQS/" rel="next" title="Recommendation Datum Query System (RDQS)">
+                <i class="fa fa-chevron-left"></i> Recommendation Datum Query System (RDQS)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/psb.jpg"
+               alt="DianaCody" />
+          <p class="site-author-name" itemprop="name">DianaCody</p>
+           
+              <p class="site-description motion-element" itemprop="description">Researcher, Focus on Artificial Intelligence</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">46</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dianacody" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/dianacody" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/dianacody" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/dianacody" title="CSDN Blog" target="_blank">CSDN Blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#I-引言"><span class="nav-number">1.</span> <span class="nav-text">I. 引言</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">工程篇</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-业务目标"><span class="nav-number">1.1.</span> <span class="nav-text">1.业务目标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-系统架构"><span class="nav-number">1.2.</span> <span class="nav-text">2.系统架构</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、实现"><span class="nav-number">2.</span> <span class="nav-text">二、实现</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-接口层"><span class="nav-number">2.1.</span> <span class="nav-text">1.接口层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-业务策略层"><span class="nav-number">2.2.</span> <span class="nav-text">2.业务策略层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-用户分层-amp-人群圈选"><span class="nav-number">2.3.</span> <span class="nav-text">2.1.用户分层 & 人群圈选</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-定价策略"><span class="nav-number">2.4.</span> <span class="nav-text">2.2.定价策略</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-1-基本计算方法"><span class="nav-number">2.5.</span> <span class="nav-text">2.2.1.基本计算方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-2-频率控制"><span class="nav-number">2.6.</span> <span class="nav-text">2.2.2.频率控制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-3-兜底策略"><span class="nav-number">2.7.</span> <span class="nav-text">2.2.3.兜底策略</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-4-费率限制"><span class="nav-number">2.8.</span> <span class="nav-text">2.2.4. 费率限制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-5-费率调节-amp-步长调节"><span class="nav-number">2.9.</span> <span class="nav-text">2.2.5. 费率调节 & 步长调节</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-3-转化漏斗"><span class="nav-number">2.10.</span> <span class="nav-text">2.3.转化漏斗</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-算法模型层"><span class="nav-number">2.11.</span> <span class="nav-text">3.算法模型层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-离线模型"><span class="nav-number">2.12.</span> <span class="nav-text">3.1.离线模型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-在线模型"><span class="nav-number">2.13.</span> <span class="nav-text">3.2.在线模型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-在线预估框架"><span class="nav-number">2.14.</span> <span class="nav-text">3.3.在线预估框架</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-监控体系层"><span class="nav-number">2.15.</span> <span class="nav-text">4.监控体系层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-离线数据监控"><span class="nav-number">2.16.</span> <span class="nav-text">4.1.离线数据监控</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-在线性能监控"><span class="nav-number">2.17.</span> <span class="nav-text">4.2.在线性能监控</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-业务指标监控"><span class="nav-number">2.18.</span> <span class="nav-text">4.3.业务指标监控</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-数据指标层"><span class="nav-number">2.19.</span> <span class="nav-text">5.数据指标层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">算法篇</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、问题分析"><span class="nav-number">1.</span> <span class="nav-text">一、问题分析</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、问题建模"><span class="nav-number">2.</span> <span class="nav-text">二、问题建模</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、非线性规划"><span class="nav-number">3.</span> <span class="nav-text">三、非线性规划</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DianaCody</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+</body>
+</html>

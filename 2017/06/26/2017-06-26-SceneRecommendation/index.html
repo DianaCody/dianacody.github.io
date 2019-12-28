@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="LDA,pig,Topic Modeling,Data Mining,N-Gram,K-means,word-embedding,Word to Vector,Brown Cluster," />
+  <meta name="keywords" content="LDA,pig,Data Mining,Topic Modeling,N-Gram,K-means,word-embedding,Word to Vector,Brown Cluster," />
 
 
 
@@ -415,6 +415,7 @@
 <h6 id="4-3-Structural-Flowchart"><a href="#4-3-Structural-Flowchart" class="headerlink" title="4.3 Structural Flowchart"></a>4.3 Structural Flowchart</h6><p><img src="/resources/scene-process.jpg" alt="figure-scene-process"><br><strong> Stage 1: 2000 scenes are required. </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Candidate combinations are put into existing first-level categories, and these data are artificially mapped to topics to define scenarios. And the commodities are gotten from the scene. At present, a scenario list is built manually, the next is to find the certain corresponding product words of the scene, and then mapped to sku.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Process: scene - &gt; product word - &gt; commodity sku.<br><strong> Stage 2: 10000 scenes are required. </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The cost of manpower is too high with the method at first stage. To consider another method, the solution is that it can cluster product word and commodity sku first.<br><strong> ① Calculate the distance between words </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A) Calculate by word-embedding method;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B) Calculate with mutual information and Chi-square statistics;<br><strong> ② K-means++ Clustering </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A) Guarantee that there are 5-7 product words in a cluster;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B) In the case of clustering, recall the SKU purchased by three days.<br><strong>【Scene Automatic Mining】</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is considerable to cluster the four-tuple product words and SKU that satisfy thresholds.<br><strong> ① K-means </strong><br>The distance between words is calculated by word-embedding and cosine similarity.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advantages: Some results have been finished, and the effect of product word is good, which is worth trying, but the effect of sku is not good.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disadvantages: It is not reasonable in theory, for there are similar scenes of product word.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solutions: Review the results of product word artificially, and then mapped to sku.<br><strong> ② LDA </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advantages: Regard the scene as a topic, and then set the number of topics to get product word or sku.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disadvantages: If four-tuple is considered as a sequence, however, LDA is not suitable for short text.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solutions: A longer sequence such as a 7-day click sequence can be considered as a document, which ensures that a document has many duplicate items without the interference of stop words.<br><strong> ③ Brown-cluster </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Advantages: It belongs to hierarchical clustering and can control the heap size of clustering after clustering.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disadvantages: It is more effective for sequences and cannot guarantee for tuple data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solutions: A longer sequence is used to ensure that there are 5-7 product words in most clusters by controlling some thresholds. In the case of clustering, the commodity skus purchased within one month are recalled, and the sliding time window is 3-7 days. Finally, the skus of top 300 are selected as the recall data for each cluster.</p>
 <h6 id="4-4-Parameter-Adjustment-amp-Evaluation"><a href="#4-4-Parameter-Adjustment-amp-Evaluation" class="headerlink" title="4.4 Parameter Adjustment &amp; Evaluation"></a>4.4 Parameter Adjustment &amp; Evaluation</h6><p><strong>(1) The scene sets are regarded as the evaluated objects. </strong> According to the scale of the whole scene set, the coverage of classification system, the minimum distance between scenes, and the average number of topic scene, the following evaluation indicators are defined.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) The total number of scenes and the number of classified scenes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) The coverage rate of scene category, overall topic and category.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) The average number of topic scenes and the average number of a classified topic scenes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) In the whole scene set, the minimum distance between scenes and the minimum distance between classified scenes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e) The average number of product words and skus in scenes and the average number of product words and skus in categories.<br><strong>(2) A single scene is regarded as the evaluation object. </strong> According to the accuracy of scene, traffic of scene, sales volume and price range, the following evaluation indicators are defined.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) The accuracy of scene.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) The proportion of product traffic involved in the scene within a month.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(c) The proportion of sales involved in the scene within a month.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(d) Overall price range of products in the scene.</p>
 <h6 id="4-5-Online-Interfaces"><a href="#4-5-Online-Interfaces" class="headerlink" title="4.5 Online Interfaces"></a>4.5 Online Interfaces</h6><p><strong>(1) Offline Data </strong>: was stored into 3 HBase tables</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -453,9 +454,11 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>(2) Online Interfaces </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(a) Input parameters of request </strong>: recommendation position id, user id, type=0. <strong>Returned results</strong>: 10 scene id, scene name, scene picture, scene description.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(b) Input parameters of request </strong>: recommendation position id, user id, type=1. <strong>Returned results</strong>: scene id, scene name, scene picture.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>(c) Input parameters of request </strong>: recommendation position id, user id, scene id. <strong>Returned results</strong>: sku, list id, list sku, article id, article text.</p>
 <h6 id="4-6-Ranking-Scheme-of-Recall-Results"><a href="#4-6-Ranking-Scheme-of-Recall-Results" class="headerlink" title="4.6 Ranking Scheme of Recall Results"></a>4.6 Ranking Scheme of Recall Results</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ranking involves two parts: the ranking between scene modules and the ranking of sku in a scene. The ranking of sku in a scene can refer to traditional schemes of recommendation position ranking. In the meanwhile, the ranking can be considered from two perspectives, one is matching similarity of users and scene, the other is scene triggering.</p>
 <h6 id="4-6-1-Matching-Similarity-of-Users-and-Scenes"><a href="#4-6-1-Matching-Similarity-of-Users-and-Scenes" class="headerlink" title="4.6.1 Matching Similarity of Users and Scenes"></a>4.6.1 Matching Similarity of Users and Scenes</h6><p><strong> (a) Unilateral feature of scene </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Such features are these, within one week, the proportion of scene browsing, the proportion of users who browsing scenes, the proportion of sku sales volume in the scene, the proportion of users who ordered, and the repurchase cycle of scene.<br><strong> (b) Bilateral features of User-Scene </strong></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -486,7 +489,9 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong> (c) Multilateral features of user-scenario-product words </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Considering the problem of cold start. When the users do not have scene data, according to the coincidence degree of user’s recent behavior and scene product word, these scenes with top 5 coincidence degree can be gotten, whose IDs and scores can also be gained. </p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -517,6 +522,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h6 id="4-6-2-Scene-Triggering"><a href="#4-6-2-Scene-Triggering" class="headerlink" title="4.6.2 Scene Triggering"></a>4.6.2 Scene Triggering</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The weight of product words in the scene can be considered.</p>
 <h5 id="V-Work-Results"><a href="#V-Work-Results" class="headerlink" title="V. Work Results"></a>V. Work Results</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A patent paper entitled “Scene recommendation based on topic models” has been published.</p>
 <h5 id="VI-References"><a href="#VI-References" class="headerlink" title="VI. References"></a>VI. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
@@ -553,9 +559,9 @@
           
             <a href="/tags/pig/" rel="tag"># pig</a>
           
-            <a href="/tags/Topic-Modeling/" rel="tag"># Topic Modeling</a>
-          
             <a href="/tags/Data-Mining/" rel="tag"># Data Mining</a>
+          
+            <a href="/tags/Topic-Modeling/" rel="tag"># Topic Modeling</a>
           
             <a href="/tags/N-Gram/" rel="tag"># N-Gram</a>
           
@@ -664,7 +670,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -675,7 +681,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -686,7 +692,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

@@ -409,6 +409,7 @@
 <h6 id="4-3-Data-Conversion"><a href="#4-3-Data-Conversion" class="headerlink" title="4.3 Data Conversion"></a>4.3 Data Conversion</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As mentioned above.</p>
 <h5 id="V-Model-Training"><a href="#V-Model-Training" class="headerlink" title="V. Model Training"></a>V. Model Training</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The artificial feature construction and automatic training of feature extraction are both implemented.</p>
 <h6 id="5-1-Artificial-Feature-Construction"><a href="#5-1-Artificial-Feature-Construction" class="headerlink" title="5.1 Artificial Feature Construction"></a>5.1 Artificial Feature Construction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The features are mainly used as initialization features, especially for some less active users. For example, the statistics are made in time window of one week or one month, filtering user’s browsing, click, adding cart, order as features. As shown below, each dimension is cross-multiplied to get about tens of basic features.</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -529,8 +530,10 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h6 id="5-2-Automatic-Training-of-Feature-Extraction"><a href="#5-2-Automatic-Training-of-Feature-Extraction" class="headerlink" title="5.2 Automatic Training of Feature Extraction"></a>5.2 Automatic Training of Feature Extraction</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the samples of highly active users, there are many features. The models are trained by Xgboost and TensorFlow directly to extract features automatically.</p>
 <h5 id="VI-Model-Evaluation"><a href="#VI-Model-Evaluation" class="headerlink" title="VI. Model Evaluation"></a>VI. Model Evaluation</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Feature Importance;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hit rate of prediction (click@4/20, order@4/20);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Online evaluating indicators (CTR/CVR);<br>There is an example to illustrate the comparison of different models:</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -569,6 +572,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h5 id="VII-Model-Iteration"><a href="#VII-Model-Iteration" class="headerlink" title="VII. Model Iteration"></a>VII. Model Iteration</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To adjust model iteratively, the model adjustment strategies of different experiment positions are also different. From the comparison among these above examples, it can be found that:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) The offline indicators can be improved by increasing the number of training sets.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) By adjusting the sampling proportion, the noise can be reduced, and it is better to sampling rigorously. The premise is that the training data sample is large enough.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) Weight settings, it is setting of training positive and negative samples. The weight should be adjusted to overall positive correlation with each action proportion in the samples, rather than simply increase or decrease the weight of click and order, and it should be in accordance with the sample proportion.</p>
 <h5 id="VIII-References"><a href="#VIII-References" class="headerlink" title="VIII. References"></a>VIII. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
 
@@ -707,7 +711,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -718,7 +722,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -729,7 +733,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

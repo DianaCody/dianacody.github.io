@@ -408,7 +408,8 @@
 <h6 id="2-3-Paths-of-User’s-Click-and-Follow"><a href="#2-3-Paths-of-User’s-Click-and-Follow" class="headerlink" title="2.3 Paths of User’s Click and Follow"></a>2.3 Paths of User’s Click and Follow</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This part of the user profile is user behavior, not related to order.</p>
 <h5 id="III-Schemes"><a href="#III-Schemes" class="headerlink" title="III. Schemes"></a>III. Schemes</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The session is used as a unit to record the user’s access behavior completely, and the full path of user’s access is outlined completely, and according to these, the data is analyzed.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Steps:<br>(1) By reading the output data edited by Session Pruner, all the sessions of user and their purchasing paths could be found by the statistics of logs for a long period of time, such as more than half a year, and whether there are certain patterns and rules can be summarized.<br>(2) Two ways<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) Define and mark the typical patterns existing in some users, and mark and portray them accordingly.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b) The similar as above, with the deep statistical analysis of each user’s session data by the time axis, some repeated patterns can be found, and should be defined and marked.<br>(3) According to these inherent patterns, the recommendation results and algorithms are optimized.</p>
 <h5 id="IV-Data-Analysis"><a href="#IV-Data-Analysis" class="headerlink" title="IV. Data Analysis"></a>IV. Data Analysis</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time: 1 day, 3 days, 7 days. The number of skus within dwell time, average time and total time was counted.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Features: It is multiplied by time window as 1day, 3days, 7days.</p>
-<h6 id="4-1-Experimental-Data"><a href="#4-1-Experimental-Data" class="headerlink" title="4.1 Experimental Data"></a>4.1 Experimental Data</h6><table>
+<h6 id="4-1-Experimental-Data"><a href="#4-1-Experimental-Data" class="headerlink" title="4.1 Experimental Data"></a>4.1 Experimental Data</h6><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>Data Source</th>
@@ -429,6 +430,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h6 id="4-2-Methods-and-Results"><a href="#4-2-Methods-and-Results" class="headerlink" title="4.2 Methods and Results"></a>4.2 Methods and Results</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) The skus searched and purchased are aggregated into four-tuples, and the frequency of the four-tuples is counted. The tuples are clustered based on Jaccard similarity.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) These four tuples in method 1 are used as corpus to train word to vector model, and then are clustered by K-means method.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) The product words purchased by the same user for six months are collected as corpus to train word to vector model, and then are clustered by K-means method.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) Due to the strong dependence of K-means method on the selection of initial nodes, so the algorithms are executed for many times to merge different parts of data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) Based on one set of data result clustered by k-means algorithm, the cosine similarity between all product word vectors and each cluster is calculated for the secondary partition.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(6) The large-scale category are tried to be clustered secondarily with K-means algorithm. However, the effect is not satisfactory, and it still cannot be subdivided.</p>
 <h6 id="4-3-Results-Analysis"><a href="#4-3-Results-Analysis" class="headerlink" title="4.3 Results Analysis"></a>4.3 Results Analysis</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) There are some clusters containing too many, mixed and disordered product words, and cannot be aggregated into a specific pattern. Furthermore, the data is sparse.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) There are some product words in a cluster with high similarity to each other.</p>
 <h5 id="V-Improvement-Scheme"><a href="#V-Improvement-Scheme" class="headerlink" title="V. Improvement Scheme"></a>V. Improvement Scheme</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) Reduce the time span of order data.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) The data sampling should follow the rule of user patterns.</p>
@@ -567,7 +569,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -578,7 +580,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -589,7 +591,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

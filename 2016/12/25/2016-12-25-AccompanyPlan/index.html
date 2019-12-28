@@ -408,6 +408,7 @@
 <h5 id="III-Main-Contents"><a href="#III-Main-Contents" class="headerlink" title="III. Main Contents"></a>III. Main Contents</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is a mini recommendation system, and the upgrade development is based on the original system, including online interface and offline model.</p>
 <h6 id="3-1-Upgrade-of-Online-Interface"><a href="#3-1-Upgrade-of-Online-Interface" class="headerlink" title="3.1 Upgrade of Online Interface"></a>3.1 Upgrade of Online Interface</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It includes predicting user’s age, ranking interface of children model, and displaying of different filter according to user’s specific pattern.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Label recommendation: After the first-level labels are ranked, the second-level label are ranked logically. (The second-level label is the sub-label of the first-level label displayed). And then whether the user has a subscription tag or not is recognized. If so, display the subscription tag in chronological order and the rest in default order.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data flow: Commodity category -&gt; User account -&gt; Quality score of related category -&gt; Summary of labels.</p>
 <h6 id="3-2-Upgrade-of-Offline-User-Feature-Dimension"><a href="#3-2-Upgrade-of-Offline-User-Feature-Dimension" class="headerlink" title="3.2 Upgrade of Offline User Feature Dimension"></a>3.2 Upgrade of Offline User Feature Dimension</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The 200 third-level categories were added, and the algorithm rules were formulated according to the different extended attributes of user’s age, gender and season, and the quality scores of candidate sets were calculated as the reason for recalling and recommending commodities.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The results are with the following dimensions: three-level classification, age (school age) label, gender label, attribute label, commodity id, ranking quality score of candidate set, as shown in the table below.</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -432,6 +433,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on the three-level categories of commodities, the discrimination degree of the goods in age, gender and season is determined to filter the data, and the sku quality score and the ranking of labels or three-level categories are determined.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data recall: According to the parameters from the front-end of the children’s age, gender and season, the corresponding products can be found and displayed in groups with the different label attributes they bind.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Online filtering: There is mainly some inventory filtering.</p>
 <h5 id="IV-Enhanced-Value"><a href="#IV-Enhanced-Value" class="headerlink" title="IV. Enhanced Value"></a>IV. Enhanced Value</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> Scenarioalization of User Labels </strong>: The recall data sets of categories were expanded.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> Precisionalization of commodity recommendation </strong>: refine all categories in age, gender and season, and the accuracy of commodity recommendation was improved.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> Renovation of user profile </strong>: The user behaviors were transformed into user profile, so that more users are participated in the iteration of children model prediction.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By the end of the project, the application has owned one million active users, and the PV/UV value has been promoted.</p>
 <h5 id="V-References"><a href="#V-References" class="headerlink" title="V. References"></a>V. References</h5><p>[1]…<br>[2]…<br>[3]…</p>
@@ -571,7 +573,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -582,7 +584,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -593,7 +595,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
