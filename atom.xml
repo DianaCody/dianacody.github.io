@@ -346,9 +346,9 @@
     
       <category term="pig" scheme="http://www.dianacody.com/tags/pig/"/>
     
-      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
-    
       <category term="Data Mining" scheme="http://www.dianacody.com/tags/Data-Mining/"/>
+    
+      <category term="Topic Modeling" scheme="http://www.dianacody.com/tags/Topic-Modeling/"/>
     
       <category term="N-Gram" scheme="http://www.dianacody.com/tags/N-Gram/"/>
     
@@ -629,13 +629,13 @@
     
       <category term="Recommender System" scheme="http://www.dianacody.com/tags/Recommender-System/"/>
     
-      <category term="Online" scheme="http://www.dianacody.com/tags/Online/"/>
-    
-      <category term="Java" scheme="http://www.dianacody.com/tags/Java/"/>
-    
       <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
     
       <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
+    
+      <category term="Online" scheme="http://www.dianacody.com/tags/Online/"/>
+    
+      <category term="Java" scheme="http://www.dianacody.com/tags/Java/"/>
     
   </entry>
   
