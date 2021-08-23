@@ -1,0 +1,1110 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Text Mining,Natural Language Processing,CVR Prediction," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DianaCody" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="基于文本挖掘方法对用户购买转化率进行预测。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于文本挖掘的用户转化率预估">
+<meta property="og:url" content="http://www.dianacody.com/2020/12/20/2020-12-20-TextMining/index.html">
+<meta property="og:site_name" content="DianaCody">
+<meta property="og:description" content="基于文本挖掘方法对用户购买转化率进行预测。">
+<meta property="og:image" content="http://www.dianacody.com/resources/text-architecture.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/text-flow.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/text-content.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/text-words.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/text-dict.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/text-wordvec.jpg">
+<meta property="og:updated_time" content="2021-08-23T03:58:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于文本挖掘的用户转化率预估">
+<meta name="twitter:description" content="基于文本挖掘方法对用户购买转化率进行预测。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/text-architecture.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'DianaCody'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.dianacody.com/2020/12/20/2020-12-20-TextMining/"/>
+
+
+
+
+
+  <title> 基于文本挖掘的用户转化率预估 | DianaCody </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?401273a24c3ce73d59b8b4083481a0be";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DianaCody</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">subtitle,subtitle,subtitle</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2020/12/20/2020-12-20-TextMining/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于文本挖掘的用户转化率预估
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-20T00:00:00+08:00">
+                2020-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index">
+                    <span itemprop="name">NLP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  基于文本挖掘方法对用户购买转化率进行预测。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于文本挖掘的技术：对文本提取关键词后对其特征进行向量空间模型训练，之后进行文本分类/聚类，形成文章摘要和标签；或者利用特征向量生成模型用于排序；利用文本提取特征用作用户购买决策预测的技术，目前基于文本分类、文本挖掘的技术集中在文本标签提取、新词发现方法优化等。</p>
+<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于用户微信沟通文本提取用户特征，通过模型预测用户转化或购买决策的概率，并且可以通过新构建文本提取相应的个性化沟通话术，促进成交转化，从而提高用户下单转化率。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在文本挖掘领域，现有的技术主要集中在文本分析和标签生成，词向量模型为词嵌入模型，少有深度学习模型。结合文本挖掘技术，通过机器学习和深度学习的方法对文本表示进行改造，再结合机器学习模型对用户转化概率预测，能有效提高目标潜在用户的识别准确率、然后针对性采用相应策略沟通话术等。</p>
+<h5 id="二、技术方案"><a href="#二、技术方案" class="headerlink" title="二、技术方案"></a>二、技术方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用用户沟通文本挖掘的转化概率预测算法，基于用户微信沟通文本，区分不同学科粒度（英语、语文、思维），预测用户购买课程的转化率，计算是否转化系统课的转化率CVR。即基于用户文本特征的是否下单的二分类预测。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>输入数据</strong>：user_id(用户id), content(原始文本), label(标签)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>输出结果</strong>：user_id(用户id), cvr_score(预测概率分数), predict_label(预测标签)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，CVR预测分数范围(0,1)区间，并据此给出用户分层。</p>
+<p>整体流程图如下：</p>
+<p><div align="center" style="width:80%;height:80%;margin:0 auto;"><img src="/resources/text-architecture.jpg" alt="figure-text-architecture"></div></p>
+<center><h7 style="color:grey">图1 整体流程图</h7></center>
+
+<p>用户文本数据处理全流程架构图如下：</p>
+<p><div align="center"><img src="/resources/text-flow.jpg" alt="figure-text-flow"></div></p>
+<center><h7 style="color:grey">图2 文本数据处理全流程架构</h7></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要拆分为两大部分：第一，词向量模型部分，该部分主要是通过对原始文本进行特征提取得到文本的词向量表示，进而得到句子向量表示；第二，机器学习模型部分，该部分主要是用得到的句子向量矩阵，以结构化数据的形式输入，用机器学习模型，得到用户转化概率的预测分数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型训练集用全部学科的沟通文本进行训练，模型预测部分区分不同学科（英语、语文、思维）进行预测。</p>
+<h6 id="2-1-文本向量模型"><a href="#2-1-文本向量模型" class="headerlink" title="2.1.文本向量模型"></a>2.1.文本向量模型</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于定长时间窗口内，每个用户的文本按时间序列聚合为句子，考虑词序上下文关系，处理流程如下：</p>
+<blockquote>
+<p>原始文本&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文本句子集&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文本词集&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;词向量&amp;句子向量(特征)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;转化率分数<br>&nbsp;content&nbsp;&nbsp;&nbsp;—&gt;&nbsp;&nbsp;&nbsp;sentences&nbsp;&nbsp;&nbsp;—&gt; &nbsp;&nbsp;&nbsp;words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—&gt;&nbsp;&nbsp;&nbsp;&nbsp;word_vector(feature)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—&gt; &nbsp;&nbsp;&nbsp;cvr_score</p>
+</blockquote>
+<h6 id="2-1-1-文本特征提取（词向量化）"><a href="#2-1-1-文本特征提取（词向量化）" class="headerlink" title="2.1.1.文本特征提取（词向量化）"></a>2.1.1.文本特征提取（词向量化）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据用户微信沟通文本，提取用户文本特征。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和传统机器学习训练不同，直接用文本的分词结果、或者直接用词语表示，无法作为监督机器学习模型的输入格式，需要将词表示为定长维度的词向量，这样训练的特征维度可以采用固定值（此时词向量的每一维feature无实际意义）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 取定长时间窗口内的用户沟通文本，用户历史过去三个月的微信沟通文本；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 每个用户user_id的沟通文本text按时间序列聚合为一行句子，考虑词序上下文关系，得到文本句子集合；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) 文本过滤：去除标点符号、特殊符号、数字、非法字符、表情包、链接；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) 文本句子分词：得到二元组2-gram、三元组3-gram、四元组4-gram、…；得到如下格式所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>label</th>
+<th>sentence</th>
+<th>words</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id1</td>
+<td>label1</td>
+<td>sentence1</td>
+<td>[ word1, …, wordN ]</td>
+</tr>
+<tr>
+<td>user_id2</td>
+<td>label2</td>
+<td>sentence2</td>
+<td>[ word1, …, wordM ]</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>user_idX</td>
+<td>labelY</td>
+<td>sentenceS</td>
+<td>[ word1, …, wordT ]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原始文本：（此处已经将用户在一定时间窗内的文本，按时间序列，聚合为一个长句子）</p>
+<p><div align="center" style="width:90%;height:90%;margin:0 auto;"><img src="/resources/text-content.jpg" alt="figure-text-content"></div></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对每行句子正则过滤、分词，得到如下表示：（其中sentence为句子集合组成的数组）</p>
+<p><div align="center"><img src="/resources/text-words.jpg" alt="figure-text-words"></div></p>
+<h6 id="2-1-2-由词向量-wordvec-生成句子向量-seqvec"><a href="#2-1-2-由词向量-wordvec-生成句子向量-seqvec" class="headerlink" title="2.1.2.由词向量(wordvec)生成句子向量(seqvec)"></a>2.1.2.由词向量(wordvec)生成句子向量(seqvec)</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) 去除词频低于设定阈值的词；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(6) 去除停用词stop-words；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(7) 由词组得到词向量，采用word2vec和fastText词向量模型进行词向量模型训练，其中词向量维数采用固定长度，滑动窗口gram大小采用固定长度，上下文模型采用Skip-Gram或CBOW；得到的词向量分别为w2v_wordvec、fst_wordvec。如下所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>word</th>
+<th>word_vector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>word1</td>
+<td>[ feature1, …, featureN ]</td>
+</tr>
+<tr>
+<td>word2</td>
+<td>[ feature1, …, featureM ]</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>wordN</td>
+<td>[ feature1, …, featureT ]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center"><img src="/resources/text-dict.jpg" alt="figure-text-dict"></div></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(8) 通过词向量生成句子向量。得到词向量表示后，整个句子的向量可以通过该句子中所有词向量求平均值得到，传统不需要训练的方法是<strong>句子向量=avg(词向量)</strong>。由此可以如下表示用户的文本特征：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>label</th>
+<th>sequence_vector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id1</td>
+<td>label1</td>
+<td>[ seq_feature1, …, seq_featureN ]</td>
+</tr>
+<tr>
+<td>user_id2</td>
+<td>label2</td>
+<td>[ seq_feature1, …, seq_featureM ]</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>user_idX</td>
+<td>labelY</td>
+<td>[ seq_feature1, …, seq_featureT ]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>通过调整词向量模型的部分参数：词组gram的滑动窗口大小、词向量维数，确定最优词向量模型参数组合。</p>
+<blockquote>
+<p>【备注】<br>a) 还有其他通过词向量得到句子向量的方法，类似神经网络类的方法，详见其他文献参考。<br>b) 浅层语义模型（如word2vec）更关注词向量的产生，而预训练语言模型（高层语义模型）主要指能产生上下文相关的特征表示，能更好地捕捉上下文关系，使特征feature表示更精确，这直接关系到之后接入机器学习模型的训练数据形态，影响模型最终效果。本文由于目前关注词本身，故此处并未采用预训练模型。对于预训练语言模型，详见其他文献参考。</p>
+</blockquote>
+<p>训练集句子向量表示：</p>
+<p><div align="center" style="width:70%;height:70%;margin:0 auto;"><img src="/resources/text-wordvec.jpg" alt="figure-text-wordvec"></div></p>
+<h6 id="2-2-机器学习模型训练"><a href="#2-2-机器学习模型训练" class="headerlink" title="2.2.机器学习模型训练"></a>2.2.机器学习模型训练</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将用户沟通文本转化为可以用监督机器学习的句子向量特征表示后，用机器学习模型训练。此处接入随机森林(Random Forest)、逻辑回归(Logistic Regression)、梯度树(GBDT)模型。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如图1所示，单独对于每个词向量模型word2vec和fastText得到的句子向量w2v_seqvec、fst_seqvec依次输入不同的机器学习模型RF、LR、GBDT，通过和各个机器学习模型组合，分别预测用户下单/不下单的二分类概率输出。</p>
+<h5 id="三、优化方向"><a href="#三、优化方向" class="headerlink" title="三、优化方向"></a>三、优化方向</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.词向量部分仅从词本身的角度采用浅层语义模型，即仍然是基于词频统计（包含文本滑动窗口），提取的特征未能完全表示上下文特征信息表示。改进方向：可以用预训练模型，直接获取上下文相关特征表示，能更好地表征句子信息。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.机器学习模型部分，此处是每次对接单个模型接入。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)考虑组合特征、上下文相关信息，输入模型特征未做特征交叉。迭代model版本可引入交叉特征。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)尝试模型融合。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.引入隐层语义特征表示，而不仅仅是基于词本身作为的特征。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Text-Mining/" rel="tag"># Text Mining</a>
+          
+            <a href="/tags/Natural-Language-Processing/" rel="tag"># Natural Language Processing</a>
+          
+            <a href="/tags/CVR-Prediction/" rel="tag"># CVR Prediction</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/15/2019-12-15-Advertiser/" rel="next" title="营销广告定价平台应用实践">
+                <i class="fa fa-chevron-left"></i> 营销广告定价平台应用实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/10/2021-03-10-FederatedLearning/" rel="prev" title="基于联邦学习的用户深度转化率预估">
+                基于联邦学习的用户深度转化率预估 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/psb.jpg"
+               alt="DianaCody" />
+          <p class="site-author-name" itemprop="name">DianaCody</p>
+           
+              <p class="site-description motion-element" itemprop="description">Researcher, Focus on Artificial Intelligence</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dianacody" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/dianacody" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/dianacody" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/dianacody" title="CSDN Blog" target="_blank">CSDN Blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">2.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、技术方案"><span class="nav-number">3.</span> <span class="nav-text">二、技术方案</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-文本向量模型"><span class="nav-number">3.1.</span> <span class="nav-text">2.1.文本向量模型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-1-文本特征提取（词向量化）"><span class="nav-number">3.2.</span> <span class="nav-text">2.1.1.文本特征提取（词向量化）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-2-由词向量-wordvec-生成句子向量-seqvec"><span class="nav-number">3.3.</span> <span class="nav-text">2.1.2.由词向量(wordvec)生成句子向量(seqvec)</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-机器学习模型训练"><span class="nav-number">3.4.</span> <span class="nav-text">2.2.机器学习模型训练</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、优化方向"><span class="nav-number">4.</span> <span class="nav-text">三、优化方向</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DianaCody</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+</body>
+</html>

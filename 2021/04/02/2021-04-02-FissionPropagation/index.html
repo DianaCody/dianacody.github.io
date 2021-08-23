@@ -1,0 +1,1172 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Fission Propagation Network,Information Distribution Network,Deep Complex Network,High-potential User Identification,Key Opinion Leaders(KOL) Mining," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DianaCody" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="用户增长获客的一种重要的手段就是通过现有用户的社交关系网络来获取新用户。在裂变传播网络中，构建深度复杂网络模型，识别关键传播路由节点用户（关键意见领袖）就成了一个值得研究的问题。只有识别了高潜用户，才能更针对性地让这部分用户个性化地向更广泛的人群推广信息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="裂变传播网络中关键用户识别算法">
+<meta property="og:url" content="http://www.dianacody.com/2021/04/02/2021-04-02-FissionPropagation/index.html">
+<meta property="og:site_name" content="DianaCody">
+<meta property="og:description" content="用户增长获客的一种重要的手段就是通过现有用户的社交关系网络来获取新用户。在裂变传播网络中，构建深度复杂网络模型，识别关键传播路由节点用户（关键意见领袖）就成了一个值得研究的问题。只有识别了高潜用户，才能更针对性地让这部分用户个性化地向更广泛的人群推广信息。">
+<meta property="og:image" content="http://www.dianacody.com/resources/fp-flow.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fp-pr1.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fp-pr2.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fp-pr3.jpg">
+<meta property="og:updated_time" content="2021-08-23T01:33:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="裂变传播网络中关键用户识别算法">
+<meta name="twitter:description" content="用户增长获客的一种重要的手段就是通过现有用户的社交关系网络来获取新用户。在裂变传播网络中，构建深度复杂网络模型，识别关键传播路由节点用户（关键意见领袖）就成了一个值得研究的问题。只有识别了高潜用户，才能更针对性地让这部分用户个性化地向更广泛的人群推广信息。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/fp-flow.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'DianaCody'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.dianacody.com/2021/04/02/2021-04-02-FissionPropagation/"/>
+
+
+
+
+
+  <title> 裂变传播网络中关键用户识别算法 | DianaCody </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?401273a24c3ce73d59b8b4083481a0be";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DianaCody</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">subtitle,subtitle,subtitle</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2021/04/02/2021-04-02-FissionPropagation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                裂变传播网络中关键用户识别算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-02T00:00:00+08:00">
+                2021-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Fission-Propagation/" itemprop="url" rel="index">
+                    <span itemprop="name">Fission Propagation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  用户增长获客的一种重要的手段就是通过现有用户的社交关系网络来获取新用户。在裂变传播网络中，构建深度复杂网络模型，识别关键传播路由节点用户（关键意见领袖）就成了一个值得研究的问题。只有识别了高潜用户，才能更针对性地让这部分用户个性化地向更广泛的人群推广信息。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>Keywords</strong>：<br>裂变传播、信息分发网络、深度复杂网络、高潜用户识别、关键意见领袖；<br>图算法社交网络关系挖掘、关键传播人群识别、关键意见领袖挖掘、PageRank &amp; LeaderRank；<br>深度复杂网络传播模型；</p>
+<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><h6 id="1-技术领域"><a href="#1-技术领域" class="headerlink" title="1.技术领域"></a>1.技术领域</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要应用方向涉及互联网中的用户社交网络信息传播、网络中关键路由节点识别等。</p>
+<h6 id="2-业界现状"><a href="#2-业界现状" class="headerlink" title="2.业界现状"></a>2.业界现状</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;互联网用户增长最重要的就是获客，通常是挖掘基于口碑/分享等行为带来新用户的优质老用户，帮助信息分发推广传播，提高信息传播效率和准确率，帮助高效地获取新用户。主要分析用户社交行为数据，以帮助获取新用户，提高信息推广效果。现有技术通常基于用户在社交网络分享带来新用户行为和日常购买行为，构建每个用户N级关系网络拓扑结构；提取用户行为特征，建立模型计算每个用户节点在关系网络的传播影响力评分，以给用户个性化推荐分发信息。</p>
+<h6 id="3-技术问题"><a href="#3-技术问题" class="headerlink" title="3.技术问题"></a>3.技术问题</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前技术仍旧存在一些问题：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.常用做法没有将用户进行分层分簇处理，无法识别高效分发用户节点和分发效率较低的节点，只是给用户节点按统一权重优先级进行信息分发，整体信息分发效率不高；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.整个用户网络的节点数量及连接边是动态更新的，若动态网络中信息传播按此一般方法处理，对于连接较少的边缘节点难以获取其真实信息分发影响力，因此存在冷启动问题，需要长时间迭代才能使网络稳定。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;针对这些问题，我们提出了一种新方案，可以对这些问题进行改进：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.原始数据预处理，利用主题模型将用户分层分簇，达到精细化目的，再在每个簇中基于多维度用户特征构建网络结构，从而构建整个连接网络。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.对于新加入节点的冷启动问题，改进网络节点排名算法。第一，加入结合用户多维度特征的冷启动，有效避免新节点加入不能更快收敛的问题；第二，结合用户多维度特征，优化网络边计算权重公式，能更快更准确地发现网络高影响力节点。</p>
+<h5 id="二、技术方案"><a href="#二、技术方案" class="headerlink" title="二、技术方案"></a>二、技术方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们提出了一种信息分发网络中关键用户识别的算法。总体步骤如下：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.通过用户多维度基础特征、社交网络活跃度特征，构建用户基础画像特征，利用模型综合评分，计算得到用户基础特征评分；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.通过用户沟通文本挖掘，文本LDA主题聚类得到top主题簇及每个主题簇下的用户、和通过用户行为聚类得到用户簇。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.通过用户社交网络分享/链接转发/关注/邀请等行为事件构建关系网络，生成图的邻接矩阵；历史转发分享行为事件的频率，作为特征，训练评分，用以修改网络边的权重；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.计算网络每个节点的出度和连接边权重，得到每个节点的影响力分数，和用户基础特征的评分加权融合。在每个簇内，(1)节点按影响力分数由高到低排名，取Top-N作为关键信息分发节点用户；(2)按影响力分数排名取分位数划分得到高潜/中潜/低潜用户分档。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整体架构图如下：</p>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/fp-flow.jpg" alt="figure-fp-flow"></div></p>
+<center><h7 style="color:grey">图1 整体基础架构图</h7></center>
+
+<h6 id="1-基础画像特征"><a href="#1-基础画像特征" class="headerlink" title="1.基础画像特征"></a>1.基础画像特征</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多维度用户基础画像特征建模，将用户特征分为几大类，基于此构建特征矩阵。</p>
+<ul>
+<li><strong>产品质量体验类</strong>：产品使用率、复购率；反馈好/中/差次数；反馈次数、反馈满意/不满意次数；</li>
+<li><strong>利益折扣类</strong>：折扣敏感度、折扣金额、购买力；购买金额/累计购买金额、购买次数/累计购买次数；最近一次购买距现在时长；近半年购买数量；首次/末次购买时间；</li>
+<li><strong>积分成就类</strong>：用户是否会员、积分数、积分使用情况；会员、优惠券、积分、金币数量、钻石数量；</li>
+<li><strong>活跃因子类</strong>：用户登录行为（登录频率/登录时长）、浏览/点击/订单行为、用户微信活跃度、用户转发数、评论数；首次注册渠道/首次注册时间；近3/7/14/30/90天登陆app次数、近7/14/30天曝光次数、近7/14/30天点击次数；首次/末次登陆app时间；</li>
+<li><strong>用户基本属性类</strong>：用户画像（性格外向/内向、积极/消极、用户地理位置、用户城市及等级）；性别、年龄、常驻省份、常驻城市、购买用户类型（RFM分层）</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过特征训练模型，得到用户评分，据此作为用户网络节点的影响力评分；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类比RFM分层融合评分，每维特征分层打分然后得到综合得分，由此网络图节点的多维度影响力评分的计算方式如下：</p>
+<script type="math/tex; mode=display">impact\_score = \sum_{i} score_{i}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可得图节点归一化分数：</p>
+<script type="math/tex; mode=display">normalization\_impact\_score = \frac{score_{i}-\min(impact\_score)}{\max(impact\_score)-\min(impact\_score)}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记录用户历史数据中每次分享转发、关注、邀请等行为，例如用户A转发分享信息到用户B，则节点A和B之间建立连接边，对于历史数据中A若有多次转发给B，则增加A到B边的权重评分。由此建立整个网络的连接边及边的权重weight。网络每次迭代更新边的权重。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;连接边权重的计算公式，详见后4.3小节-改进网络节点排名算法，节点边权重因子<script type="math/tex">\omega_{ji}</script>归一化计算式。</p>
+<h6 id="2-文本挖掘和用户情感分析"><a href="#2-文本挖掘和用户情感分析" class="headerlink" title="2.文本挖掘和用户情感分析"></a>2.文本挖掘和用户情感分析</h6><h6 id="2-1-文本预处理"><a href="#2-1-文本预处理" class="headerlink" title="2.1.文本预处理"></a>2.1.文本预处理</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过用户在微信等主要社交app上的沟通文本，提取用户文本相关特征。<br>(1) 取历史定长时间窗口（例如三个月），将每个用户的沟通文本按时间序列聚合为一个长句子，考虑词序上下文关系，得到文本句子集合；<br>(2) 文本过滤：去除标点符号、特殊符号、数字、非法字符、表情包、链接；<br>(3) 文本句子分词，得到二元组2-gram、三元组3-gram、四元组4-gram、…；<br>(4) 去除停用词stop-words；<br>(5) 由词向量得到句子向量，（采用word2vec等方法进行词向量训练）；并联合join上用户其他维度特征features；</p>
+<h6 id="2-2-用户情感分析"><a href="#2-2-用户情感分析" class="headerlink" title="2.2.用户情感分析"></a>2.2.用户情感分析</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用机器学习模型对用户文本进行二分类(积极正向/消极负向)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型：贝叶斯文本分类器、或梯度树模型GBDT等。</p>
+<h6 id="3-文本主题聚类"><a href="#3-文本主题聚类" class="headerlink" title="3.文本主题聚类"></a>3.文本主题聚类</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用LDA主题模型对用户文本进行主题聚类，提取重要主题。主要为：第一，由文本提取出top主题；第二，获取每个主题下的词的分布；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)由文本聚类得到主题。文本切词，然后LDA聚类，得到topN主题。对于词个数太少（小于某个设定阈值）的簇，无法聚类为主题的，过滤掉。得到如下所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>词簇</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Topic 1</td>
+<td>[text1]: word1, word2, …, wordK</td>
+</tr>
+<tr>
+<td>Topic 2</td>
+<td>[text2]: word2, word3, … , wordM</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>Topic N</td>
+<td>[textN]: word5, word7, …, wordX</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)采用LDA主题模型训练，得到切词后每条文本，对应每个主题下的词的概率分布。如下所示：（表中数值为举例示意）</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>prob</th>
+<th>Topic 1</th>
+<th>Topic 2</th>
+<th>…</th>
+<th>Topic N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text 1</td>
+<td>0.226</td>
+<td>0.213</td>
+<td>…</td>
+<td>0.005</td>
+</tr>
+<tr>
+<td>Text 2</td>
+<td>0.526</td>
+<td>0.498</td>
+<td>…</td>
+<td>0.004</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>Text M</td>
+<td>0.154</td>
+<td>0.112</td>
+<td>…</td>
+<td>0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)上表中，每条文本关联上user_id列，得到每个用户-文本对应在每个topic下的概率。然后选每个用户下最大概率的topic作为用户当前所属的topic。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>text</th>
+<th>topic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user_id 1</td>
+<td>text 1</td>
+<td>topic A</td>
+</tr>
+<tr>
+<td>user_id 2</td>
+<td>text 2</td>
+<td>topic B</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>user_id M</td>
+<td>text M</td>
+<td>topic S</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4)最终得到每个topic下的user_id集合（用户簇）。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>topic</th>
+<th>user_id_set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>topic A</td>
+<td>user_id1, user_id3, user_id6, …, user_idN</td>
+</tr>
+<tr>
+<td>topic B</td>
+<td>user_id2, user_id5, user_id8, …, user_idT</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>topic N</td>
+<td>user_id9, user_id13, user_id15, …, user_idX</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h6 id="4-网络图节点排名"><a href="#4-网络图节点排名" class="headerlink" title="4.网络图节点排名"></a>4.网络图节点排名</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每个topic下的用户簇，识别该簇下的重要信息分发节点用户。</p>
+<h6 id="4-1-PageRank网络节点排名算法"><a href="#4-1-PageRank网络节点排名算法" class="headerlink" title="4.1.PageRank网络节点排名算法"></a>4.1.PageRank网络节点排名算法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PageRank作为基础算法，该网页排名算法来源于Google。其原理是依据网页被链接的数量，计算该网页的重要性排名，按权重PR值由高到低排名。（每个网页权重PR值迭代更新直到收敛。）<br>基本思路：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 若某网页被很多其他网页链接到，则该网页重要，PR值提高；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 若某网页被某PR值很高的网页链接到，则该网页的PR值提高；<br>定义：</p>
+<ul>
+<li><strong>出链</strong>：一个网络节点对外链接到其他网络节点；</li>
+<li><strong>入链</strong>：一个网络节点被其他外部节点链接到；</li>
+<li><strong>无出链</strong>：一个网络节点不链接其他网络节点；</li>
+<li><strong>只对自己出链</strong>：一个网络节点只链接给自身；</li>
+<li><strong>PR值</strong>：依据网络节点的度，计算得到的评判分数；</li>
+</ul>
+<p>以一个网络中有ABCD四个节点为例，所有网页（节点）链接都可以分为以下4种情况：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>case1</strong>：节点都有出链。此时A节点PR值计算为：</p>
+<p><table>
+    <tr>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/fp-pr1.jpg" width="120px"></td>
+        <td bgcolor="white">$$ PR(A)=\frac{PR(B)}{2}+\frac{PR(C)}{1} $$</td>
+    </tr>
+</table><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>case2</strong>：存在没有出链的节点。此时A节点PR值计算为：</p>
+<p><table>
+    <tr>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/fp-pr2.jpg" width="120px"></td>
+        <td bgcolor="white">$$ PR(A) = \frac{PR(B)}{2}+\frac{PR(C)}{4} $$</td>
+    </tr>
+</table><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;节点C无出链，则其对A,B,D节点无PR值贡献。为了便于计算，对于没有出链的节点，强制设定让其对所有的节点都有出链，使得其对所有节点都有PR值贡献。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>case3</strong>：存在只对自己出链的节点。则A节点PR值计算公式为：(其中$\alpha$一般取值0.85)</p>
+<p><table>
+    <tr>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/fp-pr3.jpg" width="120px"></td>
+        <td bgcolor="white">$$ PR(A)=\alpha(\frac{PR(B)}{2})+\frac{1-\alpha}{4} $$</td>
+    </tr>
+</table><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;节点C为只对自己出链的节点。进入网页节点C一般会继续跳转，因为只对C自己出链，故假设会重定向到其他任意网页节点。设定存在一定概率为$\alpha$会重定向到其他任意网页节点。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上，单个节点的PR值一般计算公式：（其中，<script type="math/tex">M_{p_{i}}</script>为有出链到<script type="math/tex">p_{i}</script>的所有节点集合，<script type="math/tex">L(P_{j})</script>为有节点<script type="math/tex">p_{j}</script>的出链总数，$N$为节点总数，$\alpha$常量(一般0.85)）</p>
+<script type="math/tex; mode=display">PR(p_{i}) = \alpha \sum_{p_{j} \in M_{p_{i}}} \frac{PR(p_{j})}{L(p_{j})}+\frac{1-\alpha}{N}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所有节点PR值一直迭代计算，直到以下两种情况之一发生即停止：1.每个节点的PR值前后误差小于自定义误差阈值；2.迭代次数超过自定义迭代次数阈值；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该算法缺点：对新加入节点不友好。一个新节点入链相对较少，即使其可能是潜在高链接节点，要达到高PR值需要长时间迭代。</p>
+<h6 id="4-2-LeaderRank网络节点排名算法"><a href="#4-2-LeaderRank网络节点排名算法" class="headerlink" title="4.2.LeaderRank网络节点排名算法"></a>4.2.LeaderRank网络节点排名算法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在PageRank基础上，LeaderRank是改进的网络节点排名算法。增加了全局公共节点Ground Node，此节点连接网络中全部节点。所以一个N节点M边的网络G(N,M)变成N+1节点M+2N边的网络G(N+1, M+2N)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;增加Ground Node的作用：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)因Ground Node连接了网络中所有节点，所以网络一定为连通图，保证了LeaderRank的收敛性，减小了整个网络半径，增加收敛速度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)某i节点的信息来源（即由i节点发出的指向其余节点的边）的多少，反比于节点i流向Ground Node节点的个数。随着网络结构的变化，不同的节点会有不同的“跳转概率”，由此 LeaderRank算法不再需要参数“跳转概率c”。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LeaderRank算法公式：</p>
+<script type="math/tex; mode=display">s_{i}(t+1)=\sum_{j=1}^{N+1} \frac{a_{ji}}{k_{j}^{out}} s_{i}(t)</script><script type="math/tex; mode=display">S_{i}=s_{i}(t_{c})+\frac{s_{g}(t_{c})}{N}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，<script type="math/tex">a_{ji}</script>表示当前节点$j$是否有连接到节点$i$，<script type="math/tex">k_{j}^{out}</script>为节点$j$指向其他节点的连接个数，<script type="math/tex">s_{i}(t)</script>为$i$节点在$t$时刻得分；<script type="math/tex">t_{c}</script>为<script type="math/tex">s_{i}(t)</script>收敛时刻；<script type="math/tex">s_{i}(t_{c})</script>为<script type="math/tex">t_{c}</script>时刻$i$节点的得分；<script type="math/tex">s_{g}(t_{c})</script>为<script type="math/tex">t_{c}</script>时刻Ground Node节点的得分；<script type="math/tex">S_{i}</script>为$i$节点最终得分；</p>
+<h6 id="4-3-改进的网络节点排名算法"><a href="#4-3-改进的网络节点排名算法" class="headerlink" title="4.3.改进的网络节点排名算法"></a>4.3.改进的网络节点排名算法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于两种算法本身存在的局限性问题，结合本场景的具体应用，做了如下改进：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.加入节点冷启动处理。对于新加入的节点，节点边的权重计算：默认其对外连接和外部节点到该节点的连接初始化为0；节点本身分数计算：同基础特征计算方式，即前述的归一化分数计算值作为默认数值。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.结合用户多维度特征，优化网络边计算权重公式，即网络图节点出度计算公式：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;节点边权重因子<script type="math/tex">\omega_{ji}</script>归一化计算公式：</p>
+<script type="math/tex; mode=display">\omega_{ji}=\frac{\sum count_{j}}{\sum count_{total\_network}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;归一化分数，此表示节点$j$对外连接数，除以整个网络对外出度的边之和。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;结合上述LeaderRank两个计算式，有网络图节点出度计算公式：</p>
+<script type="math/tex; mode=display">s_{j}(t+1)=\sum_{j=1}^{N} \frac{\omega_{ji}\cdot \alpha_{ji}}{k_{j}^{out}} s_{j}(t)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于每个簇，计算每个用户节点的评分值和边权重值，用户基础评分特征分数加权融合。迭代更新，直至整个网络收敛。则有：</p>
+<script type="math/tex; mode=display">F_{j}(t)=\alpha\cdot s_{j}(t) + \beta\cdot \sum_{i=1}^{N-1} \omega_{j}(t) + \gamma\cdot Imp_{j}(t)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，<script type="math/tex">F_{j}(t)</script>为网络节点最终影响力分数，<script type="math/tex">s_{j}(t)</script>为当前节点$j$在当前$t$时刻节点评分值，<script type="math/tex">\omega_{j}(t)</script>为当前节点$j$对网络其他所有节点的出度边权重，对其求和得到所有出度边影响权重分数，<script type="math/tex">Imp_{j}(t)</script>为节点归一化影响力分数，即归一化分数的<script type="math/tex">normalization\_impact\_score</script>。此外，$\alpha$、$\beta$、$\gamma$ 分别为每个因子的加权融合的权重因子。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过以上改进，该算法能更快更准确地发现网络高影响力节点。同时因为加入了多维度计算的冷启动，有效避免了新节点加入不能更快收敛的问题。</p>
+<h6 id="5-用户分层结果输出"><a href="#5-用户分层结果输出" class="headerlink" title="5.用户分层结果输出"></a>5.用户分层结果输出</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每个簇中的用户节点，按综合因子评分由高到低排序，截取topK作为关键信息分发用户节点。（排名越高，该特征属性的权重分数越高）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序用户中，用户结果分层，按分位数分为：高潜用户、中潜用户、低潜用户，作为结果输出。</p>
+<h5 id="三、小结"><a href="#三、小结" class="headerlink" title="三、小结"></a>三、小结</h5><p>新的算法有很多优势：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.能对新加入的或者比较冷门的节点基于用户特征进行预处理，能更快促使网络收敛。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.将用户分层分簇之后对每个网络计算，使结果更精细化。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.大部分是基于已有历史用户数据建立网络，能识别哪些历史用户是关键节点，对于新加入网络的节点相对不太容易发现高可能性信息分发用户节点。</p>
+<h5 id="四、名词解释"><a href="#四、名词解释" class="headerlink" title="四、名词解释"></a>四、名词解释</h5><p>1.<strong>PageRank</strong>：网页排名算法，由网页之间相互的超链接计算网页评分值，体现网页的相关性和重要性，常用于搜索引擎优化。通过网页链接关系来定一个页面的等级。<br>2.<strong>LeaderRank</strong>：对PageRank网页排名算法的改进算法。通过在网络中增加一个节点，将其与网络中的所有节点相连，得到一个强连接的新网络。根据公式不断进行迭代，直到达到稳定状态，能保证网络快速收敛。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Fission-Propagation-Network/" rel="tag"># Fission Propagation Network</a>
+          
+            <a href="/tags/Information-Distribution-Network/" rel="tag"># Information Distribution Network</a>
+          
+            <a href="/tags/Deep-Complex-Network/" rel="tag"># Deep Complex Network</a>
+          
+            <a href="/tags/High-potential-User-Identification/" rel="tag"># High-potential User Identification</a>
+          
+            <a href="/tags/Key-Opinion-Leaders-KOL-Mining/" rel="tag"># Key Opinion Leaders(KOL) Mining</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/10/2021-03-10-FederatedLearning/" rel="next" title="基于联邦学习的用户深度转化率预估">
+                <i class="fa fa-chevron-left"></i> 基于联邦学习的用户深度转化率预估
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/psb.jpg"
+               alt="DianaCody" />
+          <p class="site-author-name" itemprop="name">DianaCody</p>
+           
+              <p class="site-description motion-element" itemprop="description">Researcher, Focus on Artificial Intelligence</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dianacody" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/dianacody" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/dianacody" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/dianacody" title="CSDN Blog" target="_blank">CSDN Blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-技术领域"><span class="nav-number">1.1.</span> <span class="nav-text">1.技术领域</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-业界现状"><span class="nav-number">1.2.</span> <span class="nav-text">2.业界现状</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-技术问题"><span class="nav-number">1.3.</span> <span class="nav-text">3.技术问题</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、技术方案"><span class="nav-number">2.</span> <span class="nav-text">二、技术方案</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-基础画像特征"><span class="nav-number">2.1.</span> <span class="nav-text">1.基础画像特征</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-文本挖掘和用户情感分析"><span class="nav-number">2.2.</span> <span class="nav-text">2.文本挖掘和用户情感分析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-文本预处理"><span class="nav-number">2.3.</span> <span class="nav-text">2.1.文本预处理</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-用户情感分析"><span class="nav-number">2.4.</span> <span class="nav-text">2.2.用户情感分析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-文本主题聚类"><span class="nav-number">2.5.</span> <span class="nav-text">3.文本主题聚类</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-网络图节点排名"><span class="nav-number">2.6.</span> <span class="nav-text">4.网络图节点排名</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-PageRank网络节点排名算法"><span class="nav-number">2.7.</span> <span class="nav-text">4.1.PageRank网络节点排名算法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-LeaderRank网络节点排名算法"><span class="nav-number">2.8.</span> <span class="nav-text">4.2.LeaderRank网络节点排名算法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-改进的网络节点排名算法"><span class="nav-number">2.9.</span> <span class="nav-text">4.3.改进的网络节点排名算法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-用户分层结果输出"><span class="nav-number">2.10.</span> <span class="nav-text">5.用户分层结果输出</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、小结"><span class="nav-number">3.</span> <span class="nav-text">三、小结</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、名词解释"><span class="nav-number">4.</span> <span class="nav-text">四、名词解释</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DianaCody</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1080 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Federated Learning,Joint Modeling,Gradient Propagation," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DianaCody" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在一些对用户隐私数据敏感的行业，用户样本数据和用户特征均有限的情况下，如何在保证数据安全的前提下，建立机器学习模型，对用户转化率进行预估？通常用到的技术就是联邦学习、数据联合建模等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于联邦学习的用户深度转化率预估">
+<meta property="og:url" content="http://www.dianacody.com/2021/03/10/2021-03-10-FederatedLearning/index.html">
+<meta property="og:site_name" content="DianaCody">
+<meta property="og:description" content="在一些对用户隐私数据敏感的行业，用户样本数据和用户特征均有限的情况下，如何在保证数据安全的前提下，建立机器学习模型，对用户转化率进行预估？通常用到的技术就是联邦学习、数据联合建模等。">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-architecture.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-data-exchange.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-sample-overlap.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-psi.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-dnn.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-forward-propagation.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/fl-back-propagation.jpg">
+<meta property="og:updated_time" content="2021-08-23T01:33:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于联邦学习的用户深度转化率预估">
+<meta name="twitter:description" content="在一些对用户隐私数据敏感的行业，用户样本数据和用户特征均有限的情况下，如何在保证数据安全的前提下，建立机器学习模型，对用户转化率进行预估？通常用到的技术就是联邦学习、数据联合建模等。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/fl-architecture.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'DianaCody'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.dianacody.com/2021/03/10/2021-03-10-FederatedLearning/"/>
+
+
+
+
+
+  <title> 基于联邦学习的用户深度转化率预估 | DianaCody </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?401273a24c3ce73d59b8b4083481a0be";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DianaCody</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">subtitle,subtitle,subtitle</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2021/03/10/2021-03-10-FederatedLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于联邦学习的用户深度转化率预估
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-10T00:00:00+08:00">
+                2021-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Federated-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Federated Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  在一些对用户隐私数据敏感的行业，用户样本数据和用户特征均有限的情况下，如何在保证数据安全的前提下，建立机器学习模型，对用户转化率进行预估？通常用到的技术就是联邦学习、数据联合建模等。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;联邦学习是一种加密的分布式机器学习技术，对于一些对用户隐私数据保护要求比较高、样本少量、特征少量的场景，若需要训练大规模机器学习模型，此时需要借助第三方媒介来获取填充特征，但是用户隐私数据却又不能公开，所以联合建模技术就是为了解决这种问题而提出。</p>
+<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><h6 id="1-技术领域"><a href="#1-技术领域" class="headerlink" title="1.技术领域"></a>1.技术领域</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要应用方向涉及互联网/在线教育中的数据联合建模、用户深层漏斗转化率预估等领域。</p>
+<h6 id="2-业界现状"><a href="#2-业界现状" class="headerlink" title="2.业界现状"></a>2.业界现状</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于互联网/在线教育中的数据联合建模和深度转化率预估，一些业界常用的现有技术如下：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.基于联邦学习的分布式训练技术，应用于区块链、医疗数据建模、个性化搜索推荐，采用传统的类似逻辑回归等机器学习方法，数据样本在生成过程和传输过程分布在各个不同参与方，保证数据安全共享。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.现有技术对梯度进行压缩，以减小网络传输开销。客户端训练初始模型得到梯度后进行量化处理，训练后得到更新的梯度发送给服务端，以此进行梯度数据交互，期间过程中对梯度压缩保证不失真，保证结果的安全性和数据私密性。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现有技术存在的问题：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现有技术基本采用传统机器学习模型的训练方法，对用户深度等转化数据建模的方法需要深度学习等方法结合具体场景进行建模。现有部分技术在训练过程中采用了深度学习模型，但并未进行分层架构处理，所有参数在每次训练全部更新，计算量较大，难以复用。且尚未在用户深度转化率预估方面，有类似基于深度学习的参数传播方法建模技术存在。</p>
+<h6 id="3-技术问题"><a href="#3-技术问题" class="headerlink" title="3.技术问题"></a>3.技术问题</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;教育行业属于对用户隐私数据敏感的行业，一个完整的用户成交转化漏斗流程如下：用户通过和辅导老师沟通后，购买试用体验课，然后购买正价系统课。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一，数据层面需要深度转化指标。对于教育行业，相比用户的试用体验课购买转化率，实际核心指标更关注用户的正价系统课购买转化率，此为深度转化模型。但用户深度正价课的成交数据为敏感保密数据，为营收核心指标，不能提供给第三方媒体平台。另外，投放方能获取到用户的特征非常稀疏，但同一用户在其他第三方媒体平台上可能会积累大量行为特征，投放方需要利用媒体平台的这些特征进行模型训练以预测用户深度转化率，同时需要用户数据直接在投放方的本地环境下（不出数据库），进行联合建模训练。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第二，联合建模若仅利用传统机器学习模型预估购买转化率CVR等指标，存在建模学习数据较浅的问题，需要深度模型训练。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了解决以上问题，我们给出了一种新的技术方案，可以有这些收益：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.数据隐私保护。利用该分布式机器学习/深度学习建模技术，投放方和媒体方的各自数据都可以在本地私有云上完成共建模型训练，防止敏感数据泄露。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.通过联邦学习方式训练深度转化率deepCVR，即deepCVR=正价系统课购买人数÷使用体验课购买人数，该影响因子用以调整投放定价公式，直接对线上流量做实时预估，对eCPM的计算做出调整，从而优化平衡客户引流和投放。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.从计算广告角度，作为广告主投放信息，对接各个第三方媒体平台，综合利用各个媒体平台用户公有特征，丰富了特征池，模型训练效果更优。</p>
+<h5 id="二、技术方案"><a href="#二、技术方案" class="headerlink" title="二、技术方案"></a>二、技术方案</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整体架构图如下：</p>
+<p><div align="center"><img src="/resources/fl-architecture.jpg" alt="figure-fl-architecture"></div></p>
+<center><h7 style="color:grey">图1 联邦学习训练架构</h7></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整个模型训练过程中，数据传输的交互流程图如下：</p>
+<p><div align="center"><img src="/resources/fl-data-exchange.jpg" alt="figure-fl-data-exchange"></div></p>
+<center><h7 style="color:grey">图2 数据交互流程</h7></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据交互过程中，媒体平台侧的样本加密数据（账号id+特征feature）和信息投放方的样本加密数据（账号id+特征feature+标签label），在信息投放方的私有云环境上进行PSI安全数据求交运算；然后在信息投放方本地的私有云上进行样本拼接；拼接后回传给媒体平台方，媒体平台方和信息投放方在各自私有云上进行联邦学习模型训练；深度转化deepCVR模型预测在媒体平台侧进行，最后进入信息流投放系统进行投放应用。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要步骤如下：1.训练框架部署；2.数据上传到私有云；3.PSI安全数据求交；4.样本拼接；5.模型离线训练及评估；6.模型在线预测；7.在线投放智能定价；</p>
+<h6 id="1-训练框架部署"><a href="#1-训练框架部署" class="headerlink" title="1.训练框架部署"></a>1.训练框架部署</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;训练框架用于数据网络通信、数据安全交互、模型训练等。信息投放侧在自己私有云/集群上安装并部署训练框架，媒体平台方合作协助支持。框架部署完成后，双方上传小量样本测试数据并开放对外授权，此样本数据用以调通训练流程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;正式模型训练和模型推理的计算机器资源，包括机器CPU核数、内存大小、硬盘大小、网络通信带宽、通信开放的HTTP和GRPC端口，按实际训练样本的数据量预估，保证能在特定的小时数之内，完成后续的数据求交、模型训练、模型推理等过程。</p>
+<h6 id="2-数据上传私有云"><a href="#2-数据上传私有云" class="headerlink" title="2.数据上传私有云"></a>2.数据上传私有云</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;信息投放方和媒体平台方各自的数据会单独上传到各自私有云数据库，所有参与训练的用户id或设备号id均进行hash后md5加密处理，训练时直接对加密id和特征进行训练。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;信息投放方的数据如下，需要标注是否下单标签，下单日期，而特征则非必要；同时，信息投放方仍然可以利用用户画像、课程、购买力等基础特征融合到数据中。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>encoded_user_id</th>
+<th>label</th>
+<th>order_date</th>
+<th>feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加密用户id</td>
+<td>下单标签(必选)</td>
+<td>下单日期(必选)</td>
+<td>特征(可选)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;媒体平台方的数据如下，不需要是否下单标签。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>encoded_user_id</th>
+<th>feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加密用户id</td>
+<td>媒体全域特征(必选)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;双方数据定期批量更新的方式同步到各自私有云中，参与后续模型训练。</p>
+<h6 id="3-PSI安全数据求交"><a href="#3-PSI安全数据求交" class="headerlink" title="3.PSI安全数据求交"></a>3.PSI安全数据求交</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对信息投放方提供的用户id和媒体平台侧提供的用户id取交集，观测样本的重合度。一般地，对于共有部分的数据，可以直接进行后续的样本特征拼接，参与后续模型训练；对于各自非共有部分的数据，则不参与训练。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常情况下，媒体平台侧拥有海量用户id，而信息投放方的用户id相对而言则较少，如果重叠用户占信息投放方的用户id的60%~90%以上，则认为是有效的，可以进行后续的模型训练。如果双方用户id重叠程度过低，信息投放方需要舍弃大部分用户id不能参与模型训练，则需要另外修改数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;信息投放方的数据分为以下两种：第一，含有是否下单标签，有少部分特征，比如用户的行为、画像、基本属性等。有标签的部分数据是用户已经产生了是否下单行为；第二，存在相当一部分用户，没有是否下单行为，即仅已经激活注册，但没有深度行为，但有少部分行为/画像/属性等特征。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;媒体平台侧的海量数据，主要提供丰富的特征，比如电商、社交媒体、广告、内容等，没有用户针对特定场景的行为标签，这些标签需要信息投放方根据具体应用场景进行标注正负样本。</p>
+<p><div align="center" style="width:60%;height:60%;margin:0 auto;"><img src="/resources/fl-sample-overlap.jpg" alt="figure-fl-sample-overlap"></div></p>
+<center><h7 style="color:grey">图3 数据样本重叠度</h7></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据求交过程如下：媒体平台侧的加密用户id，同步到信息投放方的数据库中，和信息投放方的加密用户id求交集。</p>
+<p><div align="center"><img src="/resources/fl-psi.jpg" alt="figure-fl-psi"></div></p>
+<center><h7 style="color:grey">图4 PSI安全数据求交过程</h7></center>
+
+<h6 id="4-样本拼接"><a href="#4-样本拼接" class="headerlink" title="4.样本拼接"></a>4.样本拼接</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对数据求交后的id拼接训练数据。由于数据加密，用户id、下单标签label、特征feature不存在泄露问题，即信息投放方不会将用户及其深度下单转化数据、手机号等敏感信息，提供给媒体平台侧。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于重叠部分用户id，每条样本格式为：加密用户encoded_user_id、下单标签label、下单日期order_date、媒体全域特征features+投放方特征feature。后续模型预测此部分特征维度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于非重叠部分用户id，主要集中在媒体平台方，每条样本格式为：加密用户encoded_user_id、下单标签label、下单日期order_date、媒体全域特征features。后续模型预测此部分特征维度。</p>
+<h6 id="5-模型离线训练及评估"><a href="#5-模型离线训练及评估" class="headerlink" title="5.模型离线训练及评估"></a>5.模型离线训练及评估</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;联邦学习模型训练支持机器学习模型和深度学习模型，机器学习模型例如线性回归、逻辑回归、梯度树模型等。深度学习模型主要为NN深度神经网络。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;训练过程中，采用分布式的方式，信息投放方和媒体平台方各自在单独的本地私有训练机器上进行单独的模型训练（机器已部署训练框架），期间机器间仅交换模型每次迭代更新所需要的梯度，其中传输的梯度已加密传输。整个交互过程中没有明文信息，不能反解。依据同态加密原理，加密后再训练和训练后加密的结果相同，故可以用加密后再训练的结果替代训练后加密的方式。</p>
+<h6 id="5-1-基于机器学习的模型训练"><a href="#5-1-基于机器学习的模型训练" class="headerlink" title="5.1.基于机器学习的模型训练"></a>5.1.基于机器学习的模型训练</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用梯度树模型GBDT进行训练，预测用户是否下单，为二分类模型。</p>
+<h6 id="5-2-基于深度学习的模型训练"><a href="#5-2-基于深度学习的模型训练" class="headerlink" title="5.2.基于深度学习的模型训练"></a>5.2.基于深度学习的模型训练</h6><h6 id="5-2-1-联邦深度学习架构"><a href="#5-2-1-联邦深度学习架构" class="headerlink" title="5.2.1.联邦深度学习架构"></a>5.2.1.联邦深度学习架构</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模型为NN深度神经网络，仍然训练二分类。基于深度模型的联邦训练，每次更新深度网络的一个子网络，同时更新前向/后向传播过程。</p>
+<p><div align="center" style="width:90%;height:90%;margin:0 auto;"><img src="/resources/fl-dnn.jpg" alt="figure-fl-dnn"></div></p>
+<center><h7 style="color:grey">图5 联邦深度DNN训练</h7></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;联邦学习NN模型整体分为三层：基础模型层（Basic Model Layer）、交互模型层（Interactive Model Layer）、顶部模型层（Top Model Layer）。有标签的提供方为主动方（Active Party），没有标签的提供方为被动方（Passive Party）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基础模型层在主动方和被动方都存在，并且各自维护单独一套DNN深度神经网络训练的基础模型，凡是包含特征的参与方都会有基础模型层；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交互模型层，若主动方没有特征，那么交互模型层仅含有被动方的交互模型，若主动方有特征，那么交互模型层包含主动方的交互模型和被动方的交互模型，主动方获取被动方传输过来的加密梯度、以及基础模型层的其他输出，融合本方模型更新需要的梯度参数之后，更新整体模型参数，以便后续训练，交互模型层的输出，经过激活函数传到顶部模型层；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;顶部模型层只在主动方存在，此为类似应用层，主要计算模型的损失，并把误差反向传播回去。训练后输出最终模型预测得分结果。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在整个联邦深度学习训练过程中，需要在主动方和被动方之间每次相互计算和传播梯度，多次循环迭代后直至模型收敛，期间的计算开销和通信开销较大。我们在整个算法过程在此基础上作了一些改进，主要包括：(1) 对需要交互传输的参数进行分层优化，大部分需要计算的参数（包括梯度）会集中到交互模型层计算；(2) 梯度计算优化和加速方法，每次迭代均需要计算梯度和加密梯度，然后再相互传输，通过优化梯度的计算过程、多次小批量并行计算，加快训练迭代收敛速度，同时减少通信传输开销。</p>
+<h6 id="5-2-2-分层网络优化"><a href="#5-2-2-分层网络优化" class="headerlink" title="5.2.2.分层网络优化"></a>5.2.2.分层网络优化</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整个训练过程纵向拆分为基础模型层、交互模型层、顶部模型层。基础模型层只关注数据嵌入，之后接入的深度模型可以为任意NN模型；交互模型层关注相互传输的参数，每次迭代过程中，更新对训练值$\alpha$的权重$W$和偏置$\epsilon$。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;深度神经网络的训练结构，基础模型层、交互模型层、顶部模型层的模型都各自独立训练而互不干扰，每层模型有更好的可拓展性。基础模型层的DNN模型可以替换为其他NN深度模型，而真正联邦深度学习的重点则在关注交互模型层的数据安全性。加密和解密过程只存在于交互模型层，不会在整个神经网络中，从而提高建模效率。</p>
+<h6 id="5-2-3-前向-反向传播、梯度计算过程"><a href="#5-2-3-前向-反向传播、梯度计算过程" class="headerlink" title="5.2.3.前向/反向传播、梯度计算过程"></a>5.2.3.前向/反向传播、梯度计算过程</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一般地，深度学习的前向/后向传播过程如下：<br>(1) 计算<script type="math/tex">y_{p}=W*\alpha+\epsilon</script>，其中<script type="math/tex">y_{p}</script>为预测目标函数值，$W$为权重矩阵，$\alpha$为训练值，$\epsilon$为偏置矩阵（此处为随机噪声扰动值）。<br>(2) 计算<script type="math/tex">\delta=|y_{r}-y_{p}|</script>，求差值的绝对值，其中<script type="math/tex">y_{r}</script>为真实值，<script type="math/tex">y_{p}</script>为预测值，残差$\delta$为损失值$loss$；<br>(3) 计算<script type="math/tex">\delta_{t}^{l}=(y_{r}-y_{p})*\sigma_{t}^{'}</script>, 用残差$\delta$和偏导<script type="math/tex">\sigma_{t}^{'}</script>相互作算子乘积；<br>(4) 计算<script type="math/tex">\delta_{(\omicron,t)}^{l}=(W^{T} \delta_{t}^{l})∘f(s_{t}^{l})∘\sigma_{t}^{'}</script>，此处激活函数<script type="math/tex">f(*)</script>可以为$softmax$、$tanh$、$ReLU$等函数，具体依模型不同而激活函数不同；<br>(5) 计算<script type="math/tex">\delta_{(o,(t+1))}^{l}=(W^{T} \delta_{(o,t)}^{l})∘f'(s_{t}^{l})∘\sigma_{t}^{'}</script>，以上过程得到的当前$t$时刻的<script type="math/tex">\delta_{(o,t)}^{l}</script>值保存，继续用于计算在下一个$(t+1)$时刻的<script type="math/tex">\delta_{(o,(t+1))}^{l}</script>，后续依次循环迭代。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;深度学习的梯度下降过程如下：<br>(1) 计算权重$W$和偏置$\epsilon$的偏导，计算目标函数$L_{N}$的对数似然梯度。</p>
+<script type="math/tex; mode=display">\frac{\partial L_{N}}{\partial W} = \sum_{l=1}^N \delta_{t}^{l}(h_{t}^{l})^{T}</script><script type="math/tex; mode=display">\frac{\partial L_{N}}{\partial \epsilon} = \sum_{l=1}^N \delta_{t}^{l}</script><p>(2) 依次循环计算$(t-1)$时刻的权值和偏置的偏导。<br>(3) 更新所有权值和偏置等网络参数。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在此联邦分布式训练的情景下，我们针对该场景作了参数拆分，分发到不同分布式训练方上进行训练。并且，参数在训练过程中是明文，但在传输过程中需要加密，因此需要拆分一部分参数用于加密（如训练因子$\alpha$、偏置噪声$\epsilon$），而另一部分参数则不需要加密。整体训练步骤如下，分为前向传播过程和反向传播过程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前向传播过程中，基础模型层主动方和被动方分别计算前向传播梯度；交互模型层中，被动方对梯度加密后传输给主动方，主动方计算梯度加权系数，生成随机噪声，加上偏置<script type="math/tex">Z_{p}</script>后回传给被动方，被动方解密数据，计算累计噪声矩阵<script type="math/tex">\epsilon_{acc}</script>并乘上调整因子<script type="math/tex">\alpha_{p}</script>，然后传给主动方，主动方用激活函数计算后传给顶部模型层；顶部模型层中计算前向传播梯度。</p>
+<p><div align="center"><img src="/resources/fl-forward-propagation.jpg" alt="figure-fl-forward-propagation"></div></p>
+<center><h7 style="color:grey">图6 前向传播过程</h7></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;反向传播过程中，在顶部模型层，主动方利用标签计算损失$loss$，即预测值和真实值的绝对值之差，得到残差$\delta$；交互模型层中，主动方生成噪声数据<script type="math/tex">\epsilon_{A}</script>并乘以因子<script type="math/tex">\alpha_{p}</script>后传给被动方，被动方生成随机噪声数据，加和后除以学习率$\eta$，加密<script type="math/tex">\epsilon_{acc}</script>后传给主动方，主动方依据公式加权计算权重，然后更新被动方交互层<script type="math/tex">W_{p}</script>，被动方解密<script type="math/tex">\delta_{p}</script>，然后继续向下反向传播；基础模型层计算后向传播梯度。</p>
+<p><div align="center"><img src="/resources/fl-back-propagation.jpg" alt="figure-fl-back-propagation"></div></p>
+<center><h7 style="color:grey">图7 反向传播过程</h7></center>
+
+<h6 id="5-3-模型评估"><a href="#5-3-模型评估" class="headerlink" title="5.3.模型评估"></a>5.3.模型评估</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;后续模型迭代优化，仍然以二分类的AUC等离线指标作为离线评估标准。原始标签数据一般在主动方提供，所以模型评估部分只在主动方进行。</p>
+<h6 id="6-模型在线预测"><a href="#6-模型在线预测" class="headerlink" title="6.模型在线预测"></a>6.模型在线预测</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预测投放价格，进行灰度或全量的流量实验。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;灰度小流量实验分为：空白组、对照组、实验组。每个组之内细分不同小组实验，切分对应流量；灰度实验效果稳定后，逐步切分全量实验。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线灰度实验组划分如下：</p>
+<table>
+    <tr><th>实验组</th><th>小流量组</th><th>实验</th></tr>
+    <tr><td rowspan="3">空白组A</td><td>a1</td><td>base_model_1</td></tr>
+    <tr><td>a2</td><td>base_model_2</td></tr>
+    <tr><td>a3</td><td>base_model_3</td></tr>
+    <tr><td rowspan="3">对照组B</td><td>b1</td><td>model_1</td></tr>
+    <tr><td>b2</td><td>model_2</td></tr>
+    <tr><td>b3</td><td>model_3</td></tr>
+    <tr><td rowspan="3">实验组C</td><td>c1</td><td>deep_model_1</td></tr>
+    <tr><td>c2</td><td>deep_model_2</td></tr>
+    <tr><td>c3</td><td>deep_model_3</td></tr>
+</table>
+
+<h6 id="7-在线投放智能定价"><a href="#7-在线投放智能定价" class="headerlink" title="7.在线投放智能定价"></a>7.在线投放智能定价</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于用户深度转化率，从引流体验课，到系统课的价格预估公式。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;投放定价公式如下：</p>
+<script type="math/tex; mode=display">eCPM = oBid * pCTR * pCVR * f(private\_deep\_cvr)</script><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其中，$eCPM$为每千次展示获得广告收入，该指标以衡量广告投放计费效果；$oBid$为广告转化出价；$pCTR$为预估点击率；$pCVR$为预估转化率；<script type="math/tex">private\_deep\_cvr</script>为模型输出结果即预估深度转化率；$f(*)$为扰动函数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线实验评估标准为：正价系统课成交数(deep_convert)提高、正价系统课成交率(deep_cvr)提高、信息投放方的投入产出比(ROI)提高。通过动态因子调整正价系统课的价格范围，达到整体最优化。</p>
+<h5 id="三、小结"><a href="#三、小结" class="headerlink" title="三、小结"></a>三、小结</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相比现有技术，新的学习算法提出的方案：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.采用分布式联邦训练和深度模型，得到用户深度转化率的评估，同时在训练过程中数据加密传输，有效防止用户敏感数据泄露，保证数据的安全性。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.将分布式模型训练分层拆分，单独对交互模型层的参数进行优化，其余层的模型具有灵活可扩展性，框架结构可复用以便于多次实验迭代。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.对梯度计算进行优化，小批量进行梯度更新，减小网络通信传输开销，加快分布式训练收敛速度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.投放定价公式用模型训练的private_deep_cvr权重因子修正，动态调节价格、动态修正eCPM数值，多次实验表明能带来较好的优化效果。</p>
+<h5 id="四、名词解释"><a href="#四、名词解释" class="headerlink" title="四、名词解释"></a>四、名词解释</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.<strong>联邦学习(Federated Learning)</strong>：全称”<strong>安全联合传输学习</strong>“(<strong>Secure Federated Transfer Learning</strong>)，实质是一种加密的分布式机器学习技术，参与各方可以在不披露底层数据和底层数据的加密(混淆)形态的前提下共建模型，主要应用于对用户隐私数据敏感的场景。模型训练过程中，数据加密传输，特征和样本均在加密后拼接，然后在公有云上训练和预测，得到预测结果数据，解密后返回给各方，训练过程完全透明。主要用于解决行业间联合建模的样本重叠少、特征重叠少、两者均重叠少等问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种技术的参与各方可以在不披露底层数据和底层数据的加密(混淆)形态的前提下共建模型。主要应用在金融领域的风控模型、用户信用评级模型，金融科技公司作为数据服务商，和第三方公司如银行/证券/保险/券商等合作数据建模。除了金融，目前在电商/教育/电信等对用户隐私数据敏感的行业也有应用。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.<strong>PSI数据求交</strong>(<strong>Private Set Intersection</strong>，隐私保护集合交集)：多方数据求交集，找出共同样本，然后数据在各自的第三方云上完成加密，加密之后用于模型训练。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.<strong>同态加密</strong>：一种密码学技术，同态加密后的数据经过模型训练得到结果再解密，和用同一种方式经过非加密模型训练得到的结果相同。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Federated-Learning/" rel="tag"># Federated Learning</a>
+          
+            <a href="/tags/Joint-Modeling/" rel="tag"># Joint Modeling</a>
+          
+            <a href="/tags/Gradient-Propagation/" rel="tag"># Gradient Propagation</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/20/2020-12-20-TextMining/" rel="next" title="基于文本挖掘的用户转化率预估">
+                <i class="fa fa-chevron-left"></i> 基于文本挖掘的用户转化率预估
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/04/02/2021-04-02-FissionPropagation/" rel="prev" title="裂变传播网络中关键用户识别算法">
+                裂变传播网络中关键用户识别算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/psb.jpg"
+               alt="DianaCody" />
+          <p class="site-author-name" itemprop="name">DianaCody</p>
+           
+              <p class="site-description motion-element" itemprop="description">Researcher, Focus on Artificial Intelligence</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dianacody" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/dianacody" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/dianacody" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/dianacody" title="CSDN Blog" target="_blank">CSDN Blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">2.</span> <span class="nav-text">一、概述</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-技术领域"><span class="nav-number">2.1.</span> <span class="nav-text">1.技术领域</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-业界现状"><span class="nav-number">2.2.</span> <span class="nav-text">2.业界现状</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-技术问题"><span class="nav-number">2.3.</span> <span class="nav-text">3.技术问题</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、技术方案"><span class="nav-number">3.</span> <span class="nav-text">二、技术方案</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-训练框架部署"><span class="nav-number">3.1.</span> <span class="nav-text">1.训练框架部署</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-数据上传私有云"><span class="nav-number">3.2.</span> <span class="nav-text">2.数据上传私有云</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-PSI安全数据求交"><span class="nav-number">3.3.</span> <span class="nav-text">3.PSI安全数据求交</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-样本拼接"><span class="nav-number">3.4.</span> <span class="nav-text">4.样本拼接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-模型离线训练及评估"><span class="nav-number">3.5.</span> <span class="nav-text">5.模型离线训练及评估</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-1-基于机器学习的模型训练"><span class="nav-number">3.6.</span> <span class="nav-text">5.1.基于机器学习的模型训练</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-基于深度学习的模型训练"><span class="nav-number">3.7.</span> <span class="nav-text">5.2.基于深度学习的模型训练</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-1-联邦深度学习架构"><span class="nav-number">3.8.</span> <span class="nav-text">5.2.1.联邦深度学习架构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-2-分层网络优化"><span class="nav-number">3.9.</span> <span class="nav-text">5.2.2.分层网络优化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-2-3-前向-反向传播、梯度计算过程"><span class="nav-number">3.10.</span> <span class="nav-text">5.2.3.前向/反向传播、梯度计算过程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-3-模型评估"><span class="nav-number">3.11.</span> <span class="nav-text">5.3.模型评估</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#6-模型在线预测"><span class="nav-number">3.12.</span> <span class="nav-text">6.模型在线预测</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-在线投放智能定价"><span class="nav-number">3.13.</span> <span class="nav-text">7.在线投放智能定价</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、小结"><span class="nav-number">4.</span> <span class="nav-text">三、小结</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、名词解释"><span class="nav-number">5.</span> <span class="nav-text">四、名词解释</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DianaCody</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+</body>
+</html>
