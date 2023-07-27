@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Parallel Computing,Multicore Computing," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -89,23 +89,15 @@
 
 
 
-<meta name="description" content="TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="TBB并行加速优化Slam计算框架">
-<meta property="og:url" content="http://www.dianacody.com/2022/10/09/2022-10-09-TBB/index.html">
+<meta name="description" content="Researcher, Focus on Artificial Intelligence">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DianaCody">
+<meta property="og:url" content="http://www.dianacody.com/index.html">
 <meta property="og:site_name" content="DianaCody">
-<meta property="og:description" content="TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。">
-<meta property="og:image" content="http://www.dianacody.com/resources/tbb-total-time.jpg">
-<meta property="og:image" content="http://www.dianacody.com/resources/tbb-median-tracking-time.jpg">
-<meta property="og:image" content="http://www.dianacody.com/resources/tbb-mean-tracking-time.jpg">
-<meta property="og:image" content="http://www.dianacody.com/resources/tbb-total-time-ratio.jpg">
-<meta property="og:image" content="http://www.dianacody.com/resources/tbb-median-tracking-time-ratio.jpg">
-<meta property="og:image" content="http://www.dianacody.com/resources/tbb-mean-tracking-time-ratio.jpg">
-<meta property="og:updated_time" content="2023-07-27T08:58:50.465Z">
+<meta property="og:description" content="Researcher, Focus on Artificial Intelligence">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TBB并行加速优化Slam计算框架">
-<meta name="twitter:description" content="TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。">
-<meta name="twitter:image" content="http://www.dianacody.com/resources/tbb-total-time.jpg">
+<meta name="twitter:title" content="DianaCody">
+<meta name="twitter:description" content="Researcher, Focus on Artificial Intelligence">
 
 
 
@@ -133,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://www.dianacody.com/2022/10/09/2022-10-09-TBB/"/>
+  <link rel="canonical" href="http://www.dianacody.com/"/>
 
 
 
 
 
-  <title> TBB并行加速优化Slam计算框架 | DianaCody </title>
+  <title> DianaCody </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -174,7 +166,9 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -299,9 +293,156 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2023/01/03/2023-01-03-SLAM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2023/01/03/2023-01-03-SLAM/" itemprop="url">
+                  SLAM定位建图和轨迹评估
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-01-03T00:00:00+08:00">
+                2023-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">SLAM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2023/01/03/2023-01-03-SLAM/">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
 
   
 
@@ -331,7 +472,10 @@
             
             
               
-                TBB并行加速优化Slam计算框架
+                
+                <a class="post-title-link" href="/2022/10/09/2022-10-09-TBB/" itemprop="url">
+                  TBB并行加速优化Slam计算框架
+                </a>
               
             
           </h1>
@@ -392,9 +536,152 @@
           
 
           
-              <div class="post-description">
-                  TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。
-              </div>
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2022/10/09/2022-10-09-TBB/">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2021/04/02/2021-04-02-FissionPropagation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2021/04/02/2021-04-02-FissionPropagation/" itemprop="url">
+                  裂变传播网络中关键用户识别算法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-02T00:00:00+08:00">
+                2021-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Fission-Propagation/" itemprop="url" rel="index">
+                    <span itemprop="name">Fission Propagation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
           
 
         </div>
@@ -408,581 +695,348 @@
       
 
       
-        <h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TBB指令集, Threading Building Blocks(Intel TBB)</strong>：英特尔发布，使用标准 ISO C++代码支持可扩展并行编程的库。不需要特殊的语言或编译器，可扩展数据并行编程。完全支持嵌套并行性，可从较小并行组件构建较大并行组件。使用该库需要指定任务而非线程，并让库以有效的方式将任务映射到线程上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该库在以下方面与典型的线程包/线程池不同：</p>
-<ul>
-<li>指定逻辑并行而不是线程。</li>
-<li>以线程化为目标，以提高性能。 </li>
-<li>兼容其他线程包。 </li>
-<li>强调可扩展的数据并行编程。</li>
-<li>依赖泛型编程。</li>
-</ul>
-<h5 id="二、TBB并行指令集函数"><a href="#二、TBB并行指令集函数" class="headerlink" title="二、TBB并行指令集函数"></a>二、TBB并行指令集函数</h5><p>1.并行算法；2.任务调度；3.并行容器；4.同步原语；5.内存分配器；<br><strong>TBB基础函数</strong><br><strong>1.parallel_for</strong>：并行方式遍历一个区间。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">parallel_for(<span class="number">1</span>, <span class="number">20000</span>, [](<span class="keyword">int</span> i)</div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">&#125;);</div><div class="line"></div><div class="line">parallel_for(blocked_range&lt;<span class="keyword">size_t</span>&gt;(<span class="number">0</span>, <span class="number">20000</span>), [](blocked_range&lt;<span class="keyword">size_t</span>&gt;&amp; r)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = r.begin(); i != r.end(); ++i)</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p><strong>2.parallel_do和parallel_for_each</strong>：将算法应用于一个区间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vector&lt;size_t&gt; v;</div><div class="line">parallel_do(v.begin(), v.end(), [](size_t i)&#123;cout &lt;&lt; i &lt;&lt; endl; &#125;);</div><div class="line">parallel_for_each(v.begin(), v.end(), [](size_t i)&#123;cout &lt;&lt; i &lt;&lt; endl; &#125;);</div></pre></td></tr></table></figure></p>
-<p><strong>3.parallel_reduce</strong>：类似于map_reduce，先将区间自动分组，对每个分组进行聚合(accumulate)计算，每组得到一个结果，最后将各组的结果进行汇聚(reduce)。<br>这个算法稍微复杂一点，parallel_reduce(range,identity,func,reduction)，第一个参数是区间范围，第二个参数是计算的初始值，第三个参数是聚合函数，第四个参数是汇聚参数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">float</span> <span class="title">ParallelSum</span><span class="params">(<span class="keyword">float</span> <span class="built_in">array</span> [], <span class="keyword">size_t</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> parallel_reduce(</div><div class="line">        blocked_range&lt;<span class="keyword">float</span>*&gt;(<span class="built_in">array</span>, <span class="built_in">array</span> + n),</div><div class="line">        <span class="number">0.f</span>,</div><div class="line">        [](<span class="keyword">const</span> blocked_range&lt;<span class="keyword">float</span>*&gt;&amp; r, <span class="keyword">float</span> value)-&gt;<span class="keyword">float</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">std</span>::accumulate(r.begin(), r.end(), value);</div><div class="line">    &#125;,</div><div class="line">        <span class="built_in">std</span>::plus&lt;<span class="keyword">float</span>&gt;()</div><div class="line">        );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这数组求和例子就是先自动分组然后对各组中的元素进行聚合累加，最后将各组结果汇聚相加。<br><strong>4.parallel_pipeline</strong>：并行的管道过滤器数据流经过一个管道，在数据流动的过程中依次要经过一些过滤器的处理，其中有些过滤器可能会并行处理数据，这时就可以用到并行的管道过滤器。举一个例子，比如我要读入一个文件，先将文件中的数字提取出来，再将提取出来的数字做一个转换，最后将转换后的数字输出到另外一个文件中。其中读文件和输出文件不能并行去做，但是中间数字转换环节可并行。parallel_pipeline的原型：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">parallel_pipeline( max_number_of_live_tokens, </div><div class="line">                   make_filter&lt;<span class="keyword">void</span>,I1&gt;(mode0,g0) &amp;</div><div class="line">                   make_filter&lt;I1,I2&gt;(mode1,g1) &amp;</div><div class="line">                   make_filter&lt;I2,I3&gt;(mode2,g2) &amp;</div><div class="line">                   ... </div><div class="line">                   make_filter&lt;In,<span class="keyword">void</span>&gt;(moden,gn) );</div></pre></td></tr></table></figure></p>
-<p>第一个参数是最大的并行数，可以通过&amp;连接多个filter，这些filter是顺序执行的，前一个filter的输出是下一个filter的输入。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">float</span> <span class="title">RootMeanSquare</span><span class="params">( <span class="keyword">float</span>* first, <span class="keyword">float</span>* last )</span> </span>&#123;</div><div class="line">    <span class="keyword">float</span> sum=<span class="number">0</span>;</div><div class="line">    parallel_pipeline( <span class="comment">/*max_number_of_live_token=*/</span><span class="number">16</span>,       </div><div class="line">        make_filter&lt;<span class="keyword">void</span>,<span class="keyword">float</span>*&gt;(</div><div class="line">            filter::serial,</div><div class="line">            [&amp;](flow_control&amp; fc)-&gt; <span class="keyword">float</span>*&#123;</div><div class="line">                <span class="keyword">if</span>( first&lt;last ) &#123;</div><div class="line">                    <span class="keyword">return</span> first++;</div><div class="line">                 &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    fc.stop();</div><div class="line">                    <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;    </div><div class="line">        ) &amp;</div><div class="line">        make_filter&lt;<span class="keyword">float</span>*,<span class="keyword">float</span>&gt;(</div><div class="line">            filter::parallel,</div><div class="line">            [](<span class="keyword">float</span>* p)&#123;<span class="keyword">return</span> (*p)*(*p);&#125; </div><div class="line">        ) &amp;</div><div class="line">        make_filter&lt;<span class="keyword">float</span>,<span class="keyword">void</span>&gt;(</div><div class="line">            filter::serial,</div><div class="line">            [&amp;](<span class="keyword">float</span> x) &#123;sum+=x;&#125;</div><div class="line">        )</div><div class="line">    );</div><div class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(sum);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>第一个filter生成数据（如从文件中读取数据等），第二个filter对产生的数据进行转换，第三个filter是对转换后的数据做累加。其中第二个filter是可以并行处理的，通过filter::parallel来指定其处理模式。<br><strong>5.parallel_sort</strong>：并行排序。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1000000</span>;</div><div class="line"><span class="keyword">float</span> a[N];</div><div class="line"><span class="keyword">float</span> b[N];</div><div class="line">parallel_sort(a, a + N);</div><div class="line">parallel_sort(b, b + N, <span class="built_in">std</span>::greater&lt;<span class="keyword">float</span>&gt;());</div></pre></td></tr></table></figure></p>
-<p><strong>6.parallel_invoke</strong>：并行调用，并行调用多个函数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</div><div class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">bar</span><span class="params">(<span class="keyword">int</span>)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">RunFunctionsInParallel</span><span class="params">()</span> </span>&#123;</div><div class="line">    tbb::parallel_invoke(f, []&#123;bar(<span class="number">2</span>);&#125;, []&#123;bar(<span class="number">3</span>);&#125; );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>TBB任务</strong><br><strong>task_group</strong>：表示可以等待或者取消的任务集合。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">task_group g;</div><div class="line">g.run([]&#123;TestPrint(); &#125;);</div><div class="line">g.run([]&#123;TestPrint(); &#125;);</div><div class="line">g.run([]&#123;TestPrint(); &#125;);</div><div class="line">g.wait()</div></pre></td></tr></table></figure></p>
-<h5 id="三、加速版ORB-SLAM3-FAST"><a href="#三、加速版ORB-SLAM3-FAST" class="headerlink" title="三、加速版ORB-SLAM3-FAST"></a>三、加速版ORB-SLAM3-FAST</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已有的开源项目：<a href="https://github.com/hellovuong/ORB_SLAM3_FAST" target="_blank" rel="external">https://github.com/hellovuong/ORB_SLAM3_FAST</a> ，by hellovuong，at 2022.1。其不是直接加载for循环上的parallel_for，SLAM3_FAST框架是在图像的特征提取和后端优化部分做了tbb加速, 目前支持“TUM-VI和EuRoC”的“单目+双目”数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实测，30s的Mono-TUM数据集，时间=0.02s数量级，Fast版本比Orb-Slam3原生版本确实都快0.002s左右，<h7 style="color:blue">提速17%~18%</h7>左右。但是该版本仅修改了少部分，还有大量Orb-Slam3的源码没有优化。</p>
-<h5 id="四、TBB加速ORB-SLAM3"><a href="#四、TBB加速ORB-SLAM3" class="headerlink" title="四、TBB加速ORB-SLAM3"></a>四、TBB加速ORB-SLAM3</h5><h6 id="1-改造方法"><a href="#1-改造方法" class="headerlink" title="1.改造方法"></a>1.改造方法</h6><p>(1)代码加速：parallel_for/parallel_reduce/parallel_invoke，修改并行计算模块：<br><strong>OrbExtracter.cc</strong>, computeKeyPointsOctTree(); DistributeOctTree(); computeOrientation();<br><strong>OrbMatcher.cc</strong>, SearchByProjection(); ComputeThreeMaxima(); SearchForInitialization();<br><strong>Optimizer.cc</strong>, PoseOptimization().lock()/mono()/right-fisheye()/stereo();<br><strong>Frame.cc</strong>, ComputeStereoMatches(); UndistortKeyPoints();<br><strong>KeyFrame.cc</strong>: KeyFrame(); UpdateBestCovisibles(); TrackedMapPoints();<br><strong>KeyFrameDataBase.cc</strong>: -<br><strong>Map.cc</strong>: -<br><strong>MapPoint.cc</strong>: -   ComputeDistinctiveDescriptors();<br><strong>LocalMapping.cc</strong>: searchInNeighbors(); KeyFrameCulling();  InitializeIMU();<br><strong>LoopClosing.cc</strong>: deleteCommonRegionsFromBow();<br><strong>System.cc</strong>: -<br><strong>Tracking.cc</strong>, Track(); CreateInitialMapMonocular(); TrackWithMotionModel(); TrackLocalMap();<br>CreateNewKeyFrame(); SearchLocalPoints(); UpdateLocalKeyFrames();<br>(2)算法加速：前端(图像特征提取并行化)/后端优化/回环检测；</p>
-<h6 id="2-数据集"><a href="#2-数据集" class="headerlink" title="2.数据集"></a>2.数据集</h6><p>单目mono、单目IMU。共10个数据集，具体如下：</p>
-<ul>
-<li>mono_tum1</li>
-<li>mono_tum2</li>
-<li>mono_tum_vi_room4</li>
-<li>mono_tum_vi_slides1</li>
-<li>mono_euroc_MH01</li>
-<li>mono_euroc_MH03</li>
-<li>mono_imu_tum_vi_room4</li>
-<li>mono_imu_tum_vi_slides1</li>
-<li>mono_imu_euroc_MH01</li>
-<li>mono_imu_euroc_MH03</li>
-</ul>
-<h6 id="3-统计指标"><a href="#3-统计指标" class="headerlink" title="3.统计指标"></a>3.统计指标</h6><p>按以下三个指标统计绝对时间、提速率。</p>
-<ul>
-<li>totalTime – 总运行时间</li>
-<li>medianTrackingTime – 轨迹中位数时间</li>
-<li>meanTrackingTime – 轨迹平均时间</li>
-</ul>
-<p>注：<h7 style="color:blue"><strong>提速率 = (测试时间-基准时间) / 基准时间 * 100%</strong></h7>。</p>
-<h6 id="3-绝对时间统计"><a href="#3-绝对时间统计" class="headerlink" title="3.绝对时间统计"></a>3.绝对时间统计</h6><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>totalTime</th>
-<th>ori</th>
-<th>fast</th>
-<th>tbb</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mono_tum1</td>
-<td>22.9099</td>
-<td>20.3967</td>
-<td>18.819</td>
-</tr>
-<tr>
-<td>mono_tum2</td>
-<td>128.491</td>
-<td>116.23</td>
-<td>110.91</td>
-</tr>
-<tr>
-<td>mono_tum_vi_room4</td>
-<td>82.30296326</td>
-<td>74.69300079</td>
-<td>69.7</td>
-</tr>
-<tr>
-<td>mono_tum_vi_slides1</td>
-<td>198.2973328</td>
-<td>184.109024</td>
-<td>156.94</td>
-</tr>
-<tr>
-<td>mono_euroc_MH01</td>
-<td>113.8627319</td>
-<td>98.12454987</td>
-<td>84.973</td>
-</tr>
-<tr>
-<td>mono_euroc_MH03</td>
-<td>83.69143677</td>
-<td>70.68492126</td>
-<td>59.8</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_room4</td>
-<td>79.43052673</td>
-<td>64.13159943</td>
-<td>64.208</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_slides1</td>
-<td>192.7673187</td>
-<td>173.0284576</td>
-<td>150.48</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH01</td>
-<td>125.3083267</td>
-<td>104.5439606</td>
-<td>90.488</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH03</td>
-<td>97.23898315</td>
-<td>80.485672</td>
-<td>62.913</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-total-time.jpg" alt="figure-total-time"></div></p>
-<center><h7 style="color:grey">图1 totalTime提速时间</h7></center>
-
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>medianTrackingTime</th>
-<th>ori</th>
-<th>fast</th>
-<th>tbb</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mono_tum1</td>
-<td>0.0246596</td>
-<td>0.0229959</td>
-<td>0.02178</td>
-</tr>
-<tr>
-<td>mono_tum2</td>
-<td>0.0225559</td>
-<td>0.0210467</td>
-<td>0.020612</td>
-</tr>
-<tr>
-<td>mono_tum_vi_room4</td>
-<td>0.031520639</td>
-<td>0.029292193</td>
-<td>0.0289</td>
-</tr>
-<tr>
-<td>mono_tum_vi_slides1</td>
-<td>0.031224145</td>
-<td>0.028130215</td>
-<td>0.025574</td>
-</tr>
-<tr>
-<td>mono_euroc_MH01</td>
-<td>0.028075576</td>
-<td>0.024197916</td>
-<td>0.021836</td>
-</tr>
-<tr>
-<td>mono_euroc_MH03</td>
-<td>0.027769892</td>
-<td>0.024874028</td>
-<td>0.020141</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_room4</td>
-<td>0.030900763</td>
-<td>0.025430075</td>
-<td>0.025349</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_slides1</td>
-<td>0.030611012</td>
-<td>0.026431446</td>
-<td>0.024964</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH01</td>
-<td>0.031929269</td>
-<td>0.025167587</td>
-<td>0.022284</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH03</td>
-<td>0.031767674</td>
-<td>0.023637912</td>
-<td>0.021577</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-median-tracking-time.jpg" alt="figure-median-tracking-time"></div></p>
-<center><h7 style="color:grey">图2 medianTrackingTime提速时间</h7></center>
-
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>meanTrackingTime</th>
-<th>ori</th>
-<th>fast</th>
-<th>tbb</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mono_tum1</td>
-<td>0.0287092</td>
-<td>0.0263192</td>
-<td>0.023583</td>
-</tr>
-<tr>
-<td>mono_tum2</td>
-<td>0.0247957</td>
-<td>0.0223593</td>
-<td>0.021404</td>
-</tr>
-<tr>
-<td>mono_tum_vi_room4</td>
-<td>0.036940288</td>
-<td>0.034013015</td>
-<td>0.031284</td>
-</tr>
-<tr>
-<td>mono_tum_vi_slides1</td>
-<td>0.035524424</td>
-<td>0.032774099</td>
-<td>0.028116</td>
-</tr>
-<tr>
-<td>mono_euroc_MH01</td>
-<td>0.030924153</td>
-<td>0.027365711</td>
-<td>0.023078</td>
-</tr>
-<tr>
-<td>mono_euroc_MH03</td>
-<td>0.030996829</td>
-<td>0.027883305</td>
-<td>0.022148</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_room4</td>
-<td>0.035651043</td>
-<td>0.03027271</td>
-<td>0.028819</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_slides1</td>
-<td>0.034533735</td>
-<td>0.030789048</td>
-<td>0.026958</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH01</td>
-<td>0.03403268</td>
-<td>0.029109169</td>
-<td>0.024576</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH03</td>
-<td>0.036014438</td>
-<td>0.031513211</td>
-<td>0.023301</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-mean-tracking-time.jpg" alt="figure-mean-tracking-time"></div></p>
-<center><h7 style="color:grey">图3 meanTrackingTime提速时间</h7></center>
-
-<h6 id="4-提速率统计"><a href="#4-提速率统计" class="headerlink" title="4.提速率统计"></a>4.提速率统计</h6><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>totalTime</th>
-<th>ori</th>
-<th>fast</th>
-<th>tbb</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mono_tum1</td>
-<td>0.00%</td>
-<td>10.97%</td>
-<td>17.86%</td>
-</tr>
-<tr>
-<td>mono_tum2</td>
-<td>0.00%</td>
-<td>9.54%</td>
-<td>13.68%</td>
-</tr>
-<tr>
-<td>mono_tum_vi_room4</td>
-<td>0.00%</td>
-<td>9.25%</td>
-<td>15.31%</td>
-</tr>
-<tr>
-<td>mono_tum_vi_slides1</td>
-<td>0.00%</td>
-<td>7.16%</td>
-<td>20.86%</td>
-</tr>
-<tr>
-<td>mono_euroc_MH01</td>
-<td>0.00%</td>
-<td>13.82%</td>
-<td>25.37%</td>
-</tr>
-<tr>
-<td>mono_euroc_MH03</td>
-<td>0.00%</td>
-<td>15.54%</td>
-<td>28.55%</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_room4</td>
-<td>0.00%</td>
-<td>19.26%</td>
-<td>19.16%</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_slides1</td>
-<td>0.00%</td>
-<td>10.24%</td>
-<td>21.94%</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH01</td>
-<td>0.00%</td>
-<td>16.57%</td>
-<td>27.79%</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH03</td>
-<td>0.00%</td>
-<td>17.23%</td>
-<td>35.30%</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-total-time-ratio.jpg" alt="figure-total-time-ratio"></div></p>
-<center><h7 style="color:grey">图4 totalTime提速率</h7></center>
-
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>medianTrackingTime</th>
-<th>ori</th>
-<th>fast</th>
-<th>tbb</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mono_tum1</td>
-<td>0.00%</td>
-<td>6.75%</td>
-<td>11.68%</td>
-</tr>
-<tr>
-<td>mono_tum2</td>
-<td>0.00%</td>
-<td>6.69%</td>
-<td>8.62%</td>
-</tr>
-<tr>
-<td>mono_tum_vi_room4</td>
-<td>0.00%</td>
-<td>7.07%</td>
-<td>8.31%</td>
-</tr>
-<tr>
-<td>mono_tum_vi_slides1</td>
-<td>0.00%</td>
-<td>9.91%</td>
-<td>18.10%</td>
-</tr>
-<tr>
-<td>mono_euroc_MH01</td>
-<td>0.00%</td>
-<td>13.81%</td>
-<td>22.22%</td>
-</tr>
-<tr>
-<td>mono_euroc_MH03</td>
-<td>0.00%</td>
-<td>10.43%</td>
-<td>27.47%</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_room4</td>
-<td>0.00%</td>
-<td>17.70%</td>
-<td>17.97%</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_slides1</td>
-<td>0.00%</td>
-<td>13.65%</td>
-<td>18.45%</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH01</td>
-<td>0.00%</td>
-<td>21.18%</td>
-<td>30.21%</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH03</td>
-<td>0.00%</td>
-<td>25.59%</td>
-<td>32.08%</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-median-tracking-time-ratio.jpg" alt="figure-median-tracking-time-ratio"></div></p>
-<center><h7 style="color:grey">图5 medianTrackingTime提速率</h7></center>
-
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>meanTrackingTime</th>
-<th>ori</th>
-<th>fast</th>
-<th>tbb</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mono_tum1</td>
-<td>0.00%</td>
-<td>8.32%</td>
-<td>17.86%</td>
-</tr>
-<tr>
-<td>mono_tum2</td>
-<td>0.00%</td>
-<td>9.83%</td>
-<td>13.68%</td>
-</tr>
-<tr>
-<td>mono_tum_vi_room4</td>
-<td>0.00%</td>
-<td>7.92%</td>
-<td>15.31%</td>
-</tr>
-<tr>
-<td>mono_tum_vi_slides1</td>
-<td>0.00%</td>
-<td>7.74%</td>
-<td>20.85%</td>
-</tr>
-<tr>
-<td>mono_euroc_MH01</td>
-<td>0.00%</td>
-<td>11.51%</td>
-<td>25.37%</td>
-</tr>
-<tr>
-<td>mono_euroc_MH03</td>
-<td>0.00%</td>
-<td>10.04%</td>
-<td>28.55%</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_room4</td>
-<td>0.00%</td>
-<td>15.09%</td>
-<td>19.16%</td>
-</tr>
-<tr>
-<td>mono_imu_tum_vi_slides1</td>
-<td>0.00%</td>
-<td>10.84%</td>
-<td>21.94%</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH01</td>
-<td>0.00%</td>
-<td>14.47%</td>
-<td>27.79%</td>
-</tr>
-<tr>
-<td>mono_imu_euroc_MH03</td>
-<td>0.00%</td>
-<td>12.50%</td>
-<td>35.30%</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-mean-tracking-time-ratio.jpg" alt="figure-mean-tracking-time-ratio"></div></p>
-<center><h7 style="color:grey">图6 meanTrackingTime提速率</h7></center>
-
-<p>总体：Slam-FAST稳定<h7 style="color:blue">提速17%~18%</h7>，tbb改造版本<h7 style="color:red">提速20%~30%</h7>。<br>分析：除了tbb的代码级别改造，Slam-FAST版本还有其他优化部分没增加完，在此基础上可以继续修改优化。</p>
-<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1] TBB官网：<a href="https://software.intel.com/content/www/us/en/develop/tools/threading-building-blocks.html" target="_blank" rel="external">https://software.intel.com/content/www/us/en/develop/tools/threading-building-blocks.html</a><br>[2] Pro TBB: C++ Parallel Programming with Threading Building Blocks<br><a href="https://book.douban.com/subject/35004080/" target="_blank" rel="external">https://book.douban.com/subject/35004080/</a><br>[3] TBB指令集c++并行化：<a href="https://www.bilibili.com/video/av508224172/" target="_blank" rel="external">https://www.bilibili.com/video/av508224172/</a></p>
-
+        
+          用户增长获客的一种重要的手段就是通过现有用户的社交关系网络来获取新用户。在裂变传播网络中，构建深度复杂网络模型，识别关键传播路由节点用户（关键意见领袖）就成了一个值得研究的问题。只有识别了高潜用户，才能更针对性地让这部分用户个性化地向更广泛的人群推广信息。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/04/02/2021-04-02-FissionPropagation/">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
-      
-        
-
       
     </div>
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Parallel-Computing/" rel="tag"># Parallel Computing</a>
-          
-            <a href="/tags/Multicore-Computing/" rel="tag"># Multicore Computing</a>
-          
-        </div>
+
       
 
       
-        
-      
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2021/04/02/2021-04-02-FissionPropagation/" rel="next" title="裂变传播网络中关键用户识别算法">
-                <i class="fa fa-chevron-left"></i> 裂变传播网络中关键用户识别算法
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2023/01/03/2023-01-03-SLAM/" rel="prev" title="SLAM定位建图和轨迹评估">
-                SLAM定位建图和轨迹评估 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
+    
+      
 
-    <div class="post-spread">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2021/03/10/2021-03-10-FederatedLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2021/03/10/2021-03-10-FederatedLearning/" itemprop="url">
+                  基于联邦学习的用户深度转化率预估
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-10T00:00:00+08:00">
+                2021-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Federated-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Federated Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          在一些对用户隐私数据敏感的行业，用户样本数据和用户特征均有限的情况下，如何在保证数据安全的前提下，建立机器学习模型，对用户转化率进行预估？通常用到的技术就是联邦学习、数据联合建模等。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/10/2021-03-10-FederatedLearning/">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
-  </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2020/12/20/2020-12-20-TextMining/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DianaCody">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psb.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DianaCody">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/12/20/2020-12-20-TextMining/" itemprop="url">
+                  基于文本挖掘的用户转化率预估
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-20T00:00:00+08:00">
+                2020-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index">
+                    <span itemprop="name">NLP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          基于文本挖掘方法对用户购买转化率进行预测。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/12/20/2020-12-20-TextMining/">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -990,12 +1044,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="uyan_frame"></div>
-    
-  </div>
-
 
         </div>
         
@@ -1015,17 +1063,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/psb.jpg"
@@ -1138,22 +1177,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、TBB并行指令集函数"><span class="nav-number">2.</span> <span class="nav-text">二、TBB并行指令集函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、加速版ORB-SLAM3-FAST"><span class="nav-number">3.</span> <span class="nav-text">三、加速版ORB-SLAM3-FAST</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、TBB加速ORB-SLAM3"><span class="nav-number">4.</span> <span class="nav-text">四、TBB加速ORB-SLAM3</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-改造方法"><span class="nav-number">4.1.</span> <span class="nav-text">1.改造方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-数据集"><span class="nav-number">4.2.</span> <span class="nav-text">2.数据集</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-统计指标"><span class="nav-number">4.3.</span> <span class="nav-text">3.统计指标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-绝对时间统计"><span class="nav-number">4.4.</span> <span class="nav-text">3.绝对时间统计</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-提速率统计"><span class="nav-number">4.5.</span> <span class="nav-text">4.提速率统计</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、参考文献"><span class="nav-number">5.</span> <span class="nav-text">五、参考文献</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -1260,10 +1283,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
 
   
 
@@ -1295,10 +1314,6 @@
   
     
 
-    
-      <!-- UY BEGIN -->
-      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
-      <!-- UY END -->
     
   
 
