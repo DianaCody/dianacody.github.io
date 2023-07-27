@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="SLAM,Trajectory Evaluation," />
 
 
 
@@ -89,15 +89,82 @@
 
 
 
-<meta name="description" content="Researcher, Focus on Artificial Intelligence">
-<meta property="og:type" content="website">
-<meta property="og:title" content="DianaCody">
-<meta property="og:url" content="http://www.dianacody.com/index.html">
+<meta name="description" content="Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SLAM定位建图和轨迹评估">
+<meta property="og:url" content="http://www.dianacody.com/2023/01/03/2023-01-03-SLAM/index.html">
 <meta property="og:site_name" content="DianaCody">
-<meta property="og:description" content="Researcher, Focus on Artificial Intelligence">
+<meta property="og:description" content="Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-indoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-outdoor.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-break1.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-break2.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-traj-slides-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-xyz-slides-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpy-slides-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-slides-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-ape-map-slides-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-slides-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-indoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-indoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-outdoor-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-outdoor-d435i-rgbd.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides-d435i-mono.jpg">
+<meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides-d435i-rgbd.jpg">
+<meta property="og:updated_time" content="2023-07-27T09:20:08.924Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DianaCody">
-<meta name="twitter:description" content="Researcher, Focus on Artificial Intelligence">
+<meta name="twitter:title" content="SLAM定位建图和轨迹评估">
+<meta name="twitter:description" content="Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。">
+<meta name="twitter:image" content="http://www.dianacody.com/resources/slam-traj-indoor.jpg">
 
 
 
@@ -125,13 +192,13 @@
 
 
 
-  <link rel="canonical" href="http://www.dianacody.com/"/>
+  <link rel="canonical" href="http://www.dianacody.com/2023/01/03/2023-01-03-SLAM/"/>
 
 
 
 
 
-  <title> DianaCody </title>
+  <title> SLAM定位建图和轨迹评估 | DianaCody </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -166,9 +233,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -293,9 +358,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -304,7 +369,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2021/04/02/2021-04-02-FissionPropagation/">
+    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2023/01/03/2023-01-03-SLAM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="DianaCody">
@@ -325,10 +390,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2021/04/02/2021-04-02-FissionPropagation/" itemprop="url">
-                  裂变传播网络中关键用户识别算法
-                </a>
+                SLAM定位建图和轨迹评估
               
             
           </h1>
@@ -343,8 +405,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-02T00:00:00+08:00">
-                2021-04-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-01-03T00:00:00+08:00">
+                2023-01-03
               </time>
             
 
@@ -366,8 +428,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Fission-Propagation/" itemprop="url" rel="index">
-                    <span itemprop="name">Fission Propagation</span>
+                  <a href="/categories/SLAM/" itemprop="url" rel="index">
+                    <span itemprop="name">SLAM</span>
                   </a>
                 </span>
 
@@ -389,152 +451,9 @@
           
 
           
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          用户增长获客的一种重要的手段就是通过现有用户的社交关系网络来获取新用户。在裂变传播网络中，构建深度复杂网络模型，识别关键传播路由节点用户（关键意见领袖）就成了一个值得研究的问题。只有识别了高潜用户，才能更针对性地让这部分用户个性化地向更广泛的人群推广信息。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/04/02/2021-04-02-FissionPropagation/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2021/03/10/2021-03-10-FederatedLearning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2021/03/10/2021-03-10-FederatedLearning/" itemprop="url">
-                  基于联邦学习的用户深度转化率预估
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-10T00:00:00+08:00">
-                2021-03-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Federated-Learning/" itemprop="url" rel="index">
-                    <span itemprop="name">Federated Learning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
+              <div class="post-description">
+                  Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。
+              </div>
           
 
         </div>
@@ -548,495 +467,295 @@
       
 
       
+        <h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><p><strong>SLAM</strong>：<strong>即时定位与地图构建</strong>，Simultaneous Location And Mapping，也称为CML (Current Mapping and Localization)。分开来看就是两个部分：</p>
+<ul>
+<li>定位部分，主要是依据周围图像，提取图像特征点(或光流法)，依据图像差异计算轨迹，以确定自身位置。</li>
+<li>建图部分，通过自身回环轨迹，不断更新当前地图和全局地图，最终以点云形式，计算出周边环境轮廓地图。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开源框架Orb-Slam3是典型的以图像特征点法为主的slam计算框架，基于此可以评估不同光照条件、不同相机、不同外部环境、不同曝光、不同图像等各种因素对于传感器运动轨迹的影响。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于仅基于图像的slam定位建图算法来说，获取到的图像质量对于计算精度和准确率的影响是极为重要的（尤其在没有附加惯性测量单元(imu)或外部GPS定位的条件下）。同时也可以看到，不同相机的帧率/曝光方式/相机性质/相机标定的内外参…，所带来的差异影响也是非常大的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文分为三个部分：<br><strong>1.卷帘曝光相机(Rolling-Shutter)和全局曝光相机(Global-Shutter)对比</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>global shutter</strong>：<strong>全局曝光</strong>，感光元件的所有像素点同时曝光一定时间，进而成像。没有Rolling Shutter的“果冻现象”。曝光时间比Rolling Shutter短，曝光整帧后输出像素数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>rolling shutter</strong>：<strong>卷帘曝光</strong>，感光元件的所有像素点逐行轮流曝光一定时间，进而成像。会出现“果冻现象”。曝光时间比Global Shutter长，但是曝光一行输出一行。<br><strong>2.RealSense D435i的彩色相机(rgb-camera)和红外相机(infrared-camera)对比</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense 是立体视觉深度相机，集成了2个红外传感器(IR Stereo Camera)、1个红外激光发射器(IR Projector)、1个彩色相机(Color Camera)。IntelRealSense D435i提供完整深度相机模块，集成视觉处理器、立体深度模块、RGB传感器、彩色图像信号处理模块。深度模块采用立体视觉的左右成像器、可选红外激光发射器、 RGB色彩传感器。<br><strong>3.RealSense D455的彩色相机(rgb-camera)和红外相机(infrared-camera)对比</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense D455和RealSense D435i其实本质差异不太大，除了相机摄像头分布位置、摄像头内外参等。</p>
+<h5 id="二、Rolling-Shutter-amp-Global-Shutter相机轨迹评估"><a href="#二、Rolling-Shutter-amp-Global-Shutter相机轨迹评估" class="headerlink" title="二、Rolling-Shutter &amp; Global-Shutter相机轨迹评估"></a>二、Rolling-Shutter &amp; Global-Shutter相机轨迹评估</h5><h6 id="1-实验设备"><a href="#1-实验设备" class="headerlink" title="1.实验设备"></a>1.实验设备</h6><p>Global Shutter相机 (2M)<br>Rolling Shutter相机 (630)</p>
+<h6 id="2-实验方法"><a href="#2-实验方法" class="headerlink" title="2.实验方法"></a>2.实验方法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个摄像头同时固定设备，沿相同轨迹移动一段时间后，得到视频。两个相机运动轨迹近乎重合，有细微差别。预处理视频后，得到帧图像数据集（室内indoor/室外outdoor/走廊slides），标注为TUM数据集格式，定位建图框架运行环境为Orb-Slam3，按关键帧提取图像特征点，得到的轨迹文件KeyFrameTrajectory.txt，为运动位姿数据，包含：时间戳timestamp、6dof位姿数据(xyz和rpy)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参照轨迹Ground Truth为global shutter轨迹，rolling shutter相对于global shutter的。</p>
+<h6 id="3-轨迹实验"><a href="#3-轨迹实验" class="headerlink" title="3.轨迹实验"></a>3.轨迹实验</h6><p><strong>3.1.实验视频</strong><br><strong>(1) 室内(indoor)</strong></p>
+<center><video height="60%" width="60%" controls preload="none" poster="封面" src="/resources/slam-indoor.mp4" type="video/mp4"></video></center>
+<center><h7 style="color:grey">视频1 室内(indoor)轨迹实验</h7></center>
+
+<p><strong>(2) 室外(outdoor)</strong></p>
+<center><video height="60%" width="60%" controls preload="none" poster="封面" src="/resources/slam-outdoor.mp4" type="video/mp4"></video></center>
+<center><h7 style="color:grey">视频2 室外(outdoor)轨迹实验</h7></center>
+
+<p><strong>(3) 走廊(slides)</strong></p>
+<center><video height="60%" width="60%" controls preload="none" poster="封面" src="/resources/slam-slides.mp4" type="video/mp4"></video></center>
+<center><h7 style="color:grey">视频3 走廊(slides)轨迹实验</h7></center>
+
+<p><strong>3.2.视频制作数据集</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将视频以一定帧率采样，得到每帧图像，加上时间戳(timestamp)，用作Orb-Slam3系统的输入。常见的输入格式有TUM、EuRoC，此处以TUM为例，用openCV将视频mp4文件转换为TUM格式数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp4提取图片帧，保存为TUM的“rgb文件夹”和“rgb.txt”。部分代码片如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> video_path = <span class="string">"/home/admin/video.mp4"</span>;</div><div class="line">Mat frame;</div><div class="line"><span class="keyword">double</span> time;</div><div class="line"><span class="function">VideoCapture <span class="title">capture</span><span class="params">(video_path)</span></span>;</div><div class="line">ofstream of;</div><div class="line">of.open(path+<span class="string">"video/rgb.txt"</span>, <span class="built_in">std</span>::ios_base::app);</div><div class="line">...</div><div class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">    capture &gt;&gt; frame;</div><div class="line">    time = capture.get(CV_CAP_PROP_POS_MSEC);  <span class="comment">//时间戳timestamp</span></div><div class="line">    ...</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">ostringstream</span> osf;</div><div class="line">    osf &lt;&lt; path+<span class="string">"video/rgb/"</span> &lt;&lt; <span class="built_in">std</span>::fixed &lt;&lt; time &lt;&lt; <span class="string">".png"</span>;</div><div class="line">    cv::imwrite(osf.str(), frame);</div><div class="line">    of &lt;&lt; <span class="built_in">std</span>::fixed &lt;&lt; time &lt;&lt; <span class="string">" "</span> &lt;&lt; <span class="string">"rgb/"</span> &lt;&lt; time &lt;&lt; <span class="string">".png"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line">of.close();</div><div class="line">capture.release();</div></pre></td></tr></table></figure></p>
+<p><strong>3.3.Slam计算</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改配置文件中的相机内外参(ps:相机参数需要自行先标定好)，Orb-Slam3计算轨迹，得到轨迹文件FrameTrajectory.txt。</p>
+<h6 id="4-评估指标"><a href="#4-评估指标" class="headerlink" title="4.评估指标"></a>4.评估指标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;轨迹、绝对位姿误差、相对位姿误差。</p>
+<h7 style="color:grey"><p>
+Ape: 绝对位姿误差，APE w.r.t. translation part (m), (with Sim(3) Umeyama alignment)<br>
+Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama alignment), for delta = 1 (frames) using consecutive pairs
+</p></h7>
+
+<p>各指标信息汇总对比如下：</p>
+<table>
+    <tr><th style="width:15%">Scene</th><th>Traj-Info</th></tr>
+    <tr><td>室内(Indoor)</td><td>name: f_dataset-indoor_rolling<br>infos: 968 poses, 6.247m path length, 322333333330000.000s duration<br>name: f_dataset-indoor_global<br>infos: 986 poses, 5.679m path length, 328333333330000.000s duration</td></tr>
+    <tr><td bgcolor="white">室外(Outdoor)</td><td bgcolor="white">name: f_dataset-outdoor_rolling<br>infos: 391 poses, 0.695m path length, 130000000000000.000s duration<br>name: f_dataset-outdoor_global<br>infos: 696 poses, 1.511m path length, 231666666670000.000s duration</td></tr>
+    <tr><td>走廊(Slides)</td><td>name: f_dataset-slides_rolling<br>infos: 466 poses, 11.648m path length, 155000000000000.062s duration<br>name:  f_dataset-slides_global<br>infos: 1455 poses, 40.405m path length, 494333333330000.062s duration</td></tr>
+</table>
+
+<p>各误差汇总对比如下：</p>
+<table>
+    <tr><th style="width:10%">指标</th><th>室内(indoor)</th><th>室外(outdoor)</th><th>走廊(slides)</th></tr>
+    <tr>
+        <td>APE</td>
+        <td>max: 0.374459<br>mean: 0.062394<br>median: 0.029402<br>min: 0.003393<br>rmse: 0.099173<br>sse: 9.520567<br>std: 0.077086</td>
+        <td>max: 0.132285<br>mean: 0.008305<br>median: 0.006561<br>min: 0.000379<br>rmse: 0.012343<br>sse: 0.059569<br>std: 0.009131</td>
+        <td>max: 2.565694<br>mean: 0.654031<br>median: 0.608664<br>min: 0.038379<br>rmse: 0.792056<br>sse: 292.346650<br>std: 0.446762</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td bgcolor="white">max: 0.104738<br>mean: 0.005775<br>median: 0.003462<br>min: 0.000161<br>rmse: 0.010518<br>sse: 0.106973<br>std: 0.008790</td>
+        <td bgcolor="white">max: 0.135044<br>mean: 0.006286<br>median: 0.004057<br>min: 0.000303<br>rmse: 0.013238<br>sse: 0.068347<br>std: 0.011650</td>
+        <td bgcolor="white">max: 0.679385<br>mean: 0.040339<br>median: 0.020645<br>min: 0.002755<br>rmse: 0.077982<br>sse: 2.827775<br>std: 0.066738</td>
+    </tr>
+</table>
+
+<p>各轨迹图统计汇总对比如下：</p>
+<table>
+    <tr><th style="width:10%;">指标</th><th>室内(indoor)</th><th>室外(outdoor)</th><th>走廊(slides)</th></tr>
+    <tr>
+        <td>Trajectory</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-traj-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-traj-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-traj-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">xyz_view</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-xyz-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-xyz-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-xyz-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td>rpy_view</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpy-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpy-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpy-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">APE</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td>APE-Map</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td>RPE-Map</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-slides.jpg" width="240px"></td>
+    </tr>
+</table>
+
+<h6 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h6><p>1.Orb-Slam3完全是基于图像特征点(ORB)的方法。</p>
+<ul>
+<li>在特定光照、参照物明确的情景下，轨迹完整，误差也较小。</li>
+<li>在图像过于相似(走廊往返)、光照过于强烈(室外)的情况，会存在轨迹跳跃不连续现象。</li>
+</ul>
+<p>2.图像变化过快的情形，导致特征点提取过慢或丢失部分特征点，会出现跑数据时的帧卡顿现象，对Altas地图集localMap构建和地图合并有影响。</p>
+<table>
+    <tr>
+        <td width="330px" bgcolor="white"><img align="left" src="/resources/slam-break1.jpg" width="330px"></td>
+        <td width="360px" bgcolor="white"><img align="left" src="/resources/slam-break2.jpg" width="360px"></td>
+    </tr>
+</table>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如上图所示，走廊实验中的现象，当沿着走廊尽头翻转180°走回来时，Orb-Slam3系统会因为图像过于相似(走廊顺向/逆向)而分辨不清，于是定位建图时直接跳回原点开始重新建图，随机选定一个方向角度开始重新绘制轨迹，即出现红色箭头所示方向。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其本质原因是基于特征点法的slam算法本身存在的缺陷，当图像质量不清晰、或者图像中能检出的特征点十分有限，导致不能slam系统很好区分图像时，就没法定位了。<br>3.rolling shutter会存在轨迹不完全的情况(丢失轨迹)，global shutter则不会存在。</p>
+<ul>
+<li>轨迹重叠度：室内&gt;室外&gt;走廊</li>
+<li>在轨迹存在的部分，误差：走廊&gt;室外&gt;室内</li>
+</ul>
+<p>此处详见上述“指标信息汇总对比”、“误差汇总对比”部分。</p>
+<h5 id="三、RealSense-D435i-rgb-amp-infrared-camera轨迹评估"><a href="#三、RealSense-D435i-rgb-amp-infrared-camera轨迹评估" class="headerlink" title="三、RealSense D435i: rgb &amp; infrared-camera轨迹评估"></a>三、RealSense D435i: rgb &amp; infrared-camera轨迹评估</h5><h6 id="1-实验设备-1"><a href="#1-实验设备-1" class="headerlink" title="1.实验设备"></a>1.实验设备</h6><p>RealSense D435i: RGB-camera<br>RealSense D435i: Infrared-left-camera</p>
+<h6 id="2-实验方法-1"><a href="#2-实验方法-1" class="headerlink" title="2.实验方法"></a>2.实验方法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense D435i的2个摄像头：rgb-camera, infrared_left-camera，分别单独沿重复轨迹，实时运行Orb-Slam3，场景为 (室内indoor/室外outdoor/走廊slides)，得到轨迹文件KeyFrameTrajectory.txt和CameraTrajectory.txt，为各自运动位姿数据，包含：时间戳timestamp、6dof位姿数据(xyz和rpy)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h7 style="color:red">由于2个摄像头是单独实时按相同既定路线运行，不存在同一时空统一性（时间戳timestamp、运行时长during length不完全统一），故轨迹为单独各自绘制。</h7></p>
+<h6 id="3-轨迹实验-1"><a href="#3-轨迹实验-1" class="headerlink" title="3.轨迹实验"></a>3.轨迹实验</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如前所述，仍旧是：室内(indoor)、室外(outdoor)、走廊(slides)。此处不再给出实验视频。</p>
+<h6 id="4-评估指标-1"><a href="#4-评估指标-1" class="headerlink" title="4.评估指标"></a>4.评估指标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;轨迹、绝对位姿误差、相对位姿误差。</p>
+<p>各指标信息汇总对比如下：</p>
+<table>
+    <tr><th style="width:15%">Scene</th><th colspan="2" style="text-align:center;">Traj-Info</th></tr>
+    <tr><td bgcolor="#F5F5F5"></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td></tr>
+    <tr>
+        <td bgcolor="white">室内(Indoor)</td>
+        <td bgcolor="white">name: kf_dataset-monoi_realsense_d435i_indoor<br>infos: 276 poses, 36.352m path length, 101989215488.000s duration<br>name: f_dataset-monoi_realsense_d435i_indoor<br>infos: 3152 poses, 42.172m path length, 105055297792.000s duration</td>
+        <td bgcolor="white">name: kf_dataset-rgbd_imu_realsense_d435i_indoor<br>infos: 280 poses, 29.703m path length, 49206745088.000s duration<br>name: f_dataset-rgbd_imu_realsense_d435i_indoor<br>infos: 1587 poses, 37.269m path length, 52942709760.000s duration</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">室外(Outdoor)</td>
+        <td bgcolor="white">name: kf_dataset-monoi_realsense_d435i_outdoor<br>infos: 1179 poses, 257.977m path length, 236662186496.000s duration<br>name: f_dataset-monoi_realsense_d435i_outdoor<br>infos: 7252 poses, 275.178m path length, 241763062528.000s duration</td>
+        <td bgcolor="white">name: kf_dataset-rgbd_imu_realsense_d435i_outdoor<br>infos: 1230 poses, 267.810m path length, 267213810176.000s duration<br>name: f_dataset-rgbd_imu_realsense_d435i_outdoor<br>infos: 8166 poses, 381.485m path length, 272350868224.000s duration</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">走廊(Slides)</td>
+        <td bgcolor="white">name: kf_dataset-monoi_realsense_d435i_slides<br>infos: 283 poses, 45.609m path length, 173703452160.000s duration<br>name: f_dataset-monoi_realsense_d435i_slides<br>infos: 2581 poses, 71.888m path length, 175361714176.000s duration</td>
+        <td bgcolor="white">name: kf_dataset-rgbd_imu_realsense_d435i_slides<br>infos: 233 poses, 35.413m path length, 52588330496.000s duration<br>name: f_dataset-rgbd_imu_realsense_d435i_slides<br>infos: 1729 poses, 48.788m path length, 57625243904.000s duration</td>
+    </tr>
+</table>
+
+<p>各误差汇总对比如下：</p>
+<table>
+    <tr><th style="width:5%">指标</th><th colspan="2" style="text-align:center;">室内(indoor)</th><th colspan="2" style="text-align:center;">室外(outdoor)</th><th colspan="2" style="text-align:center;">走廊(slides)</th></tr>
+    <tr><td bgcolor="#F5F5F5"></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td></tr>
+    <tr>
+        <td bgcolor="white">APE</td>
+        <td bgcolor="white">max:0.000004<br>mean:0.000001<br>median:0.000001<br>min:0.000000<br>rmse:0.000001<br>sse:0.000000<br>std:0.000001</td><td bgcolor="white">max:0.000006<br>mean:0.000002<br>median:0.000001<br>min:0.000000<br>rmse:0.000002<br>sse:0.000000<br>std:0.000001</td>
+        <td bgcolor="white">max:0.000067<br>mean:0.000013<br>median:0.000011<br>min:0.000000<br>rmse:0.000017<br>sse:0.000000<br>std:0.000010</td><td bgcolor="white">max:0.000094<br>mean:0.000015<br>median:0.000010<br>min:0.000001<br>rmse:0.000020<br>sse:0.000001<br>std:0.000013</td>
+        <td bgcolor="white">max:0.000007<br>mean:0.000002<br>median:0.000001<br>min:0.000000<br>rmse:0.000002<br>sse:0.000000<br>std:0.000001</td><td bgcolor="white">max:0.000013<br>mean:0.000002<br>median:0.000001<br>min:0.000000<br>rmse:0.000003<br>sse:0.000000<br>std:0.000002</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td bgcolor="white">max:0.000006<br>mean:0.000001<br>median:0.000001<br>min:0.000000<br>rmse:0.000002<br>sse:0.000000<br>std:0.000001</td><td bgcolor="white">max:0.000010<br>mean:0.000002<br>median:0.000002<br>min:0.000000<br>rmse:0.000003<br>sse:0.000000<br>std:0.000002</td>
+        <td bgcolor="white">max:0.000108<br>mean:0.000017<br>median:0.000014<br>min:0.000000<br>rmse:0.000023<br>sse:0.000001<br>std:0.000015</td><td bgcolor="white">max:0.000110<br>mean:0.000019<br>median:0.000013<br>min:0.000000<br>rmse:0.000028<br>sse:0.000001<br>std:0.000020</td>
+        <td bgcolor="white">max:0.000011<br>mean:0.000002<br>median:0.000002<br>min:0.000000<br>rmse:0.000003<br>sse:0.000000<br>std:0.000002</td><td bgcolor="white">max:0.000015<br>mean:0.000003<br>median:0.000002<br>min:0.000000<br>rmse:0.000004<br>sse:0.000000<br>std:0.000003</td>
+    </tr>
+</table>
+
+<p>各轨迹图统计汇总对比如下：</p>
+<table>
+    <tr><th style="width:10%;">指标</th><th colspan="2" style="text-align:center;">室内(indoor)</th><th colspan="2" style="text-align:center;">室外(outdoor)</th><th colspan="2" style="text-align:center;">走廊(slides)</th></tr>
+    <tr><td bgcolor="#F5F5F5"></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td></tr>
+    <tr>
+        <td bgcolor="white">Trajectory</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">xyz_view</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">rpy_view</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">APE</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">APE-Map</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE-Map</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+</table>
+
+<h6 id="5-结论-1"><a href="#5-结论-1" class="headerlink" title="5.结论"></a>5.结论</h6><p>1.infrared-camera整体效果好于rgb-camera，其中rgb-camera运行过程中，会出现的问题：<br>(1) 跳帧(找不到当前活跃地图current active-map就跳回原点、随机初始化角度方向，重画跟踪轨迹)：存在多次。bad case触发条件: 场景移动变化过快(&gt;1m/s)、场景过于相似(走廊翻转180°)；<br>(2) 卡顿(图像帧卡住, 无法活动轨迹)：存在少量，停下重新移动camera会继续运行；而infrared-camera较流畅，不会出现上述问题。</p>
+<p>2.场景对比：<br>(1) 轨迹完整度：室内&gt;室外&gt;走廊；</p>
+<ul>
+<li>室内、室外：整体轨迹保留比较完整，虽然在运行过程中会出现卡顿、跳帧，但最终轨迹结果是完整的；</li>
+<li>走廊：infrared-camera没有丢失轨迹，rgb-camera丢失部分轨迹；</li>
+</ul>
+<p>(2) 轨迹总体误差：走廊&gt;室外&gt;室内；</p>
+<h5 id="四、RealSense-D455-rgb-amp-infrared-camera轨迹评估"><a href="#四、RealSense-D455-rgb-amp-infrared-camera轨迹评估" class="headerlink" title="四、RealSense D455: rgb &amp; infrared-camera轨迹评估"></a>四、RealSense D455: rgb &amp; infrared-camera轨迹评估</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和RealSense D435i差异不大，此处不再赘述，注意获取准确对应的相机内参。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1] ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial and Multi-Map SLAM, Dec, 2021.<br>[2] Orb-Slam3源码：<a href="https://github.com/UZ-SLAMLab/ORB_SLAM3" target="_blank" rel="external">https://github.com/UZ-SLAMLab/ORB_SLAM3</a></p>
+
+      
+    </div>
+
+    <div>
+      
         
-          在一些对用户隐私数据敏感的行业，用户样本数据和用户特征均有限的情况下，如何在保证数据安全的前提下，建立机器学习模型，对用户转化率进行预估？通常用到的技术就是联邦学习、数据联合建模等。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/03/10/2021-03-10-FederatedLearning/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2020/12/20/2020-12-20-TextMining/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/12/20/2020-12-20-TextMining/" itemprop="url">
-                  基于文本挖掘的用户转化率预估
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-20T00:00:00+08:00">
-                2020-12-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NLP/" itemprop="url" rel="index">
-                    <span itemprop="name">NLP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/SLAM/" rel="tag"># SLAM</a>
           
-
+            <a href="/tags/Trajectory-Evaluation/" rel="tag"># Trajectory Evaluation</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
         
-          基于文本挖掘方法对用户购买转化率进行预测。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/12/20/2020-12-20-TextMining/">
-              Read more &raquo;
-            </a>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/10/09/2022-10-09-TBB/" rel="next" title="TBB并行加速优化Slam计算框架">
+                <i class="fa fa-chevron-left"></i> TBB并行加速优化Slam计算框架
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2019/12/15/2019-12-15-Advertiser/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2019/12/15/2019-12-15-Advertiser/" itemprop="url">
-                  营销广告定价平台应用实践
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-15T00:00:00+08:00">
-                2019-12-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Computational-Advertising/" itemprop="url" rel="index">
-                    <span itemprop="name">Computational Advertising</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          对于一般的营销广告系统来说，主要目标是吸引用户、合理出价促成用户转化。广告是否合理精准投放，直接决定了用户、广告主、平台三方能否平衡获利。广告定价的业务指标是寻求投入产出比(ROI)、实收(GMV)、转化率(CVR)这三个优化指标的平衡。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/12/15/2019-12-15-Advertiser/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://www.dianacody.com/2018/01/05/2018-01-05-RDQS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="DianaCody">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/psb.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DianaCody">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/01/05/2018-01-05-RDQS/" itemprop="url">
-                  Recommendation Datum Query System (RDQS)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-05T00:00:00+08:00">
-                2018-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web/" itemprop="url" rel="index">
-                    <span itemprop="name">Web</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          The data visualization system based on java-web.
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/05/2018-01-05-RDQS/">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+  </div>
 
 
           </div>
@@ -1044,6 +763,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
 
         </div>
         
@@ -1063,8 +788,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/psb.jpg"
@@ -1079,7 +813,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1090,7 +824,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -1101,7 +835,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -1177,6 +911,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、Rolling-Shutter-amp-Global-Shutter相机轨迹评估"><span class="nav-number">2.</span> <span class="nav-text">二、Rolling-Shutter & Global-Shutter相机轨迹评估</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-实验设备"><span class="nav-number">2.1.</span> <span class="nav-text">1.实验设备</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-实验方法"><span class="nav-number">2.2.</span> <span class="nav-text">2.实验方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-轨迹实验"><span class="nav-number">2.3.</span> <span class="nav-text">3.轨迹实验</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-评估指标"><span class="nav-number">2.4.</span> <span class="nav-text">4.评估指标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-结论"><span class="nav-number">2.5.</span> <span class="nav-text">5.结论</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、RealSense-D435i-rgb-amp-infrared-camera轨迹评估"><span class="nav-number">3.</span> <span class="nav-text">三、RealSense D435i: rgb & infrared-camera轨迹评估</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-实验设备-1"><span class="nav-number">3.1.</span> <span class="nav-text">1.实验设备</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-实验方法-1"><span class="nav-number">3.2.</span> <span class="nav-text">2.实验方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-轨迹实验-1"><span class="nav-number">3.3.</span> <span class="nav-text">3.轨迹实验</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-评估指标-1"><span class="nav-number">3.4.</span> <span class="nav-text">4.评估指标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-结论-1"><span class="nav-number">3.5.</span> <span class="nav-text">5.结论</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、RealSense-D455-rgb-amp-infrared-camera轨迹评估"><span class="nav-number">4.</span> <span class="nav-text">四、RealSense D455: rgb & infrared-camera轨迹评估</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、参考文献"><span class="nav-number">5.</span> <span class="nav-text">五、参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -1193,7 +943,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1283,6 +1033,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
@@ -1314,6 +1068,10 @@
   
     
 
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=dianacody"></script>
+      <!-- UY END -->
     
   
 
