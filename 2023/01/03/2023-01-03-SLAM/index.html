@@ -160,7 +160,7 @@
 <meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-outdoor-d435i-rgbd.jpg">
 <meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides-d435i-mono.jpg">
 <meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides-d435i-rgbd.jpg">
-<meta property="og:updated_time" content="2023-07-27T09:20:08.924Z">
+<meta property="og:updated_time" content="2023-07-29T12:21:54.732Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM定位建图和轨迹评估">
 <meta name="twitter:description" content="Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。">
@@ -492,8 +492,8 @@
 <p><strong>3.3.Slam计算</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改配置文件中的相机内外参(ps:相机参数需要自行先标定好)，Orb-Slam3计算轨迹，得到轨迹文件FrameTrajectory.txt。</p>
 <h6 id="4-评估指标"><a href="#4-评估指标" class="headerlink" title="4.评估指标"></a>4.评估指标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;轨迹、绝对位姿误差、相对位姿误差。</p>
 <h7 style="color:grey"><p>
-Ape: 绝对位姿误差，APE w.r.t. translation part (m), (with Sim(3) Umeyama alignment)<br>
-Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama alignment), for delta = 1 (frames) using consecutive pairs
+Ape: 绝对位姿误差，APE w.r.t. translation part (m), (with Sim(3) Umeyama alignment)。估计轨迹全局一致性，比较被估计值和真值轨迹之间的绝对距离。针对所有时刻定义平移分量的 均方根误差(RMSE)和方差(SSE)。<br>
+Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama alignment), for delta = 1 (frames) using consecutive pairs。测量轨迹在固定时间区间Δt内的局部准确度。对应轨迹的漂移，计算相隔固定时间差Δ两帧位姿差。
 </p></h7>
 
 <p>各指标信息汇总对比如下：</p>
