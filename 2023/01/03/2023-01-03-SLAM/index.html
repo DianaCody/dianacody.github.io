@@ -160,7 +160,7 @@
 <meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-outdoor-d435i-rgbd.jpg">
 <meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides-d435i-mono.jpg">
 <meta property="og:image" content="http://www.dianacody.com/resources/slam-rpe-map-slides-d435i-rgbd.jpg">
-<meta property="og:updated_time" content="2023-07-30T14:57:47.378Z">
+<meta property="og:updated_time" content="2023-08-03T11:03:24.288Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM定位建图和轨迹评估">
 <meta name="twitter:description" content="Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。">
@@ -490,7 +490,7 @@
 <center><h7 style="color:grey">视频3 走廊(slides)轨迹实验</h7></center>
 
 <p><strong>3.3.视频制作数据集</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将视频以一定帧率采样，得到每帧图像，加上时间戳(timestamp)，用作Orb-Slam3系统的输入。常见的输入格式有TUM、EuRoC，此处以TUM为例，用openCV将视频mp4文件转换为TUM格式数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp4提取图片帧，保存为TUM的“rgb文件夹”和“rgb.txt”。部分代码片如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> video_path = <span class="string">"/home/admin/video.mp4"</span>;</div><div class="line">Mat frame;</div><div class="line"><span class="keyword">double</span> time;</div><div class="line"><span class="function">VideoCapture <span class="title">capture</span><span class="params">(video_path)</span></span>;</div><div class="line">ofstream of;</div><div class="line">of.open(path+<span class="string">"video/rgb.txt"</span>, <span class="built_in">std</span>::ios_base::app);</div><div class="line">...</div><div class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">    capture &gt;&gt; frame;</div><div class="line">    time = capture.get(CV_CAP_PROP_POS_MSEC);  <span class="comment">//时间戳timestamp</span></div><div class="line">    ...</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">ostringstream</span> osf;</div><div class="line">    osf &lt;&lt; path+<span class="string">"video/rgb/"</span> &lt;&lt; <span class="built_in">std</span>::fixed &lt;&lt; time &lt;&lt; <span class="string">".png"</span>;</div><div class="line">    cv::imwrite(osf.str(), frame);</div><div class="line">    of &lt;&lt; <span class="built_in">std</span>::fixed &lt;&lt; time &lt;&lt; <span class="string">" "</span> &lt;&lt; <span class="string">"rgb/"</span> &lt;&lt; time &lt;&lt; <span class="string">".png"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line">of.close();</div><div class="line">capture.release();</div></pre></td></tr></table></figure></p>
-<p><strong>3.4.相机标定</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标定得到实际相机内外参(fx,fy,cx,cy)、相机转移参数(T_c1_c0)、畸变参数(distortion_coeffs)，写入Orb-Slam3参数配置文件cam0/1-camchain.yaml。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相机标定部分内容比较多，从搭建ros标定环境、到标定工具Kalibr使用、相机内外参+imu标定，详见另外本系列另外博客。用到的工具：Kalibr工具imu+camera联合标定。</p>
+<p><strong>3.4.相机标定</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标定得到实际相机内外参(fx,fy,cx,cy)、相机转移参数(T_c1_c0)、畸变参数(distortion_coeffs)，写入Orb-Slam3参数配置文件cam0/1-camchain.yaml。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相机标定部分内容比较多，从搭建ros标定环境、到标定工具Kalibr使用、相机内外参+imu标定，详见另外本系列另外博客《<a href="http://www.dianacody.com/2022/12/01/2022-12-01-Calib">相机标定</a>》。用到的工具：Kalibr工具imu+camera联合标定。</p>
 <p><strong>3.5.Slam计算</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改配置文件中的相机内外参(ps:相机参数需要自行先标定好)，Orb-Slam3计算轨迹，得到轨迹文件FrameTrajectory.txt。</p>
 <h6 id="4-评估指标"><a href="#4-评估指标" class="headerlink" title="4.评估指标"></a>4.评估指标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;轨迹、绝对位姿误差、相对位姿误差。</p>
 <h7 style="color:grey"><p>
@@ -738,8 +738,8 @@ Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama 
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2022/10/09/2022-10-09-TBB/" rel="next" title="TBB并行加速优化Slam计算框架">
-                <i class="fa fa-chevron-left"></i> TBB并行加速优化Slam计算框架
+              <a href="/2022/12/01/2022-12-01-Calib/" rel="next" title="相机标定">
+                <i class="fa fa-chevron-left"></i> 相机标定
               </a>
             
           </div>
@@ -820,7 +820,7 @@ Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama 
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -831,7 +831,7 @@ Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama 
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -842,7 +842,7 @@ Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama 
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
