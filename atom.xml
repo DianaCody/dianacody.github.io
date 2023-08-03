@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.dianacody.com/"/>
-  <updated>2021-08-23T01:33:41.000Z</updated>
+  <updated>2023-08-03T11:03:24.288Z</updated>
   <id>http://www.dianacody.com/</id>
   
   <author>
@@ -14,6 +14,846 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SLAM定位建图和轨迹评估</title>
+    <link href="http://www.dianacody.com/2023/01/03/2023-01-03-SLAM/"/>
+    <id>http://www.dianacody.com/2023/01/03/2023-01-03-SLAM/</id>
+    <published>2023-01-02T16:00:00.000Z</published>
+    <updated>2023-08-03T11:03:24.288Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><p><strong>SLAM</strong>：<strong>即时定位与地图构建</strong>，Simultaneous Location And Mapping，也称为CML (Current Mapping and Localization)。分开来看就是两个部分：</p>
+<ul>
+<li>定位部分，主要是依据周围图像，提取图像特征点(或光流法)，依据图像差异计算轨迹，以确定自身位置。</li>
+<li>建图部分，通过自身回环轨迹，不断更新当前地图和全局地图，最终以点云形式，计算出周边环境轮廓地图。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开源框架Orb-Slam3是典型的以图像特征点法为主的slam计算框架，基于此可以评估不同光照条件、不同相机、不同外部环境、不同曝光、不同图像等各种因素对于传感器运动轨迹的影响。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于仅基于图像的slam定位建图算法来说，获取到的图像质量对于计算精度和准确率的影响是极为重要的（尤其在没有附加惯性测量单元(imu)或外部GPS定位的条件下）。同时也可以看到，不同相机的帧率/曝光方式/相机性质/相机标定的内外参…，所带来的差异影响也是非常大的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本文分为三个部分：<br><strong>1.卷帘曝光相机(Rolling-Shutter)和全局曝光相机(Global-Shutter)对比</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>global shutter</strong>：<strong>全局曝光</strong>，感光元件的所有像素点同时曝光一定时间，进而成像。没有Rolling Shutter的“果冻现象”。曝光时间比Rolling Shutter短，曝光整帧后输出像素数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>rolling shutter</strong>：<strong>卷帘曝光</strong>，感光元件的所有像素点逐行轮流曝光一定时间，进而成像。会出现“果冻现象”。曝光时间比Global Shutter长，但是曝光一行输出一行。<br><strong>2.RealSense D435i的彩色相机(rgb-camera)和红外相机(infrared-camera)对比</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense 是立体视觉深度相机，集成了2个红外传感器(IR Stereo Camera)、1个红外激光发射器(IR Projector)、1个彩色相机(Color Camera)。IntelRealSense D435i提供完整深度相机模块，集成视觉处理器、立体深度模块、RGB传感器、彩色图像信号处理模块。深度模块采用立体视觉的左右成像器、可选红外激光发射器、 RGB色彩传感器。<br><strong>3.RealSense D455的彩色相机(rgb-camera)和红外相机(infrared-camera)对比</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense D455和RealSense D435i其实本质差异不太大，除了相机摄像头分布位置、摄像头内外参等。</p>
+<h5 id="二、Rolling-Shutter-amp-Global-Shutter相机轨迹评估"><a href="#二、Rolling-Shutter-amp-Global-Shutter相机轨迹评估" class="headerlink" title="二、Rolling-Shutter &amp; Global-Shutter相机轨迹评估"></a>二、Rolling-Shutter &amp; Global-Shutter相机轨迹评估</h5><h6 id="1-实验设备"><a href="#1-实验设备" class="headerlink" title="1.实验设备"></a>1.实验设备</h6><p>Global Shutter相机 (2M)<br>Rolling Shutter相机 (630)</p>
+<h6 id="2-实验方法"><a href="#2-实验方法" class="headerlink" title="2.实验方法"></a>2.实验方法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两个摄像头同时固定设备，沿相同轨迹移动一段时间后，得到视频。两个相机运动轨迹近乎重合，有细微差别。预处理视频后，得到帧图像数据集（室内indoor/室外outdoor/走廊slides），标注为TUM数据集格式，定位建图框架运行环境为Orb-Slam3，按关键帧提取图像特征点，得到的轨迹文件KeyFrameTrajectory.txt，为运动位姿数据，包含：时间戳timestamp、6dof位姿数据(xyz和rpy)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参照轨迹Ground Truth为global shutter轨迹，rolling shutter相对于global shutter的。</p>
+<h6 id="3-轨迹实验"><a href="#3-轨迹实验" class="headerlink" title="3.轨迹实验"></a>3.轨迹实验</h6><p><strong>3.1.openCV录制视频</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;openCV直接调起“pc摄像头”或“usb外接摄像头”录制数据。openCV读视频原理：其实就是不停地拍照，不停地写入到一个文件。视频本身也是由一张一张照片组成的。部分代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> video_path = <span class="string">"/home/admin/video.mp4"</span>;</div><div class="line"><span class="function">VideoCapture <span class="title">capture</span><span class="params">(<span class="number">2</span>)</span></span>;</div><div class="line">capture.<span class="built_in">set</span>(CAP_PROP_FOURCC, CV_FOURCC(<span class="string">'M'</span>,<span class="string">'J'</span>,<span class="string">'P'</span>,<span class="string">'G'</span>));</div><div class="line">capture.<span class="built_in">set</span>(CV_CAP_PROP_FRAME_WIDTH, <span class="number">640</span>);</div><div class="line">capture.<span class="built_in">set</span>(CV_CAP_PROP_FRAME_HEIGHT, <span class="number">480</span>);</div><div class="line">capture.<span class="built_in">set</span>(CV_CAP_PROP_FPS, <span class="number">30</span>);</div><div class="line">VideoWriter videoWriter;</div><div class="line">videoWriter.open(video_path, CV_FOURCC(<span class="string">'M'</span>,<span class="string">'J'</span>,<span class="string">'P'</span>,<span class="string">'G'</span>), <span class="number">30.0</span>, Size(frameWidth,frameHeight), <span class="literal">true</span>);</div><div class="line">Mat frameImg;</div><div class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">    videoWriter &lt;&lt; frameImg;</div><div class="line">    <span class="keyword">if</span>(<span class="keyword">char</span>(waitKey(<span class="number">40</span>))==<span class="string">'q'</span> or <span class="keyword">char</span>(waitKey(<span class="number">40</span>))==<span class="number">27</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">capture.release();</div><div class="line">frameImg.release();</div><div class="line">videoWriter.release();</div></pre></td></tr></table></figure></p>
+<p><strong>3.2.实验视频</strong> (点击自动播放)<br><strong>(1) 室内(indoor)</strong></p>
+<center><video height="60%" width="60%" controls preload="none" poster="封面" src="/resources/slam-indoor.mp4" type="video/mp4"></video></center>
+<center><h7 style="color:grey">视频1 室内(indoor)轨迹实验</h7></center>
+
+<p><strong>(2) 室外(outdoor)</strong></p>
+<center><video height="60%" width="60%" controls preload="none" poster="封面" src="/resources/slam-outdoor.mp4" type="video/mp4"></video></center>
+<center><h7 style="color:grey">视频2 室外(outdoor)轨迹实验</h7></center>
+
+<p><strong>(3) 走廊(slides)</strong></p>
+<center><video height="60%" width="60%" controls preload="none" poster="封面" src="/resources/slam-slides.mp4" type="video/mp4"></video></center>
+<center><h7 style="color:grey">视频3 走廊(slides)轨迹实验</h7></center>
+
+<p><strong>3.3.视频制作数据集</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将视频以一定帧率采样，得到每帧图像，加上时间戳(timestamp)，用作Orb-Slam3系统的输入。常见的输入格式有TUM、EuRoC，此处以TUM为例，用openCV将视频mp4文件转换为TUM格式数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp4提取图片帧，保存为TUM的“rgb文件夹”和“rgb.txt”。部分代码片如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> video_path = <span class="string">"/home/admin/video.mp4"</span>;</div><div class="line">Mat frame;</div><div class="line"><span class="keyword">double</span> time;</div><div class="line"><span class="function">VideoCapture <span class="title">capture</span><span class="params">(video_path)</span></span>;</div><div class="line">ofstream of;</div><div class="line">of.open(path+<span class="string">"video/rgb.txt"</span>, <span class="built_in">std</span>::ios_base::app);</div><div class="line">...</div><div class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">    capture &gt;&gt; frame;</div><div class="line">    time = capture.get(CV_CAP_PROP_POS_MSEC);  <span class="comment">//时间戳timestamp</span></div><div class="line">    ...</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">ostringstream</span> osf;</div><div class="line">    osf &lt;&lt; path+<span class="string">"video/rgb/"</span> &lt;&lt; <span class="built_in">std</span>::fixed &lt;&lt; time &lt;&lt; <span class="string">".png"</span>;</div><div class="line">    cv::imwrite(osf.str(), frame);</div><div class="line">    of &lt;&lt; <span class="built_in">std</span>::fixed &lt;&lt; time &lt;&lt; <span class="string">" "</span> &lt;&lt; <span class="string">"rgb/"</span> &lt;&lt; time &lt;&lt; <span class="string">".png"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line">of.close();</div><div class="line">capture.release();</div></pre></td></tr></table></figure></p>
+<p><strong>3.4.相机标定</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标定得到实际相机内外参(fx,fy,cx,cy)、相机转移参数(T_c1_c0)、畸变参数(distortion_coeffs)，写入Orb-Slam3参数配置文件cam0/1-camchain.yaml。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相机标定部分内容比较多，从搭建ros标定环境、到标定工具Kalibr使用、相机内外参+imu标定，详见另外本系列另外博客《<a href="http://www.dianacody.com/2022/12/01/2022-12-01-Calib">相机标定</a>》。用到的工具：Kalibr工具imu+camera联合标定。</p>
+<p><strong>3.5.Slam计算</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;修改配置文件中的相机内外参(ps:相机参数需要自行先标定好)，Orb-Slam3计算轨迹，得到轨迹文件FrameTrajectory.txt。</p>
+<h6 id="4-评估指标"><a href="#4-评估指标" class="headerlink" title="4.评估指标"></a>4.评估指标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;轨迹、绝对位姿误差、相对位姿误差。</p>
+<h7 style="color:grey"><p>
+Ape: 绝对位姿误差，APE w.r.t. translation part (m), (with Sim(3) Umeyama alignment)。估计轨迹全局一致性，比较被估计值和真值轨迹之间的绝对距离。针对所有时刻定义平移分量的 均方根误差(RMSE)和方差(SSE)。<br>
+Rpe: 相对位姿误差，RPE w.r.t. translation part (m), (with Sim(3) Umeyama alignment), for delta = 1 (frames) using consecutive pairs。测量轨迹在固定时间区间Δt内的局部准确度。对应轨迹的漂移，计算相隔固定时间差Δ两帧位姿差。
+</p></h7>
+
+<p>各指标信息汇总对比如下：</p>
+<table>
+    <tr><th style="width:15%">Scene</th><th>Traj-Info</th></tr>
+    <tr><td>室内(Indoor)</td><td>name: f_dataset-indoor_rolling<br>infos: 968 poses, 6.247m path length, 322333333330000.000s duration<br>name: f_dataset-indoor_global<br>infos: 986 poses, 5.679m path length, 328333333330000.000s duration</td></tr>
+    <tr><td bgcolor="white">室外(Outdoor)</td><td bgcolor="white">name: f_dataset-outdoor_rolling<br>infos: 391 poses, 0.695m path length, 130000000000000.000s duration<br>name: f_dataset-outdoor_global<br>infos: 696 poses, 1.511m path length, 231666666670000.000s duration</td></tr>
+    <tr><td>走廊(Slides)</td><td>name: f_dataset-slides_rolling<br>infos: 466 poses, 11.648m path length, 155000000000000.062s duration<br>name:  f_dataset-slides_global<br>infos: 1455 poses, 40.405m path length, 494333333330000.062s duration</td></tr>
+</table>
+
+<p>各误差汇总对比如下：</p>
+<table>
+    <tr><th style="width:10%">指标</th><th>室内(indoor)</th><th>室外(outdoor)</th><th>走廊(slides)</th></tr>
+    <tr>
+        <td>APE</td>
+        <td>max: 0.374459<br>mean: 0.062394<br>median: 0.029402<br>min: 0.003393<br>rmse: 0.099173<br>sse: 9.520567<br>std: 0.077086</td>
+        <td>max: 0.132285<br>mean: 0.008305<br>median: 0.006561<br>min: 0.000379<br>rmse: 0.012343<br>sse: 0.059569<br>std: 0.009131</td>
+        <td>max: 2.565694<br>mean: 0.654031<br>median: 0.608664<br>min: 0.038379<br>rmse: 0.792056<br>sse: 292.346650<br>std: 0.446762</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td bgcolor="white">max: 0.104738<br>mean: 0.005775<br>median: 0.003462<br>min: 0.000161<br>rmse: 0.010518<br>sse: 0.106973<br>std: 0.008790</td>
+        <td bgcolor="white">max: 0.135044<br>mean: 0.006286<br>median: 0.004057<br>min: 0.000303<br>rmse: 0.013238<br>sse: 0.068347<br>std: 0.011650</td>
+        <td bgcolor="white">max: 0.679385<br>mean: 0.040339<br>median: 0.020645<br>min: 0.002755<br>rmse: 0.077982<br>sse: 2.827775<br>std: 0.066738</td>
+    </tr>
+</table>
+
+<p>各轨迹图统计汇总对比如下：(点击查看大图)</p>
+<table>
+    <tr><th style="width:10%;">指标</th><th>室内(indoor)</th><th>室外(outdoor)</th><th>走廊(slides)</th></tr>
+    <tr>
+        <td>Trajectory</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-traj-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-traj-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-traj-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">xyz_view</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-xyz-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-xyz-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-xyz-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td>rpy_view</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpy-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpy-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpy-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">APE</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td>APE-Map</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-slides.jpg" width="240px"></td>
+    </tr>
+    <tr>
+        <td>RPE-Map</td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-indoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-outdoor.jpg" width="240px"></td>
+        <td width="240px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-slides.jpg" width="240px"></td>
+    </tr>
+</table>
+
+<h6 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h6><p>1.Orb-Slam3完全是基于图像特征点(ORB)的方法。</p>
+<ul>
+<li>在特定光照、参照物明确的情景下，轨迹完整，误差也较小。</li>
+<li>在图像过于相似(走廊往返)、光照过于强烈(室外)的情况，会存在轨迹跳跃不连续现象。</li>
+</ul>
+<p>2.图像变化过快的情形，导致特征点提取过慢或丢失部分特征点，会出现跑数据时的帧卡顿现象，对Altas地图集localMap构建和地图合并有影响。</p>
+<table>
+    <tr>
+        <td width="330px" bgcolor="white"><img align="left" src="/resources/slam-break1.jpg" width="330px"></td>
+        <td width="360px" bgcolor="white"><img align="left" src="/resources/slam-break2.jpg" width="360px"></td>
+    </tr>
+</table>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如上图所示，走廊实验中的现象，当沿着走廊尽头翻转180°走回来时，Orb-Slam3系统会因为图像过于相似(走廊顺向/逆向)而分辨不清，于是定位建图时直接跳回原点开始重新建图，随机选定一个方向角度开始重新绘制轨迹，即出现红色箭头所示方向。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其本质原因是基于特征点法的slam算法本身存在的缺陷，当图像质量不清晰、或者图像中能检出的特征点十分有限，导致不能slam系统很好区分图像时，就没法定位了。<br>3.rolling shutter会存在轨迹不完全的情况(丢失轨迹)，global shutter则不会存在。</p>
+<ul>
+<li>轨迹重叠度：室内&gt;室外&gt;走廊</li>
+<li>在轨迹存在的部分，误差：走廊&gt;室外&gt;室内</li>
+</ul>
+<p>此处详见上述“指标信息汇总对比”、“误差汇总对比”部分。</p>
+<h5 id="三、RealSense-D435i-rgb-amp-infrared-camera轨迹评估"><a href="#三、RealSense-D435i-rgb-amp-infrared-camera轨迹评估" class="headerlink" title="三、RealSense D435i: rgb &amp; infrared-camera轨迹评估"></a>三、RealSense D435i: rgb &amp; infrared-camera轨迹评估</h5><h6 id="1-实验设备-1"><a href="#1-实验设备-1" class="headerlink" title="1.实验设备"></a>1.实验设备</h6><p>RealSense D435i: RGB-camera<br>RealSense D435i: Infrared-left-camera</p>
+<h6 id="2-实验方法-1"><a href="#2-实验方法-1" class="headerlink" title="2.实验方法"></a>2.实验方法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense D435i的2个摄像头：rgb-camera, infrared_left-camera，分别单独沿重复轨迹，实时运行Orb-Slam3，场景为 (室内indoor/室外outdoor/走廊slides)，得到轨迹文件KeyFrameTrajectory.txt和CameraTrajectory.txt，为各自运动位姿数据，包含：时间戳timestamp、6dof位姿数据(xyz和rpy)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h7 style="color:red">由于2个摄像头是单独实时按相同既定路线运行，不存在同一时空统一性（时间戳timestamp、运行时长during length不完全统一），故轨迹为单独各自绘制。</h7></p>
+<h6 id="3-轨迹实验-1"><a href="#3-轨迹实验-1" class="headerlink" title="3.轨迹实验"></a>3.轨迹实验</h6><p><strong>3.1.相机驱动</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RealSense深度相机系列，自带驱动调起摄像头，可实时录视频+slam定位建图，不是openCV录制预存离线数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于RealSense驱动安装+ros环境安装+配置&amp;校准相机内外参+imu参数，详见RealSense官网。</p>
+<ul>
+<li>(1)realsense-sdk-2.0驱动安装：(下载链接见“参考文献”部分)<br></li>
+<li>(2)获取相机内外参数：读取配置写到自定义文件(config_D435i.yaml、config_D455.yaml)，详见sdk源码：librealsense/tools/enumerate-devices/rs-enumerate-devices.cpp，可直接编译运行。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;把Orb-Slam3配置文件中的相机参数<script type="math/tex">Cx</script>, <script type="math/tex">Cy</script>, <script type="math/tex">Fx</script>, <script type="math/tex">Fy</script>，替换为相机配置的<script type="math/tex">Px</script>, <script type="math/tex">Py</script>, <script type="math/tex">Fx</script>, <script type="math/tex">Fy</script>参数。<br><strong>3.2.实验视频</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如前所述，仍旧是：室内(indoor)、室外(outdoor)、走廊(slides)。此处不再给出实验视频。<br><strong>3.3.相机标定</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;驱动RealSense SDK可以完成，一定注意保证相机参数的准确性。<br><strong>3.4.实时slam计算</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;运行Orb-Slam3，计算轨迹+定位建图。</p>
+<h6 id="4-评估指标-1"><a href="#4-评估指标-1" class="headerlink" title="4.评估指标"></a>4.评估指标</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;轨迹、绝对位姿误差、相对位姿误差。</p>
+<p>各指标信息汇总对比如下：</p>
+<table>
+    <tr><th style="width:15%">Scene</th><th colspan="2" style="text-align:center;">Traj-Info</th></tr>
+    <tr><td bgcolor="#F5F5F5"></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td></tr>
+    <tr>
+        <td bgcolor="white">室内(Indoor)</td>
+        <td bgcolor="white">name: kf_dataset-monoi_realsense_d435i_indoor<br>infos: 276 poses, 36.352m path length, 101989215488.000s duration<br>name: f_dataset-monoi_realsense_d435i_indoor<br>infos: 3152 poses, 42.172m path length, 105055297792.000s duration</td>
+        <td bgcolor="white">name: kf_dataset-rgbd_imu_realsense_d435i_indoor<br>infos: 280 poses, 29.703m path length, 49206745088.000s duration<br>name: f_dataset-rgbd_imu_realsense_d435i_indoor<br>infos: 1587 poses, 37.269m path length, 52942709760.000s duration</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">室外(Outdoor)</td>
+        <td bgcolor="white">name: kf_dataset-monoi_realsense_d435i_outdoor<br>infos: 1179 poses, 257.977m path length, 236662186496.000s duration<br>name: f_dataset-monoi_realsense_d435i_outdoor<br>infos: 7252 poses, 275.178m path length, 241763062528.000s duration</td>
+        <td bgcolor="white">name: kf_dataset-rgbd_imu_realsense_d435i_outdoor<br>infos: 1230 poses, 267.810m path length, 267213810176.000s duration<br>name: f_dataset-rgbd_imu_realsense_d435i_outdoor<br>infos: 8166 poses, 381.485m path length, 272350868224.000s duration</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">走廊(Slides)</td>
+        <td bgcolor="white">name: kf_dataset-monoi_realsense_d435i_slides<br>infos: 283 poses, 45.609m path length, 173703452160.000s duration<br>name: f_dataset-monoi_realsense_d435i_slides<br>infos: 2581 poses, 71.888m path length, 175361714176.000s duration</td>
+        <td bgcolor="white">name: kf_dataset-rgbd_imu_realsense_d435i_slides<br>infos: 233 poses, 35.413m path length, 52588330496.000s duration<br>name: f_dataset-rgbd_imu_realsense_d435i_slides<br>infos: 1729 poses, 48.788m path length, 57625243904.000s duration</td>
+    </tr>
+</table>
+
+<p>各误差汇总对比如下：</p>
+<table>
+    <tr><th style="width:5%">指标</th><th colspan="2" style="text-align:center;">室内(indoor)</th><th colspan="2" style="text-align:center;">室外(outdoor)</th><th colspan="2" style="text-align:center;">走廊(slides)</th></tr>
+    <tr><td bgcolor="#F5F5F5"></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td></tr>
+    <tr>
+        <td bgcolor="white">APE</td>
+        <td bgcolor="white">max:0.000004<br>mean:0.000001<br>median:0.000001<br>min:0.000000<br>rmse:0.000001<br>sse:0.000000<br>std:0.000001</td><td bgcolor="white">max:0.000006<br>mean:0.000002<br>median:0.000001<br>min:0.000000<br>rmse:0.000002<br>sse:0.000000<br>std:0.000001</td>
+        <td bgcolor="white">max:0.000067<br>mean:0.000013<br>median:0.000011<br>min:0.000000<br>rmse:0.000017<br>sse:0.000000<br>std:0.000010</td><td bgcolor="white">max:0.000094<br>mean:0.000015<br>median:0.000010<br>min:0.000001<br>rmse:0.000020<br>sse:0.000001<br>std:0.000013</td>
+        <td bgcolor="white">max:0.000007<br>mean:0.000002<br>median:0.000001<br>min:0.000000<br>rmse:0.000002<br>sse:0.000000<br>std:0.000001</td><td bgcolor="white">max:0.000013<br>mean:0.000002<br>median:0.000001<br>min:0.000000<br>rmse:0.000003<br>sse:0.000000<br>std:0.000002</td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td bgcolor="white">max:0.000006<br>mean:0.000001<br>median:0.000001<br>min:0.000000<br>rmse:0.000002<br>sse:0.000000<br>std:0.000001</td><td bgcolor="white">max:0.000010<br>mean:0.000002<br>median:0.000002<br>min:0.000000<br>rmse:0.000003<br>sse:0.000000<br>std:0.000002</td>
+        <td bgcolor="white">max:0.000108<br>mean:0.000017<br>median:0.000014<br>min:0.000000<br>rmse:0.000023<br>sse:0.000001<br>std:0.000015</td><td bgcolor="white">max:0.000110<br>mean:0.000019<br>median:0.000013<br>min:0.000000<br>rmse:0.000028<br>sse:0.000001<br>std:0.000020</td>
+        <td bgcolor="white">max:0.000011<br>mean:0.000002<br>median:0.000002<br>min:0.000000<br>rmse:0.000003<br>sse:0.000000<br>std:0.000002</td><td bgcolor="white">max:0.000015<br>mean:0.000003<br>median:0.000002<br>min:0.000000<br>rmse:0.000004<br>sse:0.000000<br>std:0.000003</td>
+    </tr>
+</table>
+
+<p>各轨迹图统计汇总对比如下：(点击查看大图)</p>
+<table>
+    <tr><th style="width:10%;">指标</th><th colspan="2" style="text-align:center;">室内(indoor)</th><th colspan="2" style="text-align:center;">室外(outdoor)</th><th colspan="2" style="text-align:center;">走廊(slides)</th></tr>
+    <tr><td bgcolor="#F5F5F5"></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Mono_IMU</b></td><td bgcolor="#F5F5F5" style="text-align:center;"><b>Rgbd_IMU</b></td></tr>
+    <tr>
+        <td bgcolor="white">Trajectory</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-traj-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">xyz_view</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-xyz-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">rpy_view</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpy-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">APE</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">APE-Map</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-ape-map-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white">RPE-Map</td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-indoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-indoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-outdoor-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-outdoor-d435i-rgbd.jpg" width="120px"></td>
+        <td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-slides-d435i-mono.jpg" width="120px"></td><td width="120px" bgcolor="white"><img align="left" src="/resources/slam-rpe-map-slides-d435i-rgbd.jpg" width="120px"></td>
+    </tr>
+</table>
+
+<h6 id="5-结论-1"><a href="#5-结论-1" class="headerlink" title="5.结论"></a>5.结论</h6><p>1.infrared-camera整体效果好于rgb-camera，其中rgb-camera运行过程中，会出现的问题：<br>(1) 跳帧(找不到当前活跃地图current active-map就跳回原点、随机初始化角度方向，重画跟踪轨迹)：存在多次。bad case触发条件: 场景移动变化过快(&gt;1m/s)、场景过于相似(走廊翻转180°)；<br>(2) 卡顿(图像帧卡住, 无法活动轨迹)：存在少量，停下重新移动camera会继续运行；而infrared-camera较流畅，不会出现上述问题。</p>
+<p>2.场景对比：<br>(1) 轨迹完整度：室内&gt;室外&gt;走廊；</p>
+<ul>
+<li>室内、室外：整体轨迹保留比较完整，虽然在运行过程中会出现卡顿、跳帧，但最终轨迹结果是完整的；</li>
+<li>走廊：infrared-camera没有丢失轨迹，rgb-camera丢失部分轨迹；</li>
+</ul>
+<p>(2) 轨迹总体误差：走廊&gt;室外&gt;室内；</p>
+<h5 id="四、RealSense-D455-rgb-amp-infrared-camera轨迹评估"><a href="#四、RealSense-D455-rgb-amp-infrared-camera轨迹评估" class="headerlink" title="四、RealSense D455: rgb &amp; infrared-camera轨迹评估"></a>四、RealSense D455: rgb &amp; infrared-camera轨迹评估</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和RealSense D435i差异不大，此处不再赘述，注意获取准确对应的相机内参。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1] ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial and Multi-Map SLAM, Dec, 2021.<br>[2] Orb-Slam3源码：<a href="https://github.com/UZ-SLAMLab/ORB_SLAM3" target="_blank" rel="external">https://github.com/UZ-SLAMLab/ORB_SLAM3</a><br>[3] RealSense-sdk-2.0：<a href="https://github.com/IntelRealSense/librealsense.git" target="_blank" rel="external">https://github.com/IntelRealSense/librealsense.git</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      Slam定位、建图、轨迹评估。RealSense D435i、D455，Rolling-Shutter、Global-Shutter等不同相机对于slam计算影响对比。
+    
+    </summary>
+    
+      <category term="SLAM" scheme="http://www.dianacody.com/categories/SLAM/"/>
+    
+    
+      <category term="SLAM" scheme="http://www.dianacody.com/tags/SLAM/"/>
+    
+      <category term="Trajectory Evaluation" scheme="http://www.dianacody.com/tags/Trajectory-Evaluation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>相机标定</title>
+    <link href="http://www.dianacody.com/2022/12/01/2022-12-01-Calib/"/>
+    <id>http://www.dianacody.com/2022/12/01/2022-12-01-Calib/</id>
+    <published>2022-11-30T16:00:00.000Z</published>
+    <updated>2023-08-03T12:14:46.722Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相机标定的目标是获取双目相机参数、imu参数、几者之间的转换矩阵参数。标定的主要工作包括：<br>1.获取双目相机内参+双目转换矩阵；<br>2.获取imu参数，以测定噪声密度、随机游走；<br>3.双目+imu联合标定，获取双目到imu的转换矩阵；</p>
+<h5 id="二、相机参数说明"><a href="#二、相机参数说明" class="headerlink" title="二、相机参数说明"></a>二、相机参数说明</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相机参数配置文件camchain.yaml，存储相机内外参的校准、IMU相对于相机的空间/时间校准参数。其所含的参数说明如下：<br><strong>· CAMERA_MODEL</strong>：camera_model(pin_hole/omni)，(针孔/全向)。<br><strong>· intrinsics</strong>：包含给定投影类型的内部参数的向量。要素如下：</p>
+<ul>
+<li>pinhone: [fu fv pu pv]</li>
+<li>omni: [xi fu fv pu pv]</li>
+<li>ds: [xi alpha fu fv pu pv]</li>
+<li>eucm: [alpha beta fu fv pu pv]</li>
+</ul>
+<p><strong>· distortion_model</strong>：畸变模型，(radtan/equidistant)。<br><strong>· distortion_coeffs</strong>：畸变参数。<br><strong>· T_cn_cnm1</strong>：相机外在转换，总是相对于链中最后一个相机。（例如：cam1：T_cn_cnm1 = T_c1_c0，将cam0转换为cam1坐标）<br><strong>· T_cam_imu</strong>：imu外参，从imu到相机坐标的转换(T_c_i)。<br><strong>· timeshift_cam_imu</strong>：相机和imu时间戳之间的时间间隔，以秒为单位（t_imu = t_cam + shift）。<br><strong>· rostopic</strong>：摄像机图像流的主题。<br><strong>· resolution</strong>：相机分辨率[width,height]。</p>
+<p>示例：</p>
+<h6 id="1-相机chain-yaml"><a href="#1-相机chain-yaml" class="headerlink" title="1.相机chain.yaml"></a>1.相机chain.yaml</h6><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="attr">cam0:</span></div><div class="line"><span class="attr">  camera_model:</span> <span class="string">pinhole</span></div><div class="line"><span class="attr">  intrinsics:</span> <span class="string">[461.629,</span> <span class="number">460.152</span><span class="string">,</span> <span class="number">362.680</span><span class="string">,</span> <span class="number">246.049</span><span class="string">]</span></div><div class="line"><span class="attr">  distortion_model:</span> <span class="string">radtan</span></div><div class="line"><span class="attr">  distortion_coeffs:</span> <span class="string">[-0.27695497,</span> <span class="number">0.06712482</span><span class="string">,</span> <span class="number">0.00087538</span><span class="string">,</span> <span class="number">0.00011556</span><span class="string">]</span></div><div class="line"><span class="attr">  T_cam_imu:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.01779318,</span> <span class="number">0.99967549</span><span class="string">,-0.01822936,</span> <span class="number">0.07008565</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[-0.9998017,</span> <span class="number">0.01795239</span><span class="string">,</span> <span class="number">0.00860714</span><span class="string">,-0.01771023]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.00893160,</span> <span class="number">0.01807260</span><span class="string">,</span> <span class="number">0.99979678</span><span class="string">,</span> <span class="number">0.00399246</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.0,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">1.0</span><span class="string">]</span></div><div class="line"><span class="attr">  timeshift_cam_imu:</span> <span class="bullet">-8.121e-05</span></div><div class="line"><span class="attr">  rostopic:</span> <span class="string">/cam0/image_raw</span></div><div class="line"><span class="attr">  resolution:</span> <span class="string">[752,</span> <span class="number">480</span><span class="string">]</span></div><div class="line"><span class="attr">cam1:</span></div><div class="line"><span class="attr">  camera_model:</span> <span class="string">omni</span></div><div class="line"><span class="attr">  intrinsics:</span> <span class="string">[0.80065662,</span> <span class="number">833.006</span><span class="string">,</span> <span class="number">830.345</span><span class="string">,</span> <span class="number">373.850</span><span class="string">,</span> <span class="number">253.749</span><span class="string">]</span></div><div class="line"><span class="attr">  distortion_model:</span> <span class="string">radtan</span></div><div class="line"><span class="attr">  distortion_coeffs:</span> <span class="string">[-0.33518750,</span> <span class="number">0.13211436</span><span class="string">,</span> <span class="number">0.00055967</span><span class="string">,</span> <span class="number">0.00057686</span><span class="string">]</span></div><div class="line"><span class="attr">  T_cn_cnm1:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[</span> <span class="number">0.99998854</span><span class="string">,</span> <span class="number">0.00216014</span><span class="string">,</span> <span class="number">0.00427195</span><span class="string">,-0.11003785]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[-0.00221074,</span> <span class="number">0.99992702</span><span class="string">,</span> <span class="number">0.01187697</span><span class="string">,</span> <span class="number">0.00045792</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[-0.00424598,-0.01188627,</span> <span class="number">0.99992034</span><span class="string">,-0.00064487]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.0,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">1.0</span><span class="string">]</span></div><div class="line"><span class="attr">  T_cam_imu:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[</span> <span class="number">0.01567142</span><span class="string">,</span> <span class="number">0.99978002</span><span class="string">,-0.01393948,-0.03997419]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[-0.99966203,</span> <span class="number">0.01595569</span><span class="string">,</span> <span class="number">0.02052137</span><span class="string">,-0.01735854]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[</span> <span class="number">0.02073927</span><span class="string">,</span> <span class="number">0.01361317</span><span class="string">,</span> <span class="number">0.99969223</span><span class="string">,</span> <span class="number">0.00326019</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.0,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">1.0</span><span class="string">]</span></div><div class="line"><span class="attr">  timeshift_cam_imu:</span> <span class="bullet">-8.681e-05</span></div><div class="line"><span class="attr">  rostopic:</span> <span class="string">/cam1/image_raw</span></div><div class="line"><span class="attr">  resolution:</span> <span class="string">[752,</span> <span class="number">480</span><span class="string">]</span></div></pre></td></tr></table></figure>
+<h6 id="2-imu配置：imu-yaml"><a href="#2-imu配置：imu-yaml" class="headerlink" title="2.imu配置：imu.yaml"></a>2.imu配置：imu.yaml</h6><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Accelerometers</span></div><div class="line"><span class="attr">accelerometer_noise_density:</span> <span class="number">1.86e-03</span>   <span class="comment">#Noise density (continuous-time)</span></div><div class="line"><span class="attr">accelerometer_random_walk:</span>   <span class="number">4.33e-04</span>   <span class="comment">#Bias random walk</span></div><div class="line"></div><div class="line"><span class="comment">#Gyroscopes</span></div><div class="line"><span class="attr">gyroscope_noise_density:</span>     <span class="number">1.87e-04</span>   <span class="comment">#Noise density (continuous-time)</span></div><div class="line"><span class="attr">gyroscope_random_walk:</span>       <span class="number">2.66e-05</span>   <span class="comment">#Bias random walk</span></div><div class="line"></div><div class="line"><span class="attr">rostopic:</span>                    <span class="string">/imu0</span>      <span class="comment">#the IMU ROS topic</span></div><div class="line"><span class="attr">update_rate:</span>                 <span class="number">200.0</span>      <span class="comment">#Hz (for discretization of the values above)</span></div></pre></td></tr></table></figure>
+<h5 id="三、标定环境搭建"><a href="#三、标定环境搭建" class="headerlink" title="三、标定环境搭建"></a>三、标定环境搭建</h5><h6 id="1-ros安装"><a href="#1-ros安装" class="headerlink" title="1.ros安装"></a><strong>1.ros安装</strong></h6><p>注意当前匹配使用的ubuntu系统版本。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">1.[添加软件源=aliyun]  <span class="comment"># ubuntu 18.04 &amp; 20.04</span></div><div class="line">sudo sh -c <span class="string">'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" &gt; /etc/apt/sources.list.d/ros-latest.list'</span></div><div class="line">sudo sh -c <span class="string">'. /etc/lsb-release &amp;&amp; echo "deb http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main" &gt; /etc/apt/sources.list.d/ros-latest.list'</span></div><div class="line"></div><div class="line">2.[设置秘钥]</div><div class="line">sudo apt-key adv --keyserver <span class="string">'hkp://keyserver.ubuntu.com:80'</span> --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654</div><div class="line"></div><div class="line">3.[安装ROS文件]</div><div class="line">sudo apt update</div><div class="line">sudo apt install ros-melodic-desktop-full     <span class="comment"># ubuntu 18.04</span></div><div class="line">sudo apt install ros-noetic-desktop-full      <span class="comment"># ubuntu 20.04 </span></div><div class="line">如果提示找不到rosdep，执行sudo apt install python3-rosdep2，先安装rospack-tools包: sudo apt install rospack-tools</div><div class="line"></div><div class="line">4.[初始化rosdep] <span class="comment"># 安装过程中,执行该步骤,参考其他各种科学上网方法</span></div><div class="line">sudo rosdep init</div><div class="line">rosdep update</div><div class="line"></div><div class="line">5.[设置环境变量]</div><div class="line"><span class="built_in">echo</span> <span class="string">"source /opt/ros/melodic/setup.bash"</span> &gt;&gt; ~/.bashrc      <span class="comment"># ubuntu 18.04</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"source /opt/ros/noetic/setup.bash"</span> &gt;&gt; ~/.bashrc       <span class="comment"># ubuntu 20.04</span></div><div class="line"><span class="built_in">source</span> ~/.bashrc</div><div class="line">执行上述命令后，可以输入ros并按tab键，正常情况下会输出很多ros开头的对应所有命令，如果环境变量设置有问题，将不会出现。</div><div class="line"></div><div class="line">6.[安装rosinstall]</div><div class="line">sudo apt install python-rosinstall python-rosinstall-generator python-wstool build-essential       <span class="comment"># ubuntu 18.04</span></div><div class="line">sudo apt install python3-rosinstall python3-rosinstall-generator python3-wstool build-essential    <span class="comment"># ubuntu 20.04</span></div><div class="line"></div><div class="line">7.[安装检查]</div><div class="line">ROS的默认安装路径为/opt/ros/noetic/，可进入该路径查看安装包是否存在。</div><div class="line">使用基本命令检查ROS是否安装成功。以下三条命令分别打开一个终端进行运行。执行中很多报错依赖包没安装，参考博客原文or百度安装即可。</div><div class="line">roscore                               <span class="comment"># 启动roscore</span></div><div class="line">rosrun turtlesim turtlesim_node       <span class="comment"># 启动小海龟仿真器</span></div><div class="line">rosrun turtlesim turtle_teleop_key    <span class="comment"># 启动海龟控制节点</span></div></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后是两个utils的安装，这之前有依赖和环境搭建：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">1.[安装依赖项]</div><div class="line">sudo apt-get install libdw-dev</div><div class="line"></div><div class="line">2.[创建ros工作空间]</div><div class="line">mkdir -p ~/Documents/catkin_ws/src</div><div class="line"><span class="built_in">cd</span> ~/Documents/catkin_ws/src</div><div class="line">catkin_init_workspace</div><div class="line"><span class="built_in">cd</span> ~/Documents/catkin_ws/</div><div class="line">catkin_make</div><div class="line"><span class="built_in">source</span> ~/Documents/catkin_ws/devel/setup.bash</div></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以下2个包，注意：先编译code_utils，再编译imu_utils，不能放在一起编译，imu_utils依赖code_utils。先把code_utils放在工作空间src下编译。再将imu_utils放到src下编译。</p>
+<h6 id="2-core-utils安装"><a href="#2-core-utils安装" class="headerlink" title="2.core_utils安装"></a><strong>2.core_utils安装</strong></h6><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Documents/catkin_ws/src</div><div class="line">git <span class="built_in">clone</span> https://github.com/gaowenliang/code_utils.git</div><div class="line"><span class="built_in">cd</span> ~/Documents/catkin_ws/</div><div class="line">catkin_make</div></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;报错 fatal error: backward.hpp: 没有那个文件或目录，在code_utils下面找到sumpixel_test.cpp，修改#include “backward.hpp”为#include “code_utils/backward.hpp”后再catkin_make。</p>
+<h6 id="3-imu-utils安装"><a href="#3-imu-utils安装" class="headerlink" title="3.imu_utils安装"></a><strong>3.imu_utils安装</strong></h6><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/Documents/atkin_ws/src</div><div class="line">git <span class="built_in">clone</span> https://github.com/gaowenliang/imu_utils.git</div><div class="line"><span class="built_in">cd</span> ~/Documents/catkin_ws/</div><div class="line">catkin_make</div><div class="line"><span class="built_in">source</span> ~/Documents/catkin_ws/devel/setup.bash</div></pre></td></tr></table></figure>
+<h6 id="4-标定工具Kalibr"><a href="#4-标定工具Kalibr" class="headerlink" title="4.标定工具Kalibr"></a><strong>4.标定工具Kalibr</strong></h6><p>官网：<a href="https://github.com/ethz-asl/kalibr" target="_blank" rel="external">https://github.com/ethz-asl/kalibr</a><br>安装文档：<a href="https://github.com/ethz-asl/kalibr/wiki/installation" target="_blank" rel="external">https://github.com/ethz-asl/kalibr/wiki/installation</a><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">1.[安装依赖项]</div><div class="line">sudo apt-get install -y </div><div class="line">git wget autoconf automake nano </div><div class="line">libeigen3-dev libboost-all-dev libsuitesparse-dev </div><div class="line">doxygen libopencv-dev </div><div class="line">libpoco-dev libtbb-dev libblas-dev liblapack-dev libv4l-dev</div><div class="line"></div><div class="line">2.[安装python包]</div><div class="line">sudo apt-get install -y python3-dev python3-pip python3-scipy </div><div class="line">python3-matplotlib ipython3 python3-wxgtk4.0 python3-tk python3-igraph</div><div class="line"></div><div class="line">3.[建立工作空间]</div><div class="line">mkdir -p ~/文档/catkin_ws/src</div><div class="line"><span class="built_in">cd</span> ~/文档/catkin_ws/</div><div class="line"><span class="built_in">export</span> ROS1_DISTRO=noetic     <span class="comment">#--kinetic=16.04, melodic=18.04, noetic=20.04</span></div><div class="line"><span class="built_in">source</span> /opt/ros/<span class="variable">$ROS1_DISTRO</span>/setup.bash</div><div class="line">catkin init</div><div class="line">catkin config --extend /opt/ros/<span class="variable">$ROS1_DISTRO</span></div><div class="line">catkin config --merge-devel   <span class="comment">#--Necessary for catkin_tools&gt;=0.4.</span></div><div class="line">catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release</div><div class="line"></div><div class="line">4.[源码安装]</div><div class="line"><span class="built_in">cd</span> ~/文档/catkin_ws/src</div><div class="line">git <span class="built_in">clone</span> https://github.com/ethz-asl/kalibr.git</div><div class="line"><span class="built_in">cd</span> ~/文档/catkin_ws/</div><div class="line">catkin build -DCMAKE_BUILD_TYPE=Release -j4</div><div class="line"></div><div class="line">5.[运行]</div><div class="line"><span class="built_in">source</span> ~/Documents/catkin_ws/devel/setup.bash</div><div class="line">rosrun kalibr &lt;command_you_want_to_run_here&gt;</div></pre></td></tr></table></figure></p>
+<h5 id="四、双目相机标定"><a href="#四、双目相机标定" class="headerlink" title="四、双目相机标定"></a>四、双目相机标定</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用Kalibr工具进行双目标定。</p>
+<h6 id="1-创建新ros空间"><a href="#1-创建新ros空间" class="headerlink" title="1.创建新ros空间"></a>1.创建新ros空间</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已如上述说明。</p>
+<h6 id="2-标定板制作"><a href="#2-标定板制作" class="headerlink" title="2.标定板制作"></a>2.标定板制作</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/ethz-asl/kalibr/wiki/downloads" target="_blank" rel="external">下载链接</a>，包含三种类型标定板(Aprilgrid, Checkerboard, Circlegrid)，其中Aprilgrid含序号，能防止计算位姿时跳帧，故用Aprilgrid标定。</p>
+<h6 id="3-示例"><a href="#3-示例" class="headerlink" title="3.示例"></a>3.示例</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下载链接同上，含多相机标定(Multiple camera calibration)、IMU+相机联合标定(IMU-camera calibration)，此处先用前者标定相机，包括：相机参数文件camchain.yaml、标定结果文件target.yaml、录制数据集.bag文件。</p>
+<h6 id="4-录制bag数据集"><a href="#4-录制bag数据集" class="headerlink" title="4.录制bag数据集"></a>4.录制bag数据集</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为了之后imu+相机联合标定，此处采集双目+imu的数据。若已有通过ros发布image和imu消息节点，只需用rosbag record工具将拍摄到的标定板图像制作成.bag文件即可。注意默认设备采集的频率为20~60Hz，会使标定图像过多，计算量太大。采集时最好将ros topic频率降低到4Hz左右。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ros可更改topic发布频率的节点throttle，分别打开两个终端，运行以下命令：(其中原始话题名称：/mynteye/left/image_raw、/mynteye/right/image_raw，更改频率后话题名称：/left、/right)<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">rosrun</div><div class="line">rosrun topic_tools throttle messages /mynteye/left/image_raw 4.0 /left</div><div class="line">rosrun topic_tools throttle messages /mynteye/right/image_raw 4.0 /right</div></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然后录制bag，参考：<a href="https://www.bilibili.com/video/BV1gA411w7EM/?is_story_h5=false&amp;p=1&amp;share_from=ugc&amp;share_medium=android&amp;share_plat=android&amp;share_session_id=4cb33025-a24d-435f-adfc-7e10953ecc92&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1671450944&amp;unique_k=vMzZHAU" target="_blank" rel="external">Kalibr标定视频教程</a>。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rosbag record -O stereo_calibra.bag /left /right /imu</div></pre></td></tr></table></figure></p>
+<h6 id="5-进行标定"><a href="#5-进行标定" class="headerlink" title="5.进行标定"></a>5.进行标定</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进入下载示例Multiple camera calibration文件夹，修改camchain.yaml文件：话题名称、频率、标定板尺寸。（详见视频教程）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打开终端输入命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">source</span> devel/setup.bash</div><div class="line">rosrun kalibr kalibr_calibrate_cameras --bag /home/admin/stereo_calibra.bag --topics /left /right --models pinhole-equi pinhole-equi --target /home/admin/april_6x6_80x80cm_A0.yaml</div></pre></td></tr></table></figure></p>
+<h6 id="6-标定结果"><a href="#6-标定结果" class="headerlink" title="6.标定结果"></a>6.标定结果</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标定完成后，生成cam-chain.yaml文件，包含：相机内参、畸变参数、基线等。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="attr">cam0:</span></div><div class="line"><span class="attr">  cam_overlaps:</span> <span class="string">[1]</span></div><div class="line"><span class="attr">  camera_model:</span> <span class="string">pinhole</span></div><div class="line"><span class="attr">  distortion_coeffs:</span> <span class="string">[0.2783471016021346,</span> <span class="number">0.6964790605940689</span><span class="string">,</span> <span class="bullet">-1.7636165117280103</span><span class="string">,</span> <span class="number">1.9185066948675424</span><span class="string">]</span></div><div class="line"><span class="attr">  distortion_model:</span> <span class="string">equidistant</span></div><div class="line"><span class="attr">  intrinsics:</span> <span class="string">[464.46660755800724,</span> <span class="number">465.36764628863784</span><span class="string">,</span> <span class="number">345.1018538803555</span><span class="string">,</span> <span class="number">229.48918054311704</span><span class="string">]</span></div><div class="line"><span class="attr">  resolution:</span> <span class="string">[640,</span> <span class="number">480</span><span class="string">]</span></div><div class="line"><span class="attr">  rostopic:</span> <span class="string">/left</span></div><div class="line"><span class="attr">cam1:</span></div><div class="line"><span class="attr">  T_cn_cnm1:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.9996465213666637,</span> <span class="bullet">-0.02537787899957037</span><span class="string">,</span> <span class="number">0.007924366031799834</span><span class="string">,</span> <span class="bullet">-0.11251195025612559</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.02547649136646326,</span> <span class="number">0.9995959921960228</span><span class="string">,</span> <span class="bullet">-0.012601617884125324</span><span class="string">,</span> <span class="bullet">-0.0017042839059835384</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[-0.0076013621922192826,</span> <span class="number">0.012799048524251695</span><span class="string">,</span> <span class="number">0.9998891956860474</span><span class="string">,</span> <span class="bullet">-0.0005072054140188229</span><span class="string">]</span></div><div class="line"><span class="bullet">  -</span> <span class="string">[0.0,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">0.0</span><span class="string">,</span> <span class="number">1.0</span><span class="string">]</span></div><div class="line"><span class="attr">  cam_overlaps:</span> <span class="string">[0]</span></div><div class="line"><span class="attr">  camera_model:</span> <span class="string">pinhole</span></div><div class="line"><span class="attr">  distortion_coeffs:</span> <span class="string">[0.2682739040565608,</span> <span class="number">0.7579325851647005</span><span class="string">,</span> <span class="bullet">-2.0708675842774156</span><span class="string">,</span></div><div class="line">    <span class="number">2.3962970091118696</span><span class="string">]</span></div><div class="line"><span class="attr">  distortion_model:</span> <span class="string">equidistant</span></div><div class="line"><span class="attr">  intrinsics:</span> <span class="string">[461.8506067496413,</span> <span class="number">462.2467047389745</span><span class="string">,</span> <span class="number">325.2758830849641</span><span class="string">,</span> <span class="number">247.10152372631737</span><span class="string">]</span></div><div class="line"><span class="attr">  resolution:</span> <span class="string">[640,</span> <span class="number">480</span><span class="string">]</span></div><div class="line"><span class="attr">  rostopic:</span> <span class="string">/right</span></div></pre></td></tr></table></figure></p>
+<p><div align="center" style="width:60%;height:60%;margin:0 auto;"><img src="/resources/calib-reprojection-error-stereo.jpg" alt="figure-stereo-reprojection-errors"></div></p>
+<center><h7 style="color:grey">图1 双目标定的重投影误差</h7></center>
+
+<h5 id="五、IMU标定"><a href="#五、IMU标定" class="headerlink" title="五、IMU标定"></a>五、IMU标定</h5><h6 id="1-录制imu-bag"><a href="#1-录制imu-bag" class="headerlink" title="1.录制imu.bag"></a>1.录制imu.bag</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此处采用imu_utils进行标定。保持imu静止不动至少2小时，录制imu数据集.bag。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rosbag record /imu -O imu</div></pre></td></tr></table></figure></p>
+<h6 id="2-修改launch文件"><a href="#2-修改launch文件" class="headerlink" title="2.修改launch文件"></a>2.修改launch文件</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自定义可选，修改src/imu_utils-master/launch文件，包括名字、时长之类。(比如: mynt_imu.launch)。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">node</span> <span class="attr">pkg</span>=<span class="string">"imu_utils"</span> <span class="attr">type</span>=<span class="string">"imu_an"</span> <span class="attr">name</span>=<span class="string">"imu_an"</span> <span class="attr">output</span>=<span class="string">"screen"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"imu_topic"</span> <span class="attr">type</span>=<span class="string">"string"</span> <span class="attr">value</span>=<span class="string">"/imu0"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"imu_name"</span> <span class="attr">type</span>=<span class="string">"string"</span> <span class="attr">value</span>=<span class="string">"16448"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"data_save_path"</span> <span class="attr">type</span>=<span class="string">"string"</span> <span class="attr">value</span>=<span class="string">"$(find imu_utils)/data/"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"max_time_min"</span> <span class="attr">type</span>=<span class="string">"int"</span> <span class="attr">value</span>=<span class="string">"120"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"max_cluster"</span> <span class="attr">type</span>=<span class="string">"int"</span> <span class="attr">value</span>=<span class="string">"100"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">node</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h6 id="3-进行标定"><a href="#3-进行标定" class="headerlink" title="3.进行标定"></a>3.进行标定</h6><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">roscore</div><div class="line">rosbag play -r 200　imu_utils/imu.bag    <span class="comment"># 播放bag文件:以200速度播放,而非实际等待时长2h</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> imu_ws</div><div class="line"><span class="built_in">source</span> ./devel/setup.bash</div><div class="line">roslaunch imu_utils mynt_imu.launch      <span class="comment"># 运行launch文件</span></div></pre></td></tr></table></figure>
+<h6 id="4-标定结果"><a href="#4-标定结果" class="headerlink" title="4.标定结果"></a>4.标定结果</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标定结束，生成cam-imu.yaml文件，在data目录: src/imu_utils/data/m210_imu_param.yaml，包含：各方向的随机噪声、随机游走。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="string">%YAML:1.0</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">type:</span> <span class="string">IMU</span></div><div class="line"><span class="attr">name:</span> <span class="string">m210</span></div><div class="line"><span class="attr">Gyr:</span></div><div class="line"><span class="attr">   unit:</span> <span class="string">" rad/s"</span></div><div class="line"><span class="attr">   avg-axis:</span></div><div class="line"><span class="attr">      gyr_n:</span> <span class="number">1.1016440992489866e-03</span></div><div class="line"><span class="attr">      gyr_w:</span> <span class="number">5.7968344392887427e-06</span></div><div class="line"><span class="attr">   x-axis:</span></div><div class="line"><span class="attr">      gyr_n:</span> <span class="number">1.2601308952358316e-03</span></div><div class="line"><span class="attr">      gyr_w:</span> <span class="number">6.6549144466689008e-06</span></div><div class="line"><span class="attr">   y-axis:</span></div><div class="line"><span class="attr">      gyr_n:</span> <span class="number">9.1639862355727669e-04</span></div><div class="line"><span class="attr">      gyr_w:</span> <span class="number">4.5920115983527386e-06</span></div><div class="line"><span class="attr">   z-axis:</span></div><div class="line"><span class="attr">      gyr_n:</span> <span class="number">1.1284027789538512e-03</span></div><div class="line"><span class="attr">      gyr_w:</span> <span class="number">6.1435772728445881e-06</span></div><div class="line"><span class="attr">Acc:</span></div><div class="line"><span class="attr">   unit:</span> <span class="string">" m/s^2"</span></div><div class="line"><span class="attr">   avg-axis:</span></div><div class="line"><span class="attr">      acc_n:</span> <span class="number">5.1380013730273288e-02</span></div><div class="line"><span class="attr">      acc_w:</span> <span class="number">1.7544697355051581e-03</span></div><div class="line"><span class="attr">   x-axis:</span></div><div class="line"><span class="attr">      acc_n:</span> <span class="number">3.1145378555559291e-02</span></div><div class="line"><span class="attr">      acc_w:</span> <span class="number">2.9961069437766212e-03</span></div><div class="line"><span class="attr">   y-axis:</span></div><div class="line"><span class="attr">      acc_n:</span> <span class="number">7.0380818146931270e-02</span></div><div class="line"><span class="attr">      acc_w:</span> <span class="number">1.9377334256450410e-03</span></div><div class="line"><span class="attr">   z-axis:</span></div><div class="line"><span class="attr">      acc_n:</span> <span class="number">5.2613844488329294e-02</span></div><div class="line"><span class="attr">      acc_w:</span> <span class="number">3.2956883709381275e-04</span></div></pre></td></tr></table></figure></p>
+<h5 id="六、双目-IMU联合标定"><a href="#六、双目-IMU联合标定" class="headerlink" title="六、双目+IMU联合标定"></a>六、双目+IMU联合标定</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目标：获取相机内参到imu的相对转换矩阵。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;与kalibr标定双目过程类似，这次在IMU-camera calibration例子基础上，标定imu与camera。首先以上两次标定结果修改.yaml参数，包括：标定结果、话题类型、频率等。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kalibr_calibrate_imu_camera --target april_6x6.yaml --cam camchain.yaml --imu imu_adis16448.yaml --bag /home/admin/calib/stereo/imu_stereo.bag --bag-from-to 5 45</div></pre></td></tr></table></figure></p>
+<h6 id="标定结果"><a href="#标定结果" class="headerlink" title="标定结果"></a>标定结果</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.txt文件中的部分结果，包含相机与imu之间的转换矩阵。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">Calibration results</div><div class="line">===================</div><div class="line">Normalized Residuals</div><div class="line">----------------------------</div><div class="line">Reprojection error (cam0):     mean 0.126389437034, median 0.117608381877, std: 0.0673478862055</div><div class="line">Reprojection error (cam1):     mean 0.132576172002, median 0.12130080264, std: 0.0739372479366</div><div class="line">Gyroscope error (imu0):        mean 0.000146638755352, median 3.16696236165e-07, std: 0.0014737840839</div><div class="line">Accelerometer error (imu0):    mean 1.14000452874e-06, median 1.02723705118e-08, std: 6.0143590628e-06</div><div class="line"></div><div class="line">Residuals</div><div class="line">----------------------------</div><div class="line">Reprojection error (cam0) [px]:     mean 0.126389437034, median 0.117608381877, std: 0.0673478862055</div><div class="line">Reprojection error (cam1) [px]:     mean 0.132576172002, median 0.12130080264, std: 0.0739372479366</div><div class="line">Gyroscope error (imu0) [rad/s]:     mean 5.18446291471e-06, median 1.11969028084e-08, std: 5.21061359864e-05</div><div class="line">Accelerometer error (imu0) [m/s^2]: mean 8.06104932854e-08, median 7.26366284774e-10, std: 4.2527940778e-07</div><div class="line"></div><div class="line">Transformation (cam0):</div><div class="line">-----------------------</div><div class="line">T_ci:  (imu0 to cam0): </div><div class="line">[[-0.02093225 -0.99971259  0.01168657 -0.00021865]</div><div class="line"> [ 0.13518962 -0.01441203 -0.99071492 -0.00086208]</div><div class="line"> [ 0.99059861 -0.01915798  0.13545244  0.00014753]</div><div class="line"> [ 0.          0.          0.          1.        ]]</div><div class="line"></div><div class="line">T_ic:  (cam0 to imu0): </div><div class="line">[[-0.02093225  0.13518962  0.99059861 -0.00003417]</div><div class="line"> [-0.99971259 -0.01441203 -0.01915798 -0.00022818]</div><div class="line"> [ 0.01168657 -0.99071492  0.13545244 -0.00087151]</div><div class="line"> [ 0.          0.          0.          1.        ]]</div><div class="line"></div><div class="line">timeshift cam0 to imu0: [s] (t_imu = t_cam + shift)</div><div class="line">0.000336885304337</div></pre></td></tr></table></figure></p>
+<p><div align="center" style="width:60%;height:60%;margin:0 auto;"><img src="/resources/calib-reprojection-error-stereo-imu.jpg" alt="figure-stereo-imu-reprojection-errors"></div></p>
+<center><h7 style="color:grey">图2 双目+imu联合标定的重投影误差</h7></center>
+
+<h5 id="七、参考文献"><a href="#七、参考文献" class="headerlink" title="七、参考文献"></a>七、参考文献</h5><p>[1] Kalibr官网：<a href="https://github.com/ethz-asl/kalibr/wiki/" target="_blank" rel="external">https://github.com/ethz-asl/kalibr/wiki/</a><br>[2] Kalibr源码：<a href="https://github.com/ethz-asl/kalibr/" target="_blank" rel="external">https://github.com/ethz-asl/kalibr/</a><br>[3] Kalibr标定教程：<a href="https://www.youtube.com/watch?app=desktop&amp;v=puNXsnrYWTY/" target="_blank" rel="external">https://www.youtube.com/watch?app=desktop&amp;v=puNXsnrYWTY/</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      相机标定的目标是获取相机内外参、imu参数、几者间的转换矩阵参数，标定工具Kalibr。
+    
+    </summary>
+    
+      <category term="Camera Calibration" scheme="http://www.dianacody.com/categories/Camera-Calibration/"/>
+    
+    
+      <category term="Camera Calibration" scheme="http://www.dianacody.com/tags/Camera-Calibration/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TBB并行加速优化Slam计算框架</title>
+    <link href="http://www.dianacody.com/2022/10/09/2022-10-09-TBB/"/>
+    <id>http://www.dianacody.com/2022/10/09/2022-10-09-TBB/</id>
+    <published>2022-10-08T16:00:00.000Z</published>
+    <updated>2023-08-03T09:52:30.953Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TBB指令集, Threading Building Blocks(Intel TBB)</strong>：英特尔发布，使用标准 ISO C++代码支持可扩展并行编程的库。不需要特殊的语言或编译器，可扩展数据并行编程。完全支持嵌套并行性，可从较小并行组件构建较大并行组件。使用该库需要指定任务而非线程，并让库以有效的方式将任务映射到线程上。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该库在以下方面与典型的线程包/线程池不同：</p>
+<ul>
+<li>指定逻辑并行而不是线程。</li>
+<li>以线程化为目标，以提高性能。 </li>
+<li>兼容其他线程包。 </li>
+<li>强调可扩展的数据并行编程。</li>
+<li>依赖泛型编程。</li>
+</ul>
+<h5 id="二、TBB并行指令集函数"><a href="#二、TBB并行指令集函数" class="headerlink" title="二、TBB并行指令集函数"></a>二、TBB并行指令集函数</h5><p>1.并行算法；2.任务调度；3.并行容器；4.同步原语；5.内存分配器；<br><strong>TBB基础函数</strong><br><strong>1.parallel_for</strong>：并行方式遍历一个区间。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">parallel_for(<span class="number">1</span>, <span class="number">20000</span>, [](<span class="keyword">int</span> i)</div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">&#125;);</div><div class="line"></div><div class="line">parallel_for(blocked_range&lt;<span class="keyword">size_t</span>&gt;(<span class="number">0</span>, <span class="number">20000</span>), [](blocked_range&lt;<span class="keyword">size_t</span>&gt;&amp; r)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = r.begin(); i != r.end(); ++i)</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p><strong>2.parallel_do和parallel_for_each</strong>：将算法应用于一个区间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vector&lt;size_t&gt; v;</div><div class="line">parallel_do(v.begin(), v.end(), [](size_t i)&#123;cout &lt;&lt; i &lt;&lt; endl; &#125;);</div><div class="line">parallel_for_each(v.begin(), v.end(), [](size_t i)&#123;cout &lt;&lt; i &lt;&lt; endl; &#125;);</div></pre></td></tr></table></figure></p>
+<p><strong>3.parallel_reduce</strong>：类似于map_reduce，先将区间自动分组，对每个分组进行聚合(accumulate)计算，每组得到一个结果，最后将各组的结果进行汇聚(reduce)。<br>这个算法稍微复杂一点，parallel_reduce(range,identity,func,reduction)，第一个参数是区间范围，第二个参数是计算的初始值，第三个参数是聚合函数，第四个参数是汇聚参数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">float</span> <span class="title">ParallelSum</span><span class="params">(<span class="keyword">float</span> <span class="built_in">array</span> [], <span class="keyword">size_t</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> parallel_reduce(</div><div class="line">        blocked_range&lt;<span class="keyword">float</span>*&gt;(<span class="built_in">array</span>, <span class="built_in">array</span> + n),</div><div class="line">        <span class="number">0.f</span>,</div><div class="line">        [](<span class="keyword">const</span> blocked_range&lt;<span class="keyword">float</span>*&gt;&amp; r, <span class="keyword">float</span> value)-&gt;<span class="keyword">float</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="built_in">std</span>::accumulate(r.begin(), r.end(), value);</div><div class="line">    &#125;,</div><div class="line">        <span class="built_in">std</span>::plus&lt;<span class="keyword">float</span>&gt;()</div><div class="line">        );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这数组求和例子就是先自动分组然后对各组中的元素进行聚合累加，最后将各组结果汇聚相加。<br><strong>4.parallel_pipeline</strong>：并行的管道过滤器数据流经过一个管道，在数据流动的过程中依次要经过一些过滤器的处理，其中有些过滤器可能会并行处理数据，这时就可以用到并行的管道过滤器。举一个例子，比如我要读入一个文件，先将文件中的数字提取出来，再将提取出来的数字做一个转换，最后将转换后的数字输出到另外一个文件中。其中读文件和输出文件不能并行去做，但是中间数字转换环节可并行。parallel_pipeline的原型：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">parallel_pipeline( max_number_of_live_tokens, </div><div class="line">                   make_filter&lt;<span class="keyword">void</span>,I1&gt;(mode0,g0) &amp;</div><div class="line">                   make_filter&lt;I1,I2&gt;(mode1,g1) &amp;</div><div class="line">                   make_filter&lt;I2,I3&gt;(mode2,g2) &amp;</div><div class="line">                   ... </div><div class="line">                   make_filter&lt;In,<span class="keyword">void</span>&gt;(moden,gn) );</div></pre></td></tr></table></figure></p>
+<p>第一个参数是最大的并行数，可以通过&amp;连接多个filter，这些filter是顺序执行的，前一个filter的输出是下一个filter的输入。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">float</span> <span class="title">RootMeanSquare</span><span class="params">( <span class="keyword">float</span>* first, <span class="keyword">float</span>* last )</span> </span>&#123;</div><div class="line">    <span class="keyword">float</span> sum=<span class="number">0</span>;</div><div class="line">    parallel_pipeline( <span class="comment">/*max_number_of_live_token=*/</span><span class="number">16</span>,       </div><div class="line">        make_filter&lt;<span class="keyword">void</span>,<span class="keyword">float</span>*&gt;(</div><div class="line">            filter::serial,</div><div class="line">            [&amp;](flow_control&amp; fc)-&gt; <span class="keyword">float</span>*&#123;</div><div class="line">                <span class="keyword">if</span>( first&lt;last ) &#123;</div><div class="line">                    <span class="keyword">return</span> first++;</div><div class="line">                 &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    fc.stop();</div><div class="line">                    <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;    </div><div class="line">        ) &amp;</div><div class="line">        make_filter&lt;<span class="keyword">float</span>*,<span class="keyword">float</span>&gt;(</div><div class="line">            filter::parallel,</div><div class="line">            [](<span class="keyword">float</span>* p)&#123;<span class="keyword">return</span> (*p)*(*p);&#125; </div><div class="line">        ) &amp;</div><div class="line">        make_filter&lt;<span class="keyword">float</span>,<span class="keyword">void</span>&gt;(</div><div class="line">            filter::serial,</div><div class="line">            [&amp;](<span class="keyword">float</span> x) &#123;sum+=x;&#125;</div><div class="line">        )</div><div class="line">    );</div><div class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(sum);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>第一个filter生成数据（如从文件中读取数据等），第二个filter对产生的数据进行转换，第三个filter是对转换后的数据做累加。其中第二个filter是可以并行处理的，通过filter::parallel来指定其处理模式。<br><strong>5.parallel_sort</strong>：并行排序。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1000000</span>;</div><div class="line"><span class="keyword">float</span> a[N];</div><div class="line"><span class="keyword">float</span> b[N];</div><div class="line">parallel_sort(a, a + N);</div><div class="line">parallel_sort(b, b + N, <span class="built_in">std</span>::greater&lt;<span class="keyword">float</span>&gt;());</div></pre></td></tr></table></figure></p>
+<p><strong>6.parallel_invoke</strong>：并行调用，并行调用多个函数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</div><div class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">bar</span><span class="params">(<span class="keyword">int</span>)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">RunFunctionsInParallel</span><span class="params">()</span> </span>&#123;</div><div class="line">    tbb::parallel_invoke(f, []&#123;bar(<span class="number">2</span>);&#125;, []&#123;bar(<span class="number">3</span>);&#125; );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>TBB任务</strong><br><strong>task_group</strong>：表示可以等待或者取消的任务集合。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">task_group g;</div><div class="line">g.run([]&#123;TestPrint(); &#125;);</div><div class="line">g.run([]&#123;TestPrint(); &#125;);</div><div class="line">g.run([]&#123;TestPrint(); &#125;);</div><div class="line">g.wait()</div></pre></td></tr></table></figure></p>
+<h5 id="三、加速版ORB-SLAM3-FAST"><a href="#三、加速版ORB-SLAM3-FAST" class="headerlink" title="三、加速版ORB-SLAM3-FAST"></a>三、加速版ORB-SLAM3-FAST</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已有的开源项目：<a href="https://github.com/hellovuong/ORB_SLAM3_FAST" target="_blank" rel="external">https://github.com/hellovuong/ORB_SLAM3_FAST</a> ，by hellovuong，at 2022.1。其不是直接加载for循环上的parallel_for，SLAM3_FAST框架是在图像的特征提取和后端优化部分做了tbb加速, 目前支持“TUM-VI和EuRoC”的“单目+双目”数据集。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实测，30s的Mono-TUM数据集，时间=0.02s数量级，Fast版本比Orb-Slam3原生版本确实都快0.002s左右，<h7 style="color:blue">提速17%~18%</h7>左右。但是该版本仅修改了少部分，还有大量Orb-Slam3的源码没有优化。</p>
+<h5 id="四、TBB加速ORB-SLAM3"><a href="#四、TBB加速ORB-SLAM3" class="headerlink" title="四、TBB加速ORB-SLAM3"></a>四、TBB加速ORB-SLAM3</h5><h6 id="1-改造方法"><a href="#1-改造方法" class="headerlink" title="1.改造方法"></a>1.改造方法</h6><p>(1)代码加速：parallel_for/parallel_reduce/parallel_invoke，修改并行计算模块：<br><strong>OrbExtracter.cc</strong>, computeKeyPointsOctTree(); DistributeOctTree(); computeOrientation();<br><strong>OrbMatcher.cc</strong>, SearchByProjection(); ComputeThreeMaxima(); SearchForInitialization();<br><strong>Optimizer.cc</strong>, PoseOptimization().lock()/mono()/right-fisheye()/stereo();<br><strong>Frame.cc</strong>, ComputeStereoMatches(); UndistortKeyPoints();<br><strong>KeyFrame.cc</strong>: KeyFrame(); UpdateBestCovisibles(); TrackedMapPoints();<br><strong>KeyFrameDataBase.cc</strong>: -<br><strong>Map.cc</strong>: -<br><strong>MapPoint.cc</strong>: -   ComputeDistinctiveDescriptors();<br><strong>LocalMapping.cc</strong>: searchInNeighbors(); KeyFrameCulling();  InitializeIMU();<br><strong>LoopClosing.cc</strong>: deleteCommonRegionsFromBow();<br><strong>System.cc</strong>: -<br><strong>Tracking.cc</strong>, Track(); CreateInitialMapMonocular(); TrackWithMotionModel(); TrackLocalMap();<br>CreateNewKeyFrame(); SearchLocalPoints(); UpdateLocalKeyFrames();<br>(2)算法加速：前端(图像特征提取并行化)/后端优化/回环检测；</p>
+<h6 id="2-数据集"><a href="#2-数据集" class="headerlink" title="2.数据集"></a>2.数据集</h6><p>单目mono、单目IMU。共10个数据集，具体如下：</p>
+<ul>
+<li>mono_tum1</li>
+<li>mono_tum2</li>
+<li>mono_tum_vi_room4</li>
+<li>mono_tum_vi_slides1</li>
+<li>mono_euroc_MH01</li>
+<li>mono_euroc_MH03</li>
+<li>mono_imu_tum_vi_room4</li>
+<li>mono_imu_tum_vi_slides1</li>
+<li>mono_imu_euroc_MH01</li>
+<li>mono_imu_euroc_MH03</li>
+</ul>
+<h6 id="3-统计指标"><a href="#3-统计指标" class="headerlink" title="3.统计指标"></a>3.统计指标</h6><p>按以下三个指标统计绝对时间、提速率。</p>
+<ul>
+<li>totalTime – 总运行时间</li>
+<li>medianTrackingTime – 轨迹中位数时间</li>
+<li>meanTrackingTime – 轨迹平均时间</li>
+</ul>
+<p>注：<h7 style="color:blue"><strong>提速率 = (测试时间-基准时间) / 基准时间 * 100%</strong></h7>。</p>
+<h6 id="4-绝对时间统计"><a href="#4-绝对时间统计" class="headerlink" title="4.绝对时间统计"></a>4.绝对时间统计</h6><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>totalTime</th>
+<th>ori</th>
+<th>fast</th>
+<th>tbb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mono_tum1</td>
+<td>22.9099</td>
+<td>20.3967</td>
+<td>18.819</td>
+</tr>
+<tr>
+<td>mono_tum2</td>
+<td>128.491</td>
+<td>116.23</td>
+<td>110.91</td>
+</tr>
+<tr>
+<td>mono_tum_vi_room4</td>
+<td>82.30296326</td>
+<td>74.69300079</td>
+<td>69.7</td>
+</tr>
+<tr>
+<td>mono_tum_vi_slides1</td>
+<td>198.2973328</td>
+<td>184.109024</td>
+<td>156.94</td>
+</tr>
+<tr>
+<td>mono_euroc_MH01</td>
+<td>113.8627319</td>
+<td>98.12454987</td>
+<td>84.973</td>
+</tr>
+<tr>
+<td>mono_euroc_MH03</td>
+<td>83.69143677</td>
+<td>70.68492126</td>
+<td>59.8</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_room4</td>
+<td>79.43052673</td>
+<td>64.13159943</td>
+<td>64.208</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_slides1</td>
+<td>192.7673187</td>
+<td>173.0284576</td>
+<td>150.48</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH01</td>
+<td>125.3083267</td>
+<td>104.5439606</td>
+<td>90.488</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH03</td>
+<td>97.23898315</td>
+<td>80.485672</td>
+<td>62.913</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-total-time.jpg" alt="figure-total-time"></div></p>
+<center><h7 style="color:grey">图1 totalTime提速时间</h7></center>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>medianTrackingTime</th>
+<th>ori</th>
+<th>fast</th>
+<th>tbb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mono_tum1</td>
+<td>0.0246596</td>
+<td>0.0229959</td>
+<td>0.02178</td>
+</tr>
+<tr>
+<td>mono_tum2</td>
+<td>0.0225559</td>
+<td>0.0210467</td>
+<td>0.020612</td>
+</tr>
+<tr>
+<td>mono_tum_vi_room4</td>
+<td>0.031520639</td>
+<td>0.029292193</td>
+<td>0.0289</td>
+</tr>
+<tr>
+<td>mono_tum_vi_slides1</td>
+<td>0.031224145</td>
+<td>0.028130215</td>
+<td>0.025574</td>
+</tr>
+<tr>
+<td>mono_euroc_MH01</td>
+<td>0.028075576</td>
+<td>0.024197916</td>
+<td>0.021836</td>
+</tr>
+<tr>
+<td>mono_euroc_MH03</td>
+<td>0.027769892</td>
+<td>0.024874028</td>
+<td>0.020141</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_room4</td>
+<td>0.030900763</td>
+<td>0.025430075</td>
+<td>0.025349</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_slides1</td>
+<td>0.030611012</td>
+<td>0.026431446</td>
+<td>0.024964</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH01</td>
+<td>0.031929269</td>
+<td>0.025167587</td>
+<td>0.022284</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH03</td>
+<td>0.031767674</td>
+<td>0.023637912</td>
+<td>0.021577</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-median-tracking-time.jpg" alt="figure-median-tracking-time"></div></p>
+<center><h7 style="color:grey">图2 medianTrackingTime提速时间</h7></center>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>meanTrackingTime</th>
+<th>ori</th>
+<th>fast</th>
+<th>tbb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mono_tum1</td>
+<td>0.0287092</td>
+<td>0.0263192</td>
+<td>0.023583</td>
+</tr>
+<tr>
+<td>mono_tum2</td>
+<td>0.0247957</td>
+<td>0.0223593</td>
+<td>0.021404</td>
+</tr>
+<tr>
+<td>mono_tum_vi_room4</td>
+<td>0.036940288</td>
+<td>0.034013015</td>
+<td>0.031284</td>
+</tr>
+<tr>
+<td>mono_tum_vi_slides1</td>
+<td>0.035524424</td>
+<td>0.032774099</td>
+<td>0.028116</td>
+</tr>
+<tr>
+<td>mono_euroc_MH01</td>
+<td>0.030924153</td>
+<td>0.027365711</td>
+<td>0.023078</td>
+</tr>
+<tr>
+<td>mono_euroc_MH03</td>
+<td>0.030996829</td>
+<td>0.027883305</td>
+<td>0.022148</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_room4</td>
+<td>0.035651043</td>
+<td>0.03027271</td>
+<td>0.028819</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_slides1</td>
+<td>0.034533735</td>
+<td>0.030789048</td>
+<td>0.026958</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH01</td>
+<td>0.03403268</td>
+<td>0.029109169</td>
+<td>0.024576</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH03</td>
+<td>0.036014438</td>
+<td>0.031513211</td>
+<td>0.023301</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-mean-tracking-time.jpg" alt="figure-mean-tracking-time"></div></p>
+<center><h7 style="color:grey">图3 meanTrackingTime提速时间</h7></center>
+
+<h6 id="5-提速率统计"><a href="#5-提速率统计" class="headerlink" title="5.提速率统计"></a>5.提速率统计</h6><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>totalTime</th>
+<th>ori</th>
+<th>fast</th>
+<th>tbb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mono_tum1</td>
+<td>0.00%</td>
+<td>10.97%</td>
+<td>17.86%</td>
+</tr>
+<tr>
+<td>mono_tum2</td>
+<td>0.00%</td>
+<td>9.54%</td>
+<td>13.68%</td>
+</tr>
+<tr>
+<td>mono_tum_vi_room4</td>
+<td>0.00%</td>
+<td>9.25%</td>
+<td>15.31%</td>
+</tr>
+<tr>
+<td>mono_tum_vi_slides1</td>
+<td>0.00%</td>
+<td>7.16%</td>
+<td>20.86%</td>
+</tr>
+<tr>
+<td>mono_euroc_MH01</td>
+<td>0.00%</td>
+<td>13.82%</td>
+<td>25.37%</td>
+</tr>
+<tr>
+<td>mono_euroc_MH03</td>
+<td>0.00%</td>
+<td>15.54%</td>
+<td>28.55%</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_room4</td>
+<td>0.00%</td>
+<td>19.26%</td>
+<td>19.16%</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_slides1</td>
+<td>0.00%</td>
+<td>10.24%</td>
+<td>21.94%</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH01</td>
+<td>0.00%</td>
+<td>16.57%</td>
+<td>27.79%</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH03</td>
+<td>0.00%</td>
+<td>17.23%</td>
+<td>35.30%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-total-time-ratio.jpg" alt="figure-total-time-ratio"></div></p>
+<center><h7 style="color:grey">图4 totalTime提速率</h7></center>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>medianTrackingTime</th>
+<th>ori</th>
+<th>fast</th>
+<th>tbb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mono_tum1</td>
+<td>0.00%</td>
+<td>6.75%</td>
+<td>11.68%</td>
+</tr>
+<tr>
+<td>mono_tum2</td>
+<td>0.00%</td>
+<td>6.69%</td>
+<td>8.62%</td>
+</tr>
+<tr>
+<td>mono_tum_vi_room4</td>
+<td>0.00%</td>
+<td>7.07%</td>
+<td>8.31%</td>
+</tr>
+<tr>
+<td>mono_tum_vi_slides1</td>
+<td>0.00%</td>
+<td>9.91%</td>
+<td>18.10%</td>
+</tr>
+<tr>
+<td>mono_euroc_MH01</td>
+<td>0.00%</td>
+<td>13.81%</td>
+<td>22.22%</td>
+</tr>
+<tr>
+<td>mono_euroc_MH03</td>
+<td>0.00%</td>
+<td>10.43%</td>
+<td>27.47%</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_room4</td>
+<td>0.00%</td>
+<td>17.70%</td>
+<td>17.97%</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_slides1</td>
+<td>0.00%</td>
+<td>13.65%</td>
+<td>18.45%</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH01</td>
+<td>0.00%</td>
+<td>21.18%</td>
+<td>30.21%</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH03</td>
+<td>0.00%</td>
+<td>25.59%</td>
+<td>32.08%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-median-tracking-time-ratio.jpg" alt="figure-median-tracking-time-ratio"></div></p>
+<center><h7 style="color:grey">图5 medianTrackingTime提速率</h7></center>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>meanTrackingTime</th>
+<th>ori</th>
+<th>fast</th>
+<th>tbb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mono_tum1</td>
+<td>0.00%</td>
+<td>8.32%</td>
+<td>17.86%</td>
+</tr>
+<tr>
+<td>mono_tum2</td>
+<td>0.00%</td>
+<td>9.83%</td>
+<td>13.68%</td>
+</tr>
+<tr>
+<td>mono_tum_vi_room4</td>
+<td>0.00%</td>
+<td>7.92%</td>
+<td>15.31%</td>
+</tr>
+<tr>
+<td>mono_tum_vi_slides1</td>
+<td>0.00%</td>
+<td>7.74%</td>
+<td>20.85%</td>
+</tr>
+<tr>
+<td>mono_euroc_MH01</td>
+<td>0.00%</td>
+<td>11.51%</td>
+<td>25.37%</td>
+</tr>
+<tr>
+<td>mono_euroc_MH03</td>
+<td>0.00%</td>
+<td>10.04%</td>
+<td>28.55%</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_room4</td>
+<td>0.00%</td>
+<td>15.09%</td>
+<td>19.16%</td>
+</tr>
+<tr>
+<td>mono_imu_tum_vi_slides1</td>
+<td>0.00%</td>
+<td>10.84%</td>
+<td>21.94%</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH01</td>
+<td>0.00%</td>
+<td>14.47%</td>
+<td>27.79%</td>
+</tr>
+<tr>
+<td>mono_imu_euroc_MH03</td>
+<td>0.00%</td>
+<td>12.50%</td>
+<td>35.30%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-mean-tracking-time-ratio.jpg" alt="figure-mean-tracking-time-ratio"></div></p>
+<center><h7 style="color:grey">图6 meanTrackingTime提速率</h7></center>
+
+<p>总体：Slam-FAST稳定<h7 style="color:blue">提速17%~18%</h7>，tbb改造版本<h7 style="color:red">提速20%~30%</h7>。<br>分析：除了tbb的代码级别改造，Slam-FAST版本还有其他优化部分没增加完，在此基础上可以继续修改优化。</p>
+<h5 id="五、参考文献"><a href="#五、参考文献" class="headerlink" title="五、参考文献"></a>五、参考文献</h5><p>[1] TBB官网：<a href="https://software.intel.com/content/www/us/en/develop/tools/threading-building-blocks.html" target="_blank" rel="external">https://software.intel.com/content/www/us/en/develop/tools/threading-building-blocks.html</a><br>[2] Pro TBB: C++ Parallel Programming with Threading Building Blocks<br><a href="https://book.douban.com/subject/35004080/" target="_blank" rel="external">https://book.douban.com/subject/35004080/</a><br>[3] TBB指令集c++并行化：<a href="https://www.bilibili.com/video/av508224172/" target="_blank" rel="external">https://www.bilibili.com/video/av508224172/</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。
+    
+    </summary>
+    
+      <category term="Parallel Computing" scheme="http://www.dianacody.com/categories/Parallel-Computing/"/>
+    
+    
+      <category term="Parallel Computing" scheme="http://www.dianacody.com/tags/Parallel-Computing/"/>
+    
+      <category term="Multicore Computing" scheme="http://www.dianacody.com/tags/Multicore-Computing/"/>
+    
+  </entry>
   
   <entry>
     <title>裂变传播网络中关键用户识别算法</title>
@@ -1139,9 +1979,9 @@
     
       <category term="Online" scheme="http://www.dianacody.com/tags/Online/"/>
     
-      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
-    
       <category term="Java" scheme="http://www.dianacody.com/tags/Java/"/>
+    
+      <category term="Offline" scheme="http://www.dianacody.com/tags/Offline/"/>
     
       <category term="Hive" scheme="http://www.dianacody.com/tags/Hive/"/>
     
@@ -1543,113 +2383,6 @@
     
     
       <category term="HMM" scheme="http://www.dianacody.com/tags/HMM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>中文分词：原理及分词算法</title>
-    <link href="http://www.dianacody.com/2014/11/05/2014-11-05-cn_cutwords/"/>
-    <id>http://www.dianacody.com/2014/11/05/2014-11-05-cn_cutwords/</id>
-    <published>2014-11-04T16:00:00.000Z</published>
-    <updated>2018-12-03T03:35:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="一、中文分词"><a href="#一、中文分词" class="headerlink" title="一、中文分词"></a>一、中文分词</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;词是最小的能够独立活动的有意义的语言成分，英文单词之间是以空格作为自然分界符的，而汉语是以字为基本的书写单位，词语之间没有明显的区分标记，因此，中文词语分析是中文信息处理的基础与关键。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lucene中对中文的处理是基于自动切分的单字切分，或者二元切分。除此之外，还有最大切分（包括向前、向后、以及前后相结合）、最少切分、全切分等等。</p>
-<h5 id="二、中文分词技术分类"><a href="#二、中文分词技术分类" class="headerlink" title="二、中文分词技术分类"></a>二、中文分词技术分类</h5><p>我们讨论的分词算法可分为三大类：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.<strong> 基于词典 </strong>：基于字典、词库匹配的分词方法；（字符串匹配、机械分词法）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.<strong> 基于统计 </strong>：基于词频度统计的分词方法；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.<strong> 基于规则 </strong>：基于知识理解的分词方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第一类方法应用词典匹配、汉语词法或其它汉语语言知识进行分词，如：最大匹配法、最小分词方法等。这类方法简单、分词效率较高,但汉语语言现象复杂丰富，词典的完备性、规则的一致性等问题使其难以适应开放的大规模文本的分词处理。第二类基于统计的分词方法则基于字和词的统计信息，如把相邻字间的信息、词频及相应的共现信息等应用于分词，由于这些信息是通过调查真实语料而取得的，因而基于统计的分词方法具有较好的实用性。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下面简要介绍几种常用方法：</p>
-<h5 id="三、基于词典分词"><a href="#三、基于词典分词" class="headerlink" title="三、基于词典分词"></a>三、基于词典分词</h5><h6 id="3-1-逐词遍历法"><a href="#3-1-逐词遍历法" class="headerlink" title="3.1 逐词遍历法"></a>3.1 逐词遍历法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;逐词遍历法将词典中的所有词按由长到短的顺序在文章中逐字搜索,直至文章结束。也就是说，不管文章有多短，词典有多大，都要将词典遍历一遍。这种方法效率比较低，大一点的系统一般都不使用。</p>
-<h6 id="3-2-基于字典、词库匹配的分词方法（机械分词法）"><a href="#3-2-基于字典、词库匹配的分词方法（机械分词法）" class="headerlink" title="3.2 基于字典、词库匹配的分词方法（机械分词法）"></a>3.2 基于字典、词库匹配的分词方法（机械分词法）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方法按照一定策略将待分析的汉字串与一个“充分大的”机器词典中的词条进行匹配，若在词典中找到某个字符串，则匹配成功。识别出一个词，根据扫描方向的不同分为正向匹配和逆向匹配。根据不同长度优先匹配的情况，分为最大（最长）匹配和最小（最短）匹配。根据与词性标注过程是否相结合，又可以分为单纯分词方法和分词与标注相结合的一体化方法。常用的方法如下：</p>
-<h6 id="1-最大正向匹配法-MM-MaximumMatching-Method"><a href="#1-最大正向匹配法-MM-MaximumMatching-Method" class="headerlink" title="(1)最大正向匹配法(MM, MaximumMatching Method)"></a>(1)最大正向匹配法(MM, MaximumMatching Method)</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常简称为MM法。其基本思想为：假定分词词典中的最长词有i个汉字字符，则用被处理文档的当前字串中的前i个字作为匹配字段，查找字典。若字典中存在这样的一个i字词，则匹配成功，匹配字段被作为一个词切分出来。如果词典中找不到这样的一个i字词，则匹配失败，将匹配字段中的最后一个字去掉，对剩下的字串重新进行匹配处理……  如此进行下去，直到匹配成功，即切分出一个词或剩余字串的长度为零为止。这样就完成了一轮匹配，然后取下一个i字字串进行匹配处理，直到文档被扫描完为止。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其算法描述如下：<br><strong> step1 </strong>: 从左向右取待切分汉语句的m个字符作为匹配字段，m为大机器词典中最长词条个数。<br><strong> step2 </strong>: 查找大机器词典并进行匹配。若匹配成功，则将这个匹配字段作为一个词切分出来。若匹配不成功，则将这个匹配字段的最后一个字去掉，剩下的字符串作为新的匹配字段，进行再次匹配，重复以上过程，直到切分出所有词为止。</p>
-<h6 id="2-逆向最大匹配法-ReverseMaximum-Matching-Method"><a href="#2-逆向最大匹配法-ReverseMaximum-Matching-Method" class="headerlink" title="(2)逆向最大匹配法(ReverseMaximum Matching Method)"></a>(2)逆向最大匹配法(ReverseMaximum Matching Method)</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通常简称为<strong>RMM法</strong>。RMM法的基本原理与MM法相同 ,不同的是分词切分的方向与MM法相反，而且使用的分词辞典也不同。逆向最大匹配法从被处理文档的末端开始匹配扫描，每次取最末端的2i个字符（i字字串）作为匹配字段，若匹配失败，则去掉匹配字段最前面的一个字，继续匹配。相应地，它使用的分词词典是逆序词典，其中的每个词条都将按逆序方式存放。在实际处理时，先将文档进行倒排处理，生成逆序文档。然后，根据逆序词典，对逆序文档用正向最大匹配法处理即可。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于汉语中偏正结构较多，若从后向前匹配，可以适当提高精确度。所以，逆向最大匹配法比正向最大匹配法的误差要小。统计结果表明 ,单纯使用正向最大匹配的错误率为 1/16 9,单纯使用逆向最大匹配的错误率为 1/245。例如切分字段“硕士研究生产”，正向最大匹配法的结果会是“硕士研究生 / 产”，而逆向最大匹配法利用逆向扫描，可得到正确的分词结果“硕士 / 研究 / 生产”。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，最大匹配算法是一种基于分词词典的机械分词法，不能根据文档上下文的语义特征来切分词语，对词典的依赖性较大，所以在实际使用时，难免会造成一些分词错误，为了提高系统分词的准确度，可以采用正向最大匹配法和逆向最大匹配法相结合的分词方案（见“双向匹配法”）</p>
-<h6 id="3-最少切分法"><a href="#3-最少切分法" class="headerlink" title="(3)最少切分法"></a>(3)最少切分法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使每一句中切出的词数最小。</p>
-<h6 id="4-双向匹配法"><a href="#4-双向匹配法" class="headerlink" title="(4)双向匹配法"></a>(4)双向匹配法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将正向最大匹配法与逆向最大匹配法组合。先根据标点对文档进行粗切分，把文档分解成若干个句子，然后再对这些句子用正向最大匹配法和逆向最大匹配法进行扫描切分。如果两种分词方法得到的匹配结果相同，则认为分词正确，否则，按最小集处理。</p>
-<h5 id="四、全切分-amp-基于词的频度统计（无字典分词）"><a href="#四、全切分-amp-基于词的频度统计（无字典分词）" class="headerlink" title="四、全切分 &amp; 基于词的频度统计（无字典分词）"></a>四、全切分 &amp; 基于词的频度统计（无字典分词）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基于词的频度统计的分词方法是一种全切分方法。在讨论这个方法之前我们先要明白有关全切分的相关内容。</p>
-<h6 id="4-1-全切分"><a href="#4-1-全切分" class="headerlink" title="4.1 全切分"></a>4.1 全切分</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全切分要求获得输入序列的所有可接受的切分形式，而部分切分只取得一种或几种可接受的切分形式，由于部分切分忽略了可能的其他切分形式，所以建立在部分切分基础上的分词方法不管采取何种歧义纠正策略，都可能会遗漏正确的切分，造成分词错误或失败。而建立在全切分基础上的分词方法，由于全切分取得了所有可能的切分形式，因而从根本上避免了可能切分形式的遗漏，克服了部分切分方法的缺陷。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全切分算法能取得所有可能的切分形式，它的句子覆盖率和分词覆盖率均为100%，但全切分分词并没有在文本处理中广泛地采用，原因有以下几点：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.全切分算法只是能获得正确分词的前提，因为全切分不具有歧义检测功能，最终分词结果的正确性和完全性依赖于独立的歧义处理方法，如果评测有误，也会造成错误的结果。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.全切分的切分结果个数随句子长度的增长呈指数增长，一方面将导致庞大的无用数据充斥于存储数据库；另一方面当句长达到一定长度后，由于切分形式过多,造成分词效率严重下降。</p>
-<h6 id="4-2-基于词的频度统计的分词方法"><a href="#4-2-基于词的频度统计的分词方法" class="headerlink" title="4.2 基于词的频度统计的分词方法"></a>4.2 基于词的频度统计的分词方法</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要思想：上下文中，相邻的字同时出现的次数越多，就越可能构成一个词。因此字与字相邻出现的概率或频率能较好的反映词的可信度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主要统计模型为：<strong>N元文法模型（N-gram）、隐马尔科夫模型(Hidden Markov Model, HMM)</strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>HMM马尔科夫假设</strong>：一个词的出现仅仅依赖于它前面出现的有限的一个或者几个词。如果一个词的出现仅依赖于它前面出现的一个词，那么我们就称之为bigram。即<code class="code">P(T) = P(W1W2W3…Wn) = P(W1)P(W2|W1)P(W3|W1W2)…P(Wn|W1W2…Wn-1) ≈ P(W1)P(W2|W1)P(W3|W2)…P(Wn|Wn-1)</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一个词的出现仅依赖于它前面出现的两个词，那么我们就称之为trigram。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在实践中用的最多的就是bigram和trigram了，而且效果很不错。高于四元的用的很少，因为训练它需要更庞大的语料，而且数据稀疏严重，时间复杂度高，精度却提高的不多。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设w1,w2,w3,…,wn是长度为n的字符串，规定任意词wi只与它的前两个相关，得到三元概率模型。以此类推，N元模型就是假设当前词的出现概率只同它前面的N-1个词有关。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一种全切分方法。它不依靠词典,而是将文章中任意两个字同时出现的频率进行统计,次数越高的就可能是一个词。它首先切分出与词表匹配的所有可能的词,运用统计语言模型和决策算法决定最优的切分结果。它的优点在于可以发现所有的切分歧义并且容易将新词提取出来。</p>
-<h5 id="五、基于统计分词（无字典分词）"><a href="#五、基于统计分词（无字典分词）" class="headerlink" title="五、基于统计分词（无字典分词）"></a>五、基于统计分词（无字典分词）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该方法主要基于句法、语法分析，并结合语义分析，通过对上下文内容所提供信息的分析对词进行定界，它通常包括三个部分：分词子系统、句法语义子系统、总控部分。在总控部分的协调下，分词子系统可以获得有关词、句子等的句法和语义信息来对分词歧义进行判断。这类方法试图让机器具有人类的理解能力，需要使用大量的语言知识和信息。由于汉语语言知识的笼统、复杂性，难以将各种语言信息组织成机器可直接读取的形式。因此目前基于知识的分词系统还处在试验阶段。</p>
-<h5 id="六、并行分词法"><a href="#六、并行分词法" class="headerlink" title="六、并行分词法"></a>六、并行分词法</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种分词方法借助于一个含有分词词库的管道进行 ,比较匹配过程是分步进行的 ,每一步可以对进入管道中的词同时与词库中相应的词进行比较 ,由于同时有多个词进行比较匹配 ,因而分词速度可以大幅度提高。这种方法涉及到多级内码理论和管道的词典数据结构。（详细算法可以参考吴胜远的《并行分词方法的研究》）</p>
-]]></content>
-    
-    <summary type="html">
-    
-      词是最小的能够独立活动的有意义的语言成分，英文单词之间是以空格作为自然分界符的，Lucene中对中文的处理是基于自动切分的单字切分，或者二元切分。除此之外，还有最大切分（包括向前、向后、以及前后相结合）、最少切分、全切分等等。
-    
-    </summary>
-    
-      <category term="NLP" scheme="http://www.dianacody.com/categories/NLP/"/>
-    
-    
-      <category term="Chinese Segmentation" scheme="http://www.dianacody.com/tags/Chinese-Segmentation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>主题模型（二）：pLSA和LDA</title>
-    <link href="http://www.dianacody.com/2014/11/04/2014-11-04-Theme2_pLSA,%20LDA/"/>
-    <id>http://www.dianacody.com/2014/11/04/2014-11-04-Theme2_pLSA, LDA/</id>
-    <published>2014-11-03T16:00:00.000Z</published>
-    <updated>2018-12-03T04:15:13.000Z</updated>
-    
-    <content type="html"><![CDATA[<h5 id="一、pLSA（概率潜在语义分析）"><a href="#一、pLSA（概率潜在语义分析）" class="headerlink" title="一、pLSA（概率潜在语义分析）"></a>一、pLSA（概率潜在语义分析）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pLSA有过拟合问题，就是求D, Z, W。pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在论文《Google News Personalization Scalable Online CF》一文中提级针对用户聚类，利用相似用户性信息计算喜欢的news。其中包含min-hash以及plsi，plsi是model-based 推荐算法，属于topic(aspect) model，其在NLP领域中用途很大。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;引入：在文本挖掘时，计算文档相似性是很基础的操作，通常，对文本进行分词，构建VSM，通过jaccard或者cosin计算距离或者相似性，这是基于corpus的思路，仅仅考虑词组，并未考虑文本的语义信息。针对下面情况，基于cropus很难处理：</p>
-<ul>
-<li>如果时间回到2006年，马云和杨致远的手还会握在一起吗</li>
-<li>阿里巴巴集团和雅虎就股权回购一事签署了最终协议</li>
-</ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果采用基于corpus的jaccard距离等算法，那么这两个文本的完全不相关，但是事实上，马云和阿里巴巴集团，杨致远和雅虎有着密切的联系，从语义上看，两者都和“阿里巴巴”有关系。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此外，另一个case：</p>
-<ul>
-<li>富士苹果真好，赶快买</li>
-<li>苹果四代真好，赶快买</li>
-</ul>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从corpus上来看，两者非常相似，但是事实上，2个句子从语义上来讲，没有任何关系，一个是”水果“另一个是”手机”。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过上面的例子，差不多也看出来topic model是什么以及解决什么问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;概念：topic model是针对文本隐含主题的建模方法，针对第一个case，马云对应的主题是阿里巴巴，阿里巴巴集团也隐含阿里巴巴主题，这样两个文本的主题匹配上，认为他们是相关的，针对第二个，分别针对水果以及手机主题，我们认为他们是不相关的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;究竟什么是主题？[接下来参考baidu搜索研发部官方博客中对语义主题的定义]主题就是一个概念、一个方面。它表现为一系列相关的词，能够代表这个主题。比如如果是”阿里巴巴“主题，那么”马云“”电子商务“等词会很高的频率出现，而设计到“腾讯”主题，那么“马化腾”“游戏”“QQ”会以较高的频率出现。如果用数学来描述一下的话，主题就是词汇表上词语的条件概率分布，与主题密切相关的词，条件概率p(w|z)越大。主题就像一个桶，装了出现频率很高的词语，这些词语和主题有很强的相关性，或者说这些词语定义了这个主题。同时，一个词语，可能来自于这个桶，也可能来自那个桶，比如“电子商务”可以来自“阿里巴巴”主题，也可以来自“京东“主题，所以一段文字往往包含多个主题，也就是说，一段文字不只有一个主题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面介绍了主题的概念，我们最为关心的是如何得到这些主题？这就是topic model要解决的问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;define： d表示文档，w表示词语，z表示隐含的主题。其中 p(w|d)表示w在文档d中出现的概率，针对训练语料，对文本进行分词，w的频度除以文档所有词语的频度和，可以求出，对于未知数据，model用来计算该value.p(w|z)表示在给定主题情况下词语的出现的概率是多少，刻画词语和主题的相关程度。p(z|d)表示文档中每个主题出现的概率。所以主题模型就是：利用大量已知的p(w|d)词语-文档信息，训练出来主题-文档p(z|d)以及词语-主题p(w|z)。</p>
-<h6 id="1-1-plsa模型"><a href="#1-1-plsa模型" class="headerlink" title="1.1 plsa模型"></a>1.1 plsa模型</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plsa是一种topic model，它属于生成模型(不是很理解)，给定文档d后，以一定的概率选择d对应的主题z，然后以一定概率选择z中的词语w.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plsa提供了一种模型求解的方法，采用之前介绍的EM算法，EM算法在之前已经介绍，现在不作处理，直接利用EM信息对topic model进行求解。</p>
-<h6 id="1-2-主题模型的用途"><a href="#1-2-主题模型的用途" class="headerlink" title="1.2 主题模型的用途"></a>1.2 主题模型的用途</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.计算文本的相似性，考虑到文本语义，更好的刻画文本相似性，避免多义词，同义词的影响。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.文本聚类，用户聚类(RS)。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.去除噪音，只保留最重要的主题，更好的刻画文档</p>
-<h6 id="1-3-plsa在推荐系统中的应用"><a href="#1-3-plsa在推荐系统中的应用" class="headerlink" title="1.3 plsa在推荐系统中的应用"></a>1.3 plsa在推荐系统中的应用</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面介绍的是文档和词语的关系，映射到推荐系统中，表示为用户和ITEM的关系，ITEM可以使网，视频等。这样可以看出来描述的完全是同样的问题，求解p(s|u)=∑zp(s|z)p(z|u)，模型参数为p(s|z)?p(z|u)，里面上面的推导过程可以求得。<br>具体的可以参考：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unsupervised learning by probabilisticlatent semantic analysis<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Latent Semantic Models for collaborativefiltering<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Google News Personalization Scalable Online CF</p>
-<h5 id="二、LDA（潜在狄瑞雷克模型）"><a href="#二、LDA（潜在狄瑞雷克模型）" class="headerlink" title="二、LDA（潜在狄瑞雷克模型）"></a>二、LDA（潜在狄瑞雷克模型）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布，其原因是共轭分布时先验概率和后验概率的形式相同。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      pLSA由LSA发展过来，而早期LSA的实现主要是通过SVD分解。和pLSA不同的是LDA中假设了很多先验分布（Dirichlet），且一般参数的先验分布都假设为Dirichlet分布。
-    
-    </summary>
-    
-      <category term="NLP" scheme="http://www.dianacody.com/categories/NLP/"/>
-    
-    
-      <category term="pLSA" scheme="http://www.dianacody.com/tags/pLSA/"/>
-    
-      <category term="LDA" scheme="http://www.dianacody.com/tags/LDA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>主题模型（一）：条件概率、矩阵分解</title>
-    <link href="http://www.dianacody.com/2014/11/03/2014-11-03-Theme1_matrix/"/>
-    <id>http://www.dianacody.com/2014/11/03/2014-11-03-Theme1_matrix/</id>
-    <published>2014-11-02T16:00:00.000Z</published>
-    <updated>2018-12-03T03:48:12.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>主题模型</strong>训练推理方法主要有2种：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) pLSA→EM（期望最大化）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) LDA → Gibbs Sampling抽样方法（计算量大,单精确）、变分贝叶斯推断法（计算量小,精度弱）<br>概率矩阵：<strong>p(词语|文档) =∑p(词语|主题)× p(主题|文档)</strong>，<strong> C = Φ × Θ </strong><br>在EM（最大期望）过程中：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) E过程：由贝叶斯可从Φ算到Θ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) M过程：由贝叶斯可从Θ算到Φ<br>两者迭代，最终收敛（矩阵趋于均分）</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设有两个句子，想知道它们之间是否相关联：第一个是：“乔布斯离我们而去了。”第二个是：“苹果价格会不会降？”如果由人来判断，一看就知道，这两个句子之间虽然没有任何公共词语，但仍然是很相关的。因为虽然第二句中的“苹果”可能是指吃的苹果，但是由于第一句里面有了“乔布斯”，我们会很自然的把“苹果”理解为苹果公司的产品。事实上，这种文字语句之间的相关性、相似性问题在搜索引擎算法中经常遇到。例如，一个用户输入了一个query，我们要从海量的网页库中找出和它最相关的结果。这里就涉及到如何衡量query和网页之间相似度的问题。对于这类问题，人是可以通过上下文语境来判断的。但是，机器可以么？<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在传统信息检索领域里，实际上已经有了很多衡量文档相似性的方法，比如经典的VSM模型。然而这些方法往往基于一个基本假设：文档之间重复的词语越多越可能相似。这一点在实际中并不尽然。很多时候相关程度取决于背后的语义联系，而非表面的词语重复。那么，这种语义关系应该怎样度量呢？事实上在自然语言处理领域里已经有了很多从词、词组、句子、篇章角度进行衡量的方法。本文要介绍的是其中一个语义挖掘的利器：<strong>主题模型</strong>。</p>
-<h5 id="一、主题模型定义"><a href="#一、主题模型定义" class="headerlink" title="一、主题模型定义"></a>一、主题模型定义</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主题模型，顾名思义，就是对文字中隐含主题的一种建模方法。还是上面的例子，“苹果”这个词的背后既包含是苹果公司这样一个主题，也包括了水果的主题。当我们和第一句进行比较时，苹果公司这个主题就和“乔布斯”所代表的主题匹配上了，因而我们认为它们是相关的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于主题定义：主题就是一个概念、一个方面。它表现为一系列相关的词语。比如一个文章如果涉及到“百度”这个主题，那么“中文搜索”、“李彦宏”等词语就会以较高的频率出现，而如果涉及到“IBM”这个主题，那么“笔记本”等就会出现的很频繁。如果用数学来描述一下的话，主题就是词汇表上词语的条件概率分布 。与主题关系越密切的词语，它的条件概率越大，反之则越小。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以上是从互联网新闻中摘抄下来的一段话。划分了4个桶（主题），百度（红色），微软（紫色）、谷歌（蓝色）和市场（绿色）。段落中所包含的每个主题的词语用颜色标识出来。从颜色分布上我们就可以看出，文字的大意是在讲百度和市场发展。在这里面，谷歌、微软这两个主题也出现了，但不是主要语义。值得注意的是，像“搜索引擎”这样的词语，在百度、微软、谷歌这三个主题上都是很可能出现的，可以认为一个词语放进了多个“桶”。当它在文字中出现的时候，这三个主题均有一定程度的体现。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如何得到这些主题？对文章中的主题又是如何进行分析？这正是主题模型要解决的问题。主题模型如何工作？</p>
-<h5 id="二、主题模型工作原理"><a href="#二、主题模型工作原理" class="headerlink" title="二、主题模型工作原理"></a>二、主题模型工作原理</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先，用生成模型的视角来看文档和主题这两件事。所谓<strong>生成模型</strong>就是认为一篇文章的每个词都是通过“<strong>以一定概率选择了某个主题，并从这个主题中以一定概率选择某个词语</strong>”这样一个过程得到的。<br>假如有很多的文档，比如大量的网页，先对所有文档进行分词，得到一个词汇列表。这样每篇文档就可以表示为一个词语的集合。对于每个词语，可以用它在文档中出现的次数除以文档中词语的数目作为它在文档中出现的概率p(词语|文档) 。这样对任意一篇文档，左边的C矩阵是已知的，右边的两个矩阵未知。<strong>而主题模型就是用大量已知的“词语－文档”C矩阵 ，通过一系列的训练，推理出右边的“词语－主题”矩阵Φ 和“主题文档”矩阵Θ </strong>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主题模型训练推理的方法主要有两种，一个是pLSA（Probabilistic Latent Semantic Analysis），另一个是LDA（Latent Dirichlet Allocation）。pLSA主要使用的是EM（期望最大化）算法；LDA采用的是Gibbssampling方法。由于它们都较为复杂且篇幅有限，这里就只简要地介绍一下pLSA的思想，其他具体方法和公式，读者可以查阅相关资料。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pLSA采用的方法叫做EM（期望最大化）算法，它包含两个不断迭代的过程：E（期望）过程和M（最大化）过程。用一个形象的例子来说吧：比如说食堂的大师傅炒了一盘菜，要等分成两份给两个人吃，显然没有必要拿天平去一点点去精确称量，最简单的办法是先随意的把菜分到两个碗中，然后观察是否一样多，把比较多的那一份取出一点放到另一个碗中，这个过程一直重复下去，直到大家看不出两个碗里的菜有什么差别为止。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对于主题模型训练来说，“计算每个主题里的词语分布”和“计算训练文档中的主题分布”就好比是在往两个人碗里分饭。在E过程中，我们通过贝叶斯公式可以由“词语－主题”矩阵计算出“主题－文档”矩阵。在M过程中，我们再用“主题－文档”矩阵重新计算“词语－主题”矩阵。这个过程一直这样迭代下去。EM算法的神奇之处就在于它可以保证这个迭代过程是收敛的。也就是说，我们在反复迭代之后，就一定可以得到趋向于真实值的Φ和Θ。</p>
-<h5 id="三、主题模型应用"><a href="#三、主题模型应用" class="headerlink" title="三、主题模型应用"></a>三、主题模型应用</h5><p>有了主题模型，如何使用？以及优缺点？主要是以下几点：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) 可以衡量文档之间的语义相似性。对于一篇文档，我们求出来的主题分布可以看作是对它的一个抽象表示。对于概率分布，我们可以通过一些距离公式（比如KL距离）来计算出两篇文档的语义距离，从而得到它们之间的相似度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) 可以解决多义词的问题。回想最开始的例子，“苹果”可能是水果，也可能指苹果公司。通过求出来的“词语－主题”概率分布，就可以知道“苹果”都属于哪些主题，就可以通过主题的匹配来计算它与其他文字之间的相似度。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) 可以排除文档中噪音的影响。一般来说，文档中的噪音往往处于次要主题中，我们可以把它们忽略掉，只保持文档中最主要的主题。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) 它是无监督、完全自动化。只需要提供训练文档，它就可以自动训练出各种概率，无需任何人工标注过程。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) 跟语言无关。任何语言只要能够对它进行分词，就可以进行训练，得到它的主题分布。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综上所述，主题模型是一个能够挖掘语言背后隐含信息的利器。近些年来各大搜索引擎公司都已经开始重视这方面的研发工作。语义分析的技术正在逐步深入到搜索领域的各个产品中去。以后的搜索会趋于更加智能化。</p>
-<h5 id="四、LSA（潜在语义分析）"><a href="#四、LSA（潜在语义分析）" class="headerlink" title="四、LSA（潜在语义分析）"></a>四、LSA（潜在语义分析）</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;鉴于TF-IDF存在一些缺点，Deerwester等人于1990年提出潜在语义分析（LatentSemanticAnalysis）模型，用于挖掘文档与词语之间隐含的潜在语义关联。LSA的理论基础是数学中的奇异值矩阵分解（SVD）技术。</p>
-<h6 id="4-1-PLSA（基于概率的潜在语义分析）"><a href="#4-1-PLSA（基于概率的潜在语义分析）" class="headerlink" title="4.1 PLSA（基于概率的潜在语义分析）"></a>4.1 PLSA（基于概率的潜在语义分析）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;鉴于LSA存在一些缺点，Hofmann等人于1999年提出一种基于概率的潜在语义分析（Probabilistic Latent SemanticAnalysis）模型。PLSA继承了“潜在语义”的概念，通过“统一的潜在语义空间”（也就是Blei等人于2003年正式提出Topic概念）来关联词与文档；通过引入概率统计的思想，避免了SVD的复杂计算。在PLSA中，各个因素（文档、潜在语义空间、词）之间的概率分布求解是最重要的，EM算法是常用的方法。PLSA也存在一些缺点：概率模型不够完备；随着文档和词的个数的增加，模型变得越来越庞大；在文档层面没有一个统计模型；EM算法需要反复迭代，计算量也很大。</p>
-<h6 id="4-2-LDA（潜在狄瑞雷克模型）"><a href="#4-2-LDA（潜在狄瑞雷克模型）" class="headerlink" title="4.2 LDA（潜在狄瑞雷克模型）"></a>4.2 LDA（潜在狄瑞雷克模型）</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;鉴于PLSA的缺点，Blei等人于2003年进一步提出新的主题模型LDA（LatentDirichletAllocation），它是一个层次贝叶斯模型，把模型的参数也看作随机变量，从而可以引入控制参数的参数，实现彻底的“概率化”。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是LDA模型的Dirichlet的先验分布，表示整个文档集上主题的分布；表示文档d上主题的多项式分布；Z表示文档d的第n个词的主题；W表示文档d的第n个词；N表示文档d所包含词的个数；D表示文档集；K表示主题集；表示主题k上词语的多项式分布；表示所有主题上次的先验分布。事实上，去掉和 ，LDA就变成了PLSA。目前，参数估计是LDA最重要的任务，主要有两种方法：Gibbs抽样法（计算量大，但相对简单和精确）和变分贝叶斯推断法（计算量小，精度度弱）。</p>
-<h6 id="4-3-其他基于topic-model的演变"><a href="#4-3-其他基于topic-model的演变" class="headerlink" title="4.3 其他基于topic model的演变"></a>4.3 其他基于topic model的演变</h6><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a）<strong>考虑上下文信息</strong>：例如，“上下文相关的概率潜在语义分析模型（ContextualProbabilistic LatentSemantic Analysis，CPLSA）”将词语上下文信息引入PLSA；也有研究人员考虑“地理位置”上下文信息，从地理位置相关的文档中发现地理位置关联的Topic。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b）<strong>主题模型演化</strong>：引入文本语料的时间信息，研究主题随时间的演化，例如DTM、CTDTM、DMM、OLDA等模型。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c）<strong>并行主题模型</strong>：在大规模数据处理的需求下，基于并行计算的主题模型也开始得到关注。现有的解决方案有：Mallet、GPU-LDA、Async-LDA、N.C.L、pLDA、Y!LDA、Mahout、Mr.LDA等；其中pLDA、Y!LDA、Mahout、Mr.LDA等基于Hadoop/MapReduce框架，其他方案则基于传统的并行编程模型；参数估算方面，Mallet、Async-LDA、pLDA、Y!LDA等使用Gibbs抽样方法，Mr.LDA、Mahout、N.C.L等使用变分贝叶斯推断法，GPU-LDA同时支持两种方法。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      两篇文档是否相关往往不只决定于字面上的词语重复，还取决于文字背后的语义关联。对语义关联的挖掘，可以让搜索更加智能化。
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://www.dianacody.com/categories/Algorithm/"/>
-    
-    
-      <category term="Conditional Probability" scheme="http://www.dianacody.com/tags/Conditional-Probability/"/>
-    
-      <category term="matrix" scheme="http://www.dianacody.com/tags/matrix/"/>
     
   </entry>
   
