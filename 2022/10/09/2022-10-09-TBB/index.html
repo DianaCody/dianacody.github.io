@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://www.dianacody.com/resources/tbb-total-time-ratio.jpg">
 <meta property="og:image" content="http://www.dianacody.com/resources/tbb-median-tracking-time-ratio.jpg">
 <meta property="og:image" content="http://www.dianacody.com/resources/tbb-mean-tracking-time-ratio.jpg">
-<meta property="og:updated_time" content="2023-07-27T08:58:50.465Z">
+<meta property="og:updated_time" content="2023-08-03T09:52:30.953Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TBB并行加速优化Slam计算框架">
 <meta name="twitter:description" content="TBB并行加速库可以区别于传统的并发编程，其在多核上并行计算，区别于多线程并发(实质仍旧是时间片的轮换调度)，可以极大有效节省计算时间。Orb-Slam3是一个基于图像特征点提取的SLAM计算框架，但其开源版本的计算速率还有待优化。利用TBB并行优化可提高SLAM框架计算的实时性。">
@@ -446,7 +446,7 @@
 <li>meanTrackingTime – 轨迹平均时间</li>
 </ul>
 <p>注：<h7 style="color:blue"><strong>提速率 = (测试时间-基准时间) / 基准时间 * 100%</strong></h7>。</p>
-<h6 id="3-绝对时间统计"><a href="#3-绝对时间统计" class="headerlink" title="3.绝对时间统计"></a>3.绝对时间统计</h6><div class="table-container">
+<h6 id="4-绝对时间统计"><a href="#4-绝对时间统计" class="headerlink" title="4.绝对时间统计"></a>4.绝对时间统计</h6><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -677,7 +677,7 @@
 <p><div align="center" style="width:75%;height:75%;margin:0 auto;"><img src="/resources/tbb-mean-tracking-time.jpg" alt="figure-mean-tracking-time"></div></p>
 <center><h7 style="color:grey">图3 meanTrackingTime提速时间</h7></center>
 
-<h6 id="4-提速率统计"><a href="#4-提速率统计" class="headerlink" title="4.提速率统计"></a>4.提速率统计</h6><div class="table-container">
+<h6 id="5-提速率统计"><a href="#5-提速率统计" class="headerlink" title="5.提速率统计"></a>5.提速率统计</h6><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -964,8 +964,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2023/01/03/2023-01-03-SLAM/" rel="prev" title="SLAM定位建图和轨迹评估">
-                SLAM定位建图和轨迹评估 <i class="fa fa-chevron-right"></i>
+              <a href="/2022/12/01/2022-12-01-Calib/" rel="prev" title="相机标定">
+                相机标定 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1040,7 +1040,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1051,7 +1051,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -1062,7 +1062,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -1147,7 +1147,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、TBB并行指令集函数"><span class="nav-number">2.</span> <span class="nav-text">二、TBB并行指令集函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、加速版ORB-SLAM3-FAST"><span class="nav-number">3.</span> <span class="nav-text">三、加速版ORB-SLAM3-FAST</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、TBB加速ORB-SLAM3"><span class="nav-number">4.</span> <span class="nav-text">四、TBB加速ORB-SLAM3</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-改造方法"><span class="nav-number">4.1.</span> <span class="nav-text">1.改造方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-数据集"><span class="nav-number">4.2.</span> <span class="nav-text">2.数据集</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-统计指标"><span class="nav-number">4.3.</span> <span class="nav-text">3.统计指标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-绝对时间统计"><span class="nav-number">4.4.</span> <span class="nav-text">3.绝对时间统计</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-提速率统计"><span class="nav-number">4.5.</span> <span class="nav-text">4.提速率统计</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、参考文献"><span class="nav-number">5.</span> <span class="nav-text">五、参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、TBB并行指令集函数"><span class="nav-number">2.</span> <span class="nav-text">二、TBB并行指令集函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、加速版ORB-SLAM3-FAST"><span class="nav-number">3.</span> <span class="nav-text">三、加速版ORB-SLAM3-FAST</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、TBB加速ORB-SLAM3"><span class="nav-number">4.</span> <span class="nav-text">四、TBB加速ORB-SLAM3</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-改造方法"><span class="nav-number">4.1.</span> <span class="nav-text">1.改造方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-数据集"><span class="nav-number">4.2.</span> <span class="nav-text">2.数据集</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-统计指标"><span class="nav-number">4.3.</span> <span class="nav-text">3.统计指标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-绝对时间统计"><span class="nav-number">4.4.</span> <span class="nav-text">4.绝对时间统计</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-提速率统计"><span class="nav-number">4.5.</span> <span class="nav-text">5.提速率统计</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、参考文献"><span class="nav-number">5.</span> <span class="nav-text">五、参考文献</span></a></li></ol></div>
             
 
           </div>
